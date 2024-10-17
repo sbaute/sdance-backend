@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "/api/v1")
 public class InstructorController {
@@ -19,9 +21,14 @@ public class InstructorController {
     @Autowired
     IInstructorService instructorService;
 
-    @GetMapping("instructor")
-    public void getAll() {
-        instructorService.getAllInstructors();
+    @GetMapping("instructors")
+    public ResponseEntity<?> getAll() {
+       List<Instructor> instructors =  instructorService.getAllInstructors();
+        return new ResponseEntity<>(ResponseMessage.builder()
+                .message("")
+                .object(instructors)
+                .build(),
+                HttpStatus.OK);
     }
 
     @GetMapping("instructor/{id}")
@@ -54,7 +61,7 @@ public class InstructorController {
     public ResponseEntity<?> create (@RequestBody InstructorDto instructorDto){
         try{
             Instructor instructorSave = instructorService.createAndUpdateInstructor(instructorDto);
-            InstructorDto.builder()
+            InstructorDto savedDto = InstructorDto.builder()
                     .id(instructorSave.getId())
                     .name(instructorSave.getName())
                     .lastName(instructorSave.getLastName())
@@ -63,7 +70,7 @@ public class InstructorController {
                     .build();
             return new ResponseEntity<>(ResponseMessage.builder()
                     .message("Instructor save")
-                    .object(instructorDto)
+                    .object(savedDto)
                     .build(),
                     HttpStatus.CREATED);
         }catch (DataAccessException exDT) {
@@ -81,7 +88,7 @@ public class InstructorController {
             if(instructorService.existById(id)){
                 instructorDto.setId(id);
                 Instructor instructorUpdate = instructorService.createAndUpdateInstructor(instructorDto);
-                StudentDto.builder()
+                InstructorDto updateDto = InstructorDto.builder()
                         .id(instructorUpdate.getId())
                         .name(instructorUpdate.getName())
                         .lastName(instructorUpdate.getLastName())
@@ -90,7 +97,7 @@ public class InstructorController {
                         .build();
                 return new ResponseEntity<>(ResponseMessage.builder()
                         .message("Instructor Update")
-                        .object(instructorDto)
+                        .object(updateDto)
                         .build(),
                         HttpStatus.CREATED);
 
@@ -118,9 +125,9 @@ public class InstructorController {
             instructorService.deleteInstructor(instructorDeleted);
             return new ResponseEntity<>(ResponseMessage
                     .builder()
-                    .message("The student was deleted")
+                    .message("The Instructor was deleted")
                     .object(instructorDeleted)
-                    .build(), HttpStatus.NO_CONTENT);
+                    .build(), HttpStatus.OK);
         } catch (DataAccessException exDT) {
             return new ResponseEntity<>(ResponseMessage.builder()
                     .message(exDT.getMessage())

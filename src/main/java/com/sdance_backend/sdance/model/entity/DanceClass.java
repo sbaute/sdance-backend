@@ -1,5 +1,6 @@
 package com.sdance_backend.sdance.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sdance_backend.sdance.model.entity.enums.Days;
 import com.sdance_backend.sdance.model.entity.enums.Hour;
 import jakarta.persistence.*;
@@ -29,6 +30,7 @@ public class DanceClass {
 
     @ManyToOne
     @JoinColumn(name = "instructor_id")
+    @JsonBackReference
     private Instructor instructor;
 
     @ManyToMany
