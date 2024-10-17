@@ -1,7 +1,11 @@
 package com.sdance_backend.sdance.model.service;
 
+import com.sdance_backend.sdance.model.dto.danceClass.AddStudentsToDanceClassDto;
 import com.sdance_backend.sdance.model.dto.danceClass.DanceClassDto;
+import com.sdance_backend.sdance.model.dto.instructor.InstructorNameDto;
 import com.sdance_backend.sdance.model.entity.DanceClass;
+import com.sdance_backend.sdance.model.entity.enums.Days;
+import com.sdance_backend.sdance.model.entity.enums.Hour;
 
 import java.util.List;
 
@@ -12,4 +16,7 @@ public interface IDanceClassService {
     void deleteDanceClass(DanceClass danceClass);
     boolean existsById(Integer id);
     DanceClassDto mapToDanceClassDto(DanceClass danceClass);
+    boolean isClassExists(InstructorNameDto instructorDto, Days daysOfWeek, Hour classTime);
+
+    DanceClass addStudentsToDanceClass(AddStudentsToDanceClassDto studentAndDanceClassDto);
 }

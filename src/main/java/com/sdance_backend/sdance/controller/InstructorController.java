@@ -30,7 +30,7 @@ public class InstructorController {
     public ResponseEntity<?> getAll() {
        List<Instructor> instructors =  instructorService.getAllInstructors();
 
-        List<InstructorDto> instructorDtos = instructors.stream()
+        List<InstructorDto> instructorDto = instructors.stream()
                 .map(instructor -> {
                     List<DanceClassDto> danceClassDto = instructor.getDanceClasses().stream()
                             .map(danceClass -> danceClassService.mapToDanceClassDto(danceClass))
@@ -49,7 +49,7 @@ public class InstructorController {
 
         return new ResponseEntity<>(ResponseMessage.builder()
                 .message("")
-                .object(instructorDtos)
+                .object(instructorDto)
                 .build(),
                 HttpStatus.OK);
     }

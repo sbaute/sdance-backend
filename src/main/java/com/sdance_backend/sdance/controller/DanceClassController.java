@@ -1,5 +1,6 @@
 package com.sdance_backend.sdance.controller;
 
+import com.sdance_backend.sdance.model.dto.danceClass.AddStudentsToDanceClassDto;
 import com.sdance_backend.sdance.model.dto.danceClass.DanceClassDto;
 import com.sdance_backend.sdance.model.dto.instructor.InstructorDto;
 import com.sdance_backend.sdance.model.dto.instructor.InstructorNameDto;
@@ -43,7 +44,7 @@ public class DanceClassController {
                     return DanceClassDto.builder()
                             .id(danceClass.getId())
                             .className(danceClass.getClassName())
-                            .dayOfWeek(danceClass.getDaysOfWeek())
+                            .daysOfWeek(danceClass.getDaysOfWeek())
                             .classTime(danceClass.getClassTime())
                             .instructor(instructorNameDto)
                             .student(studentNameDto)
@@ -78,7 +79,7 @@ public class DanceClassController {
             DanceClassDto danceClassDto = DanceClassDto.builder()
                     .id(danceClass.getId())
                     .className(danceClass.getClassName())
-                    .dayOfWeek(danceClass.getDaysOfWeek())
+                    .daysOfWeek(danceClass.getDaysOfWeek())
                     .classTime(danceClass.getClassTime())
                     .instructor(instructorNameDto)
                     .student(studentNameDto)
@@ -103,15 +104,17 @@ public class DanceClassController {
     public ResponseEntity<?> create (@RequestBody DanceClassDto danceClassDto){
         try{
             DanceClass danceClassSave = danceClassService.createUpdateDanceClass(danceClassDto);
-            DanceClassDto.builder()
+            DanceClassDto  danceClassSaveDto = DanceClassDto.builder()
                     .id(danceClassSave.getId())
                     .className(danceClassSave.getClassName())
-                    .dayOfWeek(danceClassSave.getDaysOfWeek())
+                    .daysOfWeek(danceClassSave.getDaysOfWeek())
                     .classTime(danceClassSave.getClassTime())
+                    .instructor(instructorService.mapToInstructorNameDto(danceClassSave.getInstructor()))
+                    .student(studentService.mapToStudentNameDto(danceClassSave.getStudents()))
                     .build();
             return new ResponseEntity<>(ResponseMessage.builder()
                     .message("Dance class save")
-                    .object(danceClassSave)
+                    .object(danceClassSaveDto)
                     .build(),
                     HttpStatus.CREATED);
         }catch (DataAccessException exDT) {
@@ -123,6 +126,17 @@ public class DanceClassController {
         }
     }
 
+    @PostMapping("danceclass/addStudentsToDanceClass/")
+    public ResponseEntity<?> addStudentsToDanceClass(@RequestBody AddStudentsToDanceClassDto studentAndDanceClassDto){
+        danceClassService.addStudentsToDanceClass(studentAndDanceClassDto);
+        
+        return new ResponseEntity<>(ResponseMessage.builder()
+                .message("Students add to class")
+                .object(null)
+                .build(),
+                HttpStatus.OK);
+    }
+
     @PutMapping("danceClass/{id}")
     public ResponseEntity<?> update (@RequestBody DanceClassDto danceClassDto, @PathVariable Integer id){
         try{
@@ -132,7 +146,7 @@ public class DanceClassController {
                 DanceClassDto.builder()
                         .id(danceClassUpdate.getId())
                         .className(danceClassUpdate.getClassName())
-                        .dayOfWeek(danceClassUpdate.getDaysOfWeek())
+                        .daysOfWeek(danceClassUpdate.getDaysOfWeek())
                         .classTime(danceClassUpdate.getClassTime())
                         /*.studentsId(danceClassUpdate.getStudents().stream()
                                 .map(Student::getId)

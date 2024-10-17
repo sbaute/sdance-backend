@@ -17,7 +17,7 @@ public class DanceClassDto {
 
     private Integer id;
     private String className;
-    private Days dayOfWeek;
+    private Days daysOfWeek;
     private Hour classTime;
     private InstructorNameDto instructor;
     private List<StudentNameDto> student;

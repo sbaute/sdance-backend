@@ -1,19 +1,29 @@
 package com.sdance_backend.sdance.model.service.impl;
 
+import com.sdance_backend.sdance.model.dto.danceClass.AddStudentsToDanceClassDto;
 import com.sdance_backend.sdance.model.dto.danceClass.DanceClassDto;
+import com.sdance_backend.sdance.model.dto.instructor.InstructorNameDto;
 import com.sdance_backend.sdance.model.dto.student.StudentNameDto;
 import com.sdance_backend.sdance.model.entity.DanceClass;
+import com.sdance_backend.sdance.model.entity.Instructor;
+import com.sdance_backend.sdance.model.entity.Student;
+import com.sdance_backend.sdance.model.entity.enums.Days;
+import com.sdance_backend.sdance.model.entity.enums.Hour;
 import com.sdance_backend.sdance.model.repository.DanceClassRepository;
 import com.sdance_backend.sdance.model.repository.InstructorRepository;
 import com.sdance_backend.sdance.model.repository.StudentRepository;
 import com.sdance_backend.sdance.model.service.IDanceClassService;
 import com.sdance_backend.sdance.model.service.IStudentService;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class DanceClassServiceImpl implements IDanceClassService {
@@ -41,32 +51,54 @@ public class DanceClassServiceImpl implements IDanceClassService {
     }
 
     @Override
+    @Transactional
     public DanceClass createUpdateDanceClass(DanceClassDto danceClassDto) {
-        // Crear la entidad DanceClass
-        DanceClass danceClass = DanceClass.builder()
-                .id(danceClassDto.getId())
-                .className(danceClassDto.getClassName())
-                .daysOfWeek(danceClassDto.getDayOfWeek())
-                .classTime(danceClassDto.getClassTime())
-                /*.instructor(instructorRepository.findById(danceClassDto.getInstructorId())
-                        .orElseThrow(() -> new EntityNotFoundException("Instructor not found")))
-                .students(new ArrayList<>())*/
-                .build();
+        DanceClass danceClass;
 
-        // Agregar los estudiantes a la lista de la clase de danza (opcional)
-        /*if(danceClassDto.getStudentsId() != null){
-            for (Integer studentId : danceClassDto.getStudentsId()) {
-                Student student = studentRepository.findById(studentId)
-                        .orElseThrow(() -> new EntityNotFoundException("Student not found"));
-                danceClass.getStudents().add(student);
+        if((danceClassDto.getId() != null && danceClassRepository.existsById(danceClassDto.getId()))){
+            danceClass = danceClassRepository.findById(danceClassDto.getId()).get();
+        } else {
+            if (isClassExists(danceClassDto.getInstructor(), danceClassDto.getDaysOfWeek(), danceClassDto.getClassTime())) {
+                throw new EntityExistsException("A class with this instructor, day, and time already exists.");
             }
-        } */
+            danceClass = new DanceClass();
+        }
+        danceClass.setClassName(danceClassDto.getClassName());
+        danceClass.setDaysOfWeek(danceClassDto.getDaysOfWeek());
+        danceClass.setClassTime(danceClassDto.getClassTime());
+        danceClass.setInstructor(instructorRepository.findById(danceClassDto.getInstructor().getId())
+                .orElseThrow(() -> new EntityNotFoundException("Instructor not found")));
+        danceClass.setStudents(danceClassDto.getStudent().stream()
+                .map(studentNameDto -> studentRepository.findById(studentNameDto.getId())
+                        .orElseThrow(() -> new EntityNotFoundException("Student not found"))
+                )
+                .collect(Collectors.toList()));
 
-
-        // Guardar la clase de danza con los estudiantes
         return danceClassRepository.save(danceClass);
     }
 
+    @Override
+    public boolean isClassExists(InstructorNameDto instructorDto, Days daysOfWeek, Hour classTime) {
+        Instructor instructor = instructorRepository.findById(instructorDto.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Instructor not found"));
+
+        return danceClassRepository.existsByInstructorAndDaysOfWeekAndClassTime(instructor, daysOfWeek, classTime);
+    }
+
+    @Override
+    public DanceClass addStudentsToDanceClass(AddStudentsToDanceClassDto studentAndDanceClassDto) {
+            DanceClass danceClass = danceClassRepository.findById(studentAndDanceClassDto.getDanceClassId()).orElseThrow( () -> new EntityNotFoundException("Dance class not found"));
+            List<Student> students = StreamSupport.stream(studentRepository.findAllById(studentAndDanceClassDto.getStudentIds()).spliterator(), false)
+                .collect(Collectors.toList());
+
+            List<Student> newStudents = students.stream()
+                .filter(student -> !danceClass.getStudents().contains(student))
+                .collect(Collectors.toList());
+
+            danceClass.getStudents().addAll(newStudents);
+
+        return danceClassRepository.save(danceClass);
+    }
 
     @Override
     public void deleteDanceClass(DanceClass danceClass) {
@@ -83,7 +115,7 @@ public class DanceClassServiceImpl implements IDanceClassService {
         List<StudentNameDto> studentNameDtos = studentService.mapToStudentNameDto(danceClass.getStudents());
         return DanceClassDto.builder()
                 .className(danceClass.getClassName())
-                .dayOfWeek(danceClass.getDaysOfWeek())
+                .daysOfWeek(danceClass.getDaysOfWeek())
                 .classTime(danceClass.getClassTime())
                 .student(studentNameDtos)
                 .build();
