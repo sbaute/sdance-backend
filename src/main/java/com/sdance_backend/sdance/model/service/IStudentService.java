@@ -13,5 +13,5 @@ public interface IStudentService {
     Student createUpdateStudent(StudentDto student);
     void deleteStudent(Student student);
     boolean existsById(Integer id);
-    List<StudentNameDto> mapToStudentNameDtos(List<Student> students);
+    List<StudentNameDto> mapToStudentNameDto(List<Student> students);
 }

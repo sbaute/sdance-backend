@@ -1,5 +1,6 @@
 package com.sdance_backend.sdance.model.dto.danceClass;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.sdance_backend.sdance.model.dto.instructor.InstructorNameDto;
 import com.sdance_backend.sdance.model.dto.student.StudentNameDto;
 import com.sdance_backend.sdance.model.entity.enums.Days;
 import com.sdance_backend.sdance.model.entity.enums.Hour;
@@ -18,7 +19,7 @@ public class DanceClassDto {
     private String className;
     private Days dayOfWeek;
     private Hour classTime;
-    private Integer instructorId;
-    private List<StudentNameDto> studentsName;
+    private InstructorNameDto instructor;
+    private List<StudentNameDto> student;
 
 }

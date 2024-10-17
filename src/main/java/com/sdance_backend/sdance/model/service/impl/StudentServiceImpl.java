@@ -88,7 +88,7 @@ public class StudentServiceImpl implements IStudentService {
     }
 
     @Override
-    public  List<StudentNameDto> mapToStudentNameDtos(List<Student> students){
+    public  List<StudentNameDto> mapToStudentNameDto(List<Student> students){
         return students.stream()
                 .map(student -> StudentNameDto.builder()
                         .name(student.getName())

@@ -48,9 +48,9 @@ public class DanceClassServiceImpl implements IDanceClassService {
                 .className(danceClassDto.getClassName())
                 .daysOfWeek(danceClassDto.getDayOfWeek())
                 .classTime(danceClassDto.getClassTime())
-                .instructor(instructorRepository.findById(danceClassDto.getInstructorId())
+                /*.instructor(instructorRepository.findById(danceClassDto.getInstructorId())
                         .orElseThrow(() -> new EntityNotFoundException("Instructor not found")))
-                .students(new ArrayList<>())
+                .students(new ArrayList<>())*/
                 .build();
 
         // Agregar los estudiantes a la lista de la clase de danza (opcional)
@@ -80,12 +80,12 @@ public class DanceClassServiceImpl implements IDanceClassService {
 
     @Override
     public DanceClassDto mapToDanceClassDto(DanceClass danceClass) {
-        List<StudentNameDto> studentNameDtos = studentService.mapToStudentNameDtos(danceClass.getStudents());
+        List<StudentNameDto> studentNameDtos = studentService.mapToStudentNameDto(danceClass.getStudents());
         return DanceClassDto.builder()
                 .className(danceClass.getClassName())
                 .dayOfWeek(danceClass.getDaysOfWeek())
                 .classTime(danceClass.getClassTime())
-                .studentsName(studentNameDtos)
+                .student(studentNameDtos)
                 .build();
     }
 }

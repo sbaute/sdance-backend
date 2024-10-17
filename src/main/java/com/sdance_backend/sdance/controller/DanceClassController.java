@@ -1,14 +1,22 @@
 package com.sdance_backend.sdance.controller;
 
 import com.sdance_backend.sdance.model.dto.danceClass.DanceClassDto;
+import com.sdance_backend.sdance.model.dto.instructor.InstructorDto;
+import com.sdance_backend.sdance.model.dto.instructor.InstructorNameDto;
+import com.sdance_backend.sdance.model.dto.student.StudentNameDto;
 import com.sdance_backend.sdance.model.entity.DanceClass;
 import com.sdance_backend.sdance.model.payload.ResponseMessage;
 import com.sdance_backend.sdance.model.service.IDanceClassService;
+import com.sdance_backend.sdance.model.service.IInstructorService;
+import com.sdance_backend.sdance.model.service.IStudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/api/v1")
@@ -17,9 +25,39 @@ public class DanceClassController {
     @Autowired
     private IDanceClassService danceClassService;
 
+    @Autowired
+    private IStudentService studentService;
+
+    @Autowired
+    private IInstructorService instructorService;
+
     @GetMapping("danceClass")
-    public void getAll() {
-        danceClassService.getAllDanceClass();
+    public ResponseEntity<?> getAll() {
+        List<DanceClass> danceClasses = danceClassService.getAllDanceClass();
+
+        List<DanceClassDto> danceClassDto = danceClasses.stream()
+                .map(danceClass -> {
+                    List<StudentNameDto> studentNameDto = studentService.mapToStudentNameDto(danceClass.getStudents());
+                    InstructorNameDto instructorNameDto = instructorService.mapToInstructorNameDto(danceClass.getInstructor());
+
+                    return DanceClassDto.builder()
+                            .id(danceClass.getId())
+                            .className(danceClass.getClassName())
+                            .dayOfWeek(danceClass.getDaysOfWeek())
+                            .classTime(danceClass.getClassTime())
+                            .instructor(instructorNameDto)
+                            .student(studentNameDto)
+                            .build();
+                })
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(ResponseMessage
+                .builder()
+                .message("" )
+                .object(danceClassDto)
+                .build(),
+                HttpStatus.OK);
+
     }
 
     @GetMapping("danceClass/{id}")
@@ -34,10 +72,22 @@ public class DanceClassController {
                         .build(),
                         HttpStatus.NOT_FOUND);
             }
+            List<StudentNameDto> studentNameDto = studentService.mapToStudentNameDto(danceClass.getStudents());
+            InstructorNameDto instructorNameDto = instructorService.mapToInstructorNameDto(danceClass.getInstructor());
+
+            DanceClassDto danceClassDto = DanceClassDto.builder()
+                    .id(danceClass.getId())
+                    .className(danceClass.getClassName())
+                    .dayOfWeek(danceClass.getDaysOfWeek())
+                    .classTime(danceClass.getClassTime())
+                    .instructor(instructorNameDto)
+                    .student(studentNameDto)
+                    .build();
+
             return new ResponseEntity<>(ResponseMessage
                     .builder()
                     .message("" )
-                    .object(danceClass)
+                    .object(danceClassDto)
                     .build(),
                     HttpStatus.OK);
             } catch (DataAccessException exDT){
@@ -58,7 +108,6 @@ public class DanceClassController {
                     .className(danceClassSave.getClassName())
                     .dayOfWeek(danceClassSave.getDaysOfWeek())
                     .classTime(danceClassSave.getClassTime())
-                    .instructorId(danceClassSave.getInstructor().getId())
                     .build();
             return new ResponseEntity<>(ResponseMessage.builder()
                     .message("Dance class save")
@@ -85,7 +134,6 @@ public class DanceClassController {
                         .className(danceClassUpdate.getClassName())
                         .dayOfWeek(danceClassUpdate.getDaysOfWeek())
                         .classTime(danceClassUpdate.getClassTime())
-                        .instructorId(danceClassUpdate.getInstructor().getId()) // Solo el ID del instructor
                         /*.studentsId(danceClassUpdate.getStudents().stream()
                                 .map(Student::getId)
                                 .collect(Collectors.toList())) // Lista de IDs de estudiantes */

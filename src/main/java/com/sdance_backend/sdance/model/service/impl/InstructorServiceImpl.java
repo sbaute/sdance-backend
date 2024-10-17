@@ -1,13 +1,17 @@
 package com.sdance_backend.sdance.model.service.impl;
 
 import com.sdance_backend.sdance.model.dto.instructor.InstructorDto;
+import com.sdance_backend.sdance.model.dto.instructor.InstructorNameDto;
+import com.sdance_backend.sdance.model.dto.student.StudentNameDto;
 import com.sdance_backend.sdance.model.entity.Instructor;
+import com.sdance_backend.sdance.model.entity.Student;
 import com.sdance_backend.sdance.model.repository.InstructorRepository;
 import com.sdance_backend.sdance.model.service.IInstructorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class InstructorServiceImpl implements IInstructorService {
@@ -49,5 +53,14 @@ public class InstructorServiceImpl implements IInstructorService {
     @Override
     public Boolean existById(Integer id) {
         return instructorRepository.existsById(id);
+    }
+
+    @Override
+    public InstructorNameDto mapToInstructorNameDto(Instructor instructor){
+        return InstructorNameDto.builder()
+                        .id(instructor.getId())
+                        .name(instructor.getName())
+                        .lastName(instructor.getLastName())
+                        .build();
     }
 }
