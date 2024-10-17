@@ -1,4 +1,4 @@
-package com.sdance_backend.sdance.model.dto;
+package com.sdance_backend.sdance.model.dto.student;
 
 
 import com.sdance_backend.sdance.model.entity.DanceClass;

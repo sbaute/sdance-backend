@@ -1,5 +1,6 @@
 package com.sdance_backend.sdance.model.service.impl;
-import com.sdance_backend.sdance.model.dto.StudentDto;
+import com.sdance_backend.sdance.model.dto.student.StudentDto;
+import com.sdance_backend.sdance.model.dto.student.StudentNameDto;
 import com.sdance_backend.sdance.model.entity.DanceClass;
 import com.sdance_backend.sdance.model.repository.DanceClassRepository;
 import com.sdance_backend.sdance.model.repository.StudentRepository;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements IStudentService {
@@ -83,5 +85,14 @@ public class StudentServiceImpl implements IStudentService {
     @Override
     public boolean existsById(Integer id) {
         return studentRepository.existsById(id);
+    }
+
+    @Override
+    public  List<StudentNameDto> mapToStudentNameDtos(List<Student> students){
+        return students.stream()
+                .map(student -> StudentNameDto.builder()
+                        .name(student.getName())
+                        .lastName(student.getLastName())
+                        .build()).collect(Collectors.toList());
     }
 }

@@ -62,9 +62,6 @@ public class DanceClassController {
                     .dayOfWeek(danceClassSave.getDaysOfWeek())
                     .classTime(danceClassSave.getClassTime())
                     .instructorId(danceClassSave.getInstructor().getId())
-                    .studentsId(danceClassSave.getStudents().stream()
-                            .map(Student::getId)
-                            .collect(Collectors.toList()))
                     .build();
             return new ResponseEntity<>(ResponseMessage.builder()
                     .message("Dance class save")
@@ -92,9 +89,9 @@ public class DanceClassController {
                         .dayOfWeek(danceClassUpdate.getDaysOfWeek())
                         .classTime(danceClassUpdate.getClassTime())
                         .instructorId(danceClassUpdate.getInstructor().getId()) // Solo el ID del instructor
-                        .studentsId(danceClassUpdate.getStudents().stream()
+                        /*.studentsId(danceClassUpdate.getStudents().stream()
                                 .map(Student::getId)
-                                .collect(Collectors.toList())) // Lista de IDs de estudiantes
+                                .collect(Collectors.toList())) // Lista de IDs de estudiantes */
                         .build();
                 return new ResponseEntity<>(ResponseMessage.builder()
                         .message("Dance class Update")

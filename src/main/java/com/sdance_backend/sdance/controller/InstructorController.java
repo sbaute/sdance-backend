@@ -1,10 +1,11 @@
 package com.sdance_backend.sdance.controller;
 
 
+import com.sdance_backend.sdance.model.dto.DanceClassDto;
 import com.sdance_backend.sdance.model.dto.InstructorDto;
-import com.sdance_backend.sdance.model.dto.StudentDto;
 import com.sdance_backend.sdance.model.entity.Instructor;
 import com.sdance_backend.sdance.model.payload.ResponseMessage;
+import com.sdance_backend.sdance.model.service.IDanceClassService;
 import com.sdance_backend.sdance.model.service.IInstructorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/api/v1")
@@ -20,6 +22,9 @@ public class InstructorController {
 
     @Autowired
     IInstructorService instructorService;
+
+    @Autowired
+    IDanceClassService danceClassService;
 
     @GetMapping("instructors")
     public ResponseEntity<?> getAll() {
@@ -35,6 +40,19 @@ public class InstructorController {
     public ResponseEntity<?> getById(@PathVariable Integer id) {
         try {
             Instructor instructor = instructorService.getInstructorById(id);
+
+            // Convertir las DanceClass en DanceClassDto para que solo me muestre el nombre y apellido de los alumnos
+            List<DanceClassDto> danceClassDto = instructor.getDanceClasses().stream()
+                    .map(danceClass -> danceClassService.mapToDanceClassDto(danceClass))
+                    .collect(Collectors.toList());
+
+            InstructorDto instructorDtoGet = InstructorDto.builder()
+                    .name(instructor.getName())
+                    .lastName(instructor.getLastName())
+                    .document(instructor.getDocument())
+                    .phoneNumber(instructor.getPhoneNumber())
+                    .danceClasses(danceClassDto)
+                    .build();
             if(instructor == null) {
                 return new ResponseEntity<>(ResponseMessage.builder()
                         .message("The instructor of id " + id + " was not found")
@@ -44,7 +62,7 @@ public class InstructorController {
             }
             return new ResponseEntity<>(ResponseMessage.builder()
                     .message("")
-                    .object(instructor)
+                    .object(instructorDtoGet)
                     .build(),
                     HttpStatus.OK);
 
@@ -62,11 +80,8 @@ public class InstructorController {
         try{
             Instructor instructorSave = instructorService.createAndUpdateInstructor(instructorDto);
             InstructorDto savedDto = InstructorDto.builder()
-                    .id(instructorSave.getId())
                     .name(instructorSave.getName())
                     .lastName(instructorSave.getLastName())
-                    .phoneNumber(instructorSave.getPhoneNumber())
-                    .document(instructorSave.getDocument())
                     .build();
             return new ResponseEntity<>(ResponseMessage.builder()
                     .message("Instructor save")
@@ -88,6 +103,8 @@ public class InstructorController {
             if(instructorService.existById(id)){
                 instructorDto.setId(id);
                 Instructor instructorUpdate = instructorService.createAndUpdateInstructor(instructorDto);
+
+
                 InstructorDto updateDto = InstructorDto.builder()
                         .id(instructorUpdate.getId())
                         .name(instructorUpdate.getName())

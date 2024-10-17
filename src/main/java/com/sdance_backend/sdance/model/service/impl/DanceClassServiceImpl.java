@@ -1,19 +1,20 @@
 package com.sdance_backend.sdance.model.service.impl;
 
 import com.sdance_backend.sdance.model.dto.DanceClassDto;
+import com.sdance_backend.sdance.model.dto.student.StudentNameDto;
 import com.sdance_backend.sdance.model.entity.DanceClass;
-import com.sdance_backend.sdance.model.entity.Instructor;
-import com.sdance_backend.sdance.model.entity.Student;
 import com.sdance_backend.sdance.model.repository.DanceClassRepository;
 import com.sdance_backend.sdance.model.repository.InstructorRepository;
 import com.sdance_backend.sdance.model.repository.StudentRepository;
 import com.sdance_backend.sdance.model.service.IDanceClassService;
+import com.sdance_backend.sdance.model.service.IStudentService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DanceClassServiceImpl implements IDanceClassService {
@@ -26,6 +27,9 @@ public class DanceClassServiceImpl implements IDanceClassService {
 
     @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
+    private IStudentService studentService;
 
     @Override
     public List<DanceClass> getAllDanceClass() {
@@ -51,13 +55,13 @@ public class DanceClassServiceImpl implements IDanceClassService {
                 .build();
 
         // Agregar los estudiantes a la lista de la clase de danza (opcional)
-        if(danceClassDto.getStudentsId() != null){
+        /*if(danceClassDto.getStudentsId() != null){
             for (Integer studentId : danceClassDto.getStudentsId()) {
                 Student student = studentRepository.findById(studentId)
                         .orElseThrow(() -> new EntityNotFoundException("Student not found"));
                 danceClass.getStudents().add(student);
             }
-        }
+        } */
 
 
         // Guardar la clase de danza con los estudiantes
@@ -73,5 +77,16 @@ public class DanceClassServiceImpl implements IDanceClassService {
     @Override
     public boolean existsById(Integer id) {
         return danceClassRepository.existsById(id);
+    }
+
+    @Override
+    public DanceClassDto mapToDanceClassDto(DanceClass danceClass) {
+        List<StudentNameDto> studentNameDtos = studentService.mapToStudentNameDtos(danceClass.getStudents());
+        return DanceClassDto.builder()
+                .className(danceClass.getClassName())
+                .dayOfWeek(danceClass.getDaysOfWeek())
+                .classTime(danceClass.getClassTime())
+                .studentsName(studentNameDtos)
+                .build();
     }
 }

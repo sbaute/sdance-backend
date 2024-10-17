@@ -11,4 +11,5 @@ public interface IDanceClassService {
     DanceClass createUpdateDanceClass(DanceClassDto danceClassDto);
     void deleteDanceClass(DanceClass danceClass);
     boolean existsById(Integer id);
+    DanceClassDto mapToDanceClassDto(DanceClass danceClass);
 }

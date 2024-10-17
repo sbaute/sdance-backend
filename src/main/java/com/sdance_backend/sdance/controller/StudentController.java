@@ -1,6 +1,6 @@
 package com.sdance_backend.sdance.controller;
 
-import com.sdance_backend.sdance.model.dto.StudentDto;
+import com.sdance_backend.sdance.model.dto.student.StudentDto;
 import com.sdance_backend.sdance.model.entity.DanceClass;
 import com.sdance_backend.sdance.model.entity.Student;
 import com.sdance_backend.sdance.model.payload.ResponseMessage;
