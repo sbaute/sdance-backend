@@ -29,9 +29,27 @@ public class InstructorController {
     @GetMapping("instructors")
     public ResponseEntity<?> getAll() {
        List<Instructor> instructors =  instructorService.getAllInstructors();
+
+        List<InstructorDto> instructorDtos = instructors.stream()
+                .map(instructor -> {
+                    List<DanceClassDto> danceClassDto = instructor.getDanceClasses().stream()
+                            .map(danceClass -> danceClassService.mapToDanceClassDto(danceClass))
+                            .collect(Collectors.toList());
+
+                    return InstructorDto.builder()
+                            .id(instructor.getId())
+                            .name(instructor.getName())
+                            .lastName(instructor.getLastName())
+                            .document(instructor.getDocument())
+                            .phoneNumber(instructor.getPhoneNumber())
+                            .danceClasses(danceClassDto)
+                            .build();
+                })
+                .collect(Collectors.toList());
+
         return new ResponseEntity<>(ResponseMessage.builder()
                 .message("")
-                .object(instructors)
+                .object(instructorDtos)
                 .build(),
                 HttpStatus.OK);
     }
@@ -41,7 +59,6 @@ public class InstructorController {
         try {
             Instructor instructor = instructorService.getInstructorById(id);
 
-            // Convertir las DanceClass en DanceClassDto para que solo me muestre el nombre y apellido de los alumnos
             List<DanceClassDto> danceClassDto = instructor.getDanceClasses().stream()
                     .map(danceClass -> danceClassService.mapToDanceClassDto(danceClass))
                     .collect(Collectors.toList());
