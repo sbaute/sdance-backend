@@ -1,8 +1,8 @@
 package com.sdance_backend.sdance.controller;
 
 
-import com.sdance_backend.sdance.model.dto.DanceClassDto;
-import com.sdance_backend.sdance.model.dto.InstructorDto;
+import com.sdance_backend.sdance.model.dto.danceClass.DanceClassDto;
+import com.sdance_backend.sdance.model.dto.instructor.InstructorDto;
 import com.sdance_backend.sdance.model.entity.Instructor;
 import com.sdance_backend.sdance.model.payload.ResponseMessage;
 import com.sdance_backend.sdance.model.service.IDanceClassService;
@@ -64,6 +64,7 @@ public class InstructorController {
                     .collect(Collectors.toList());
 
             InstructorDto instructorDtoGet = InstructorDto.builder()
+                    .id(instructor.getId())
                     .name(instructor.getName())
                     .lastName(instructor.getLastName())
                     .document(instructor.getDocument())
@@ -120,8 +121,6 @@ public class InstructorController {
             if(instructorService.existById(id)){
                 instructorDto.setId(id);
                 Instructor instructorUpdate = instructorService.createAndUpdateInstructor(instructorDto);
-
-
                 InstructorDto updateDto = InstructorDto.builder()
                         .id(instructorUpdate.getId())
                         .name(instructorUpdate.getName())
@@ -157,11 +156,7 @@ public class InstructorController {
         try {
             Instructor instructorDeleted = instructorService.getInstructorById(id);
             instructorService.deleteInstructor(instructorDeleted);
-            return new ResponseEntity<>(ResponseMessage
-                    .builder()
-                    .message("The Instructor was deleted")
-                    .object(instructorDeleted)
-                    .build(), HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (DataAccessException exDT) {
             return new ResponseEntity<>(ResponseMessage.builder()
                     .message(exDT.getMessage())

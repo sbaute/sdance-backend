@@ -1,8 +1,8 @@
 package com.sdance_backend.sdance.model.payload;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
-import lombok.ToString;
 
 import java.io.Serializable;
 

@@ -1,6 +1,6 @@
 package com.sdance_backend.sdance.model.service.impl;
 
-import com.sdance_backend.sdance.model.dto.DanceClassDto;
+import com.sdance_backend.sdance.model.dto.danceClass.DanceClassDto;
 import com.sdance_backend.sdance.model.dto.student.StudentNameDto;
 import com.sdance_backend.sdance.model.entity.DanceClass;
 import com.sdance_backend.sdance.model.repository.DanceClassRepository;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class DanceClassServiceImpl implements IDanceClassService {

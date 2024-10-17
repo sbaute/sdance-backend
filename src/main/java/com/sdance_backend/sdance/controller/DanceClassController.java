@@ -1,8 +1,7 @@
 package com.sdance_backend.sdance.controller;
 
-import com.sdance_backend.sdance.model.dto.DanceClassDto;
+import com.sdance_backend.sdance.model.dto.danceClass.DanceClassDto;
 import com.sdance_backend.sdance.model.entity.DanceClass;
-import com.sdance_backend.sdance.model.entity.Student;
 import com.sdance_backend.sdance.model.payload.ResponseMessage;
 import com.sdance_backend.sdance.model.service.IDanceClassService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +9,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/api/v1")

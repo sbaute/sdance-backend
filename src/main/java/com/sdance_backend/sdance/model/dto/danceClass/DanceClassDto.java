@@ -1,4 +1,4 @@
-package com.sdance_backend.sdance.model.dto;
+package com.sdance_backend.sdance.model.dto.danceClass;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sdance_backend.sdance.model.dto.student.StudentNameDto;
 import com.sdance_backend.sdance.model.entity.enums.Days;

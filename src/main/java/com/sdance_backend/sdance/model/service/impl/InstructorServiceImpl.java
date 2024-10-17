@@ -1,6 +1,6 @@
 package com.sdance_backend.sdance.model.service.impl;
 
-import com.sdance_backend.sdance.model.dto.InstructorDto;
+import com.sdance_backend.sdance.model.dto.instructor.InstructorDto;
 import com.sdance_backend.sdance.model.entity.Instructor;
 import com.sdance_backend.sdance.model.repository.InstructorRepository;
 import com.sdance_backend.sdance.model.service.IInstructorService;
@@ -26,15 +26,18 @@ public class InstructorServiceImpl implements IInstructorService {
     }
 
     @Override
-    public Instructor createAndUpdateInstructor(InstructorDto instructordto) {
-        Instructor instructor = Instructor
-                .builder()
-                .id(instructordto.getId())
-                .name(instructordto.getName())
-                .lastName(instructordto.getLastName())
-                .phoneNumber(instructordto.getPhoneNumber())
-                .document(instructordto.getDocument())
-                .build();
+    public Instructor createAndUpdateInstructor(InstructorDto instructorDto) {
+        Instructor instructor;
+        if (instructorDto.getId() != null && instructorRepository.existsById(instructorDto.getId())) {
+            instructor = instructorRepository.findById(instructorDto.getId()).get();
+        } else {
+            instructor = new Instructor();
+        }
+        instructor.setName(instructorDto.getName());
+        instructor.setLastName(instructorDto.getLastName());
+        instructor.setPhoneNumber(instructorDto.getPhoneNumber());
+        instructor.setDocument(instructorDto.getDocument());
+
         return instructorRepository.save(instructor);
     }
 

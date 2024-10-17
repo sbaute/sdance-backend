@@ -1,8 +1,8 @@
-package com.sdance_backend.sdance.model.dto;
+package com.sdance_backend.sdance.model.dto.instructor;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.sdance_backend.sdance.model.entity.DanceClass;
+import com.sdance_backend.sdance.model.dto.danceClass.DanceClassDto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
