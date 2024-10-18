@@ -52,16 +52,37 @@ public class DanceClassServiceImpl implements IDanceClassService {
 
     @Override
     @Transactional
-    public DanceClass createUpdateDanceClass(DanceClassDto danceClassDto) {
+    public DanceClass createDanceClass(DanceClassDto danceClassDto) {
         DanceClass danceClass;
 
         if((danceClassDto.getId() != null && danceClassRepository.existsById(danceClassDto.getId()))){
+            throw new EntityExistsException("A class with id already exist.");
+        }
+
+        if (isClassExists(danceClassDto.getInstructor(), danceClassDto.getDaysOfWeek(), danceClassDto.getClassTime())) {
+            throw new EntityExistsException("A class with this instructor, day, and time already exists.");
+        }
+
+        danceClass = DanceClass.builder()
+                .className(danceClassDto.getClassName())
+                .daysOfWeek(danceClassDto.getDaysOfWeek())
+                .classTime(danceClassDto.getClassTime())
+                .instructor(instructorRepository.findById(danceClassDto.getInstructor().getId())
+                        .orElseThrow(() -> new EntityNotFoundException("Instructor not found")))
+                .students(danceClassDto.getStudent().stream()
+                        .map(studentNameDto -> studentRepository.findById(studentNameDto.getId())
+                                .orElseThrow(() -> new EntityNotFoundException("Student not found"))
+                        )
+                        .collect(Collectors.toList()))
+                .build();
+        return danceClassRepository.save(danceClass);
+    }
+
+    @Override
+    @Transactional
+    public DanceClass updateDanceClass(DanceClassDto danceClassDto){
+        /*if((danceClassDto.getId() != null && danceClassRepository.existsById(danceClassDto.getId()))){
             danceClass = danceClassRepository.findById(danceClassDto.getId()).get();
-        } else {
-            if (isClassExists(danceClassDto.getInstructor(), danceClassDto.getDaysOfWeek(), danceClassDto.getClassTime())) {
-                throw new EntityExistsException("A class with this instructor, day, and time already exists.");
-            }
-            danceClass = new DanceClass();
         }
         danceClass.setClassName(danceClassDto.getClassName());
         danceClass.setDaysOfWeek(danceClassDto.getDaysOfWeek());
@@ -72,9 +93,8 @@ public class DanceClassServiceImpl implements IDanceClassService {
                 .map(studentNameDto -> studentRepository.findById(studentNameDto.getId())
                         .orElseThrow(() -> new EntityNotFoundException("Student not found"))
                 )
-                .collect(Collectors.toList()));
-
-        return danceClassRepository.save(danceClass);
+                .collect(Collectors.toList()));*/
+        return null;
     }
 
     @Override

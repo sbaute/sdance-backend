@@ -103,7 +103,7 @@ public class DanceClassController {
     @PostMapping("danceClass")
     public ResponseEntity<?> create (@RequestBody DanceClassDto danceClassDto){
         try{
-            DanceClass danceClassSave = danceClassService.createUpdateDanceClass(danceClassDto);
+            DanceClass danceClassSave = danceClassService.createDanceClass(danceClassDto);
             DanceClassDto  danceClassSaveDto = DanceClassDto.builder()
                     .id(danceClassSave.getId())
                     .className(danceClassSave.getClassName())
@@ -129,7 +129,7 @@ public class DanceClassController {
     @PostMapping("danceclass/addStudentsToDanceClass/")
     public ResponseEntity<?> addStudentsToDanceClass(@RequestBody AddStudentsToDanceClassDto studentAndDanceClassDto){
         danceClassService.addStudentsToDanceClass(studentAndDanceClassDto);
-        
+
         return new ResponseEntity<>(ResponseMessage.builder()
                 .message("Students add to class")
                 .object(null)
@@ -142,7 +142,7 @@ public class DanceClassController {
         try{
             if(danceClassService.existsById(id)){
                 danceClassDto.setId(id);
-                DanceClass danceClassUpdate = danceClassService.createUpdateDanceClass(danceClassDto);
+                DanceClass danceClassUpdate = danceClassService.updateDanceClass(danceClassDto);
                 DanceClassDto.builder()
                         .id(danceClassUpdate.getId())
                         .className(danceClassUpdate.getClassName())

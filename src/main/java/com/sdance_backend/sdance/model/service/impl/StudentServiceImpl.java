@@ -91,6 +91,7 @@ public class StudentServiceImpl implements IStudentService {
     public  List<StudentNameDto> mapToStudentNameDto(List<Student> students){
         return students.stream()
                 .map(student -> StudentNameDto.builder()
+                        .id(student.getId())
                         .name(student.getName())
                         .lastName(student.getLastName())
                         .build()).collect(Collectors.toList());

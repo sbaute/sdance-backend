@@ -12,7 +12,8 @@ import java.util.List;
 public interface IDanceClassService {
     List<DanceClass> getAllDanceClass();
     DanceClass getDanceClassById(Integer id);
-    DanceClass createUpdateDanceClass(DanceClassDto danceClassDto);
+    DanceClass createDanceClass(DanceClassDto danceClassDto);
+    DanceClass updateDanceClass(DanceClassDto danceClassDto);
     void deleteDanceClass(DanceClass danceClass);
     boolean existsById(Integer id);
     DanceClassDto mapToDanceClassDto(DanceClass danceClass);
