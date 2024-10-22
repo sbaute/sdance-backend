@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -110,7 +111,9 @@ public class DanceClassController {
                     .daysOfWeek(danceClassSave.getDaysOfWeek())
                     .classTime(danceClassSave.getClassTime())
                     .instructor(instructorService.mapToInstructorNameDto(danceClassSave.getInstructor()))
-                    .student(studentService.mapToStudentNameDto(danceClassSave.getStudents()))
+                    .student((danceClassSave.getStudents() != null && !danceClassSave.getStudents().isEmpty())
+                            ? studentService.mapToStudentNameDto(danceClassSave.getStudents())
+                            : Collections.emptyList())
                     .build();
             return new ResponseEntity<>(ResponseMessage.builder()
                     .message("Dance class save")
