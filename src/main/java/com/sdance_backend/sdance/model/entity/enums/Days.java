@@ -7,7 +7,6 @@ public enum Days {
     THURSDAY("Thursday"),
     FRIDAY("Friday"),
     SATURDAY("Saturday"),
-    SUNDAY("Sunday"),
     MONDAY_WEDNESDAY("Monday & Wednesday"),
     TUESDAY_THURSDAY("Tuesday & Thursday"),
     TUESDAY_FRIDAY("Tuesday & Friday"),

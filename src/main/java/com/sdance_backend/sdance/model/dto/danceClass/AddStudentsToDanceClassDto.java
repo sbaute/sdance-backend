@@ -14,5 +14,5 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AddStudentsToDanceClassDto {
     private Integer danceClassId;
-    private List<Integer> studentIds;
+    private List<Integer> studentId;
 }

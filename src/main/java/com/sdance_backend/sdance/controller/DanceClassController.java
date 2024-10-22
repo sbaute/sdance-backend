@@ -131,7 +131,7 @@ public class DanceClassController {
         danceClassService.addStudentsToDanceClass(studentAndDanceClassDto);
 
         return new ResponseEntity<>(ResponseMessage.builder()
-                .message("Students add to class")
+                .message("Students add to class " + danceClassService.getDanceClassById(studentAndDanceClassDto.getDanceClassId()).getClassName())
                 .object(null)
                 .build(),
                 HttpStatus.OK);
@@ -148,9 +148,8 @@ public class DanceClassController {
                         .className(danceClassUpdate.getClassName())
                         .daysOfWeek(danceClassUpdate.getDaysOfWeek())
                         .classTime(danceClassUpdate.getClassTime())
-                        /*.studentsId(danceClassUpdate.getStudents().stream()
-                                .map(Student::getId)
-                                .collect(Collectors.toList())) // Lista de IDs de estudiantes */
+                        .instructor(instructorService.mapToInstructorNameDto(danceClassUpdate.getInstructor()))
+                        .student(studentService.mapToStudentNameDto(danceClassUpdate.getStudents()))
                         .build();
                 return new ResponseEntity<>(ResponseMessage.builder()
                         .message("Dance class Update")

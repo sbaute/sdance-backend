@@ -81,7 +81,8 @@ public class DanceClassServiceImpl implements IDanceClassService {
     @Override
     @Transactional
     public DanceClass updateDanceClass(DanceClassDto danceClassDto){
-        /*if((danceClassDto.getId() != null && danceClassRepository.existsById(danceClassDto.getId()))){
+        DanceClass danceClass = null;
+        if((danceClassDto.getId() != null && danceClassRepository.existsById(danceClassDto.getId()))){
             danceClass = danceClassRepository.findById(danceClassDto.getId()).get();
         }
         danceClass.setClassName(danceClassDto.getClassName());
@@ -89,12 +90,12 @@ public class DanceClassServiceImpl implements IDanceClassService {
         danceClass.setClassTime(danceClassDto.getClassTime());
         danceClass.setInstructor(instructorRepository.findById(danceClassDto.getInstructor().getId())
                 .orElseThrow(() -> new EntityNotFoundException("Instructor not found")));
-        danceClass.setStudents(danceClassDto.getStudent().stream()
+       /* danceClass.setStudents(danceClassDto.getStudent().stream()
                 .map(studentNameDto -> studentRepository.findById(studentNameDto.getId())
                         .orElseThrow(() -> new EntityNotFoundException("Student not found"))
                 )
                 .collect(Collectors.toList()));*/
-        return null;
+        return danceClassRepository.save(danceClass);
     }
 
     @Override
@@ -108,7 +109,7 @@ public class DanceClassServiceImpl implements IDanceClassService {
     @Override
     public DanceClass addStudentsToDanceClass(AddStudentsToDanceClassDto studentAndDanceClassDto) {
             DanceClass danceClass = danceClassRepository.findById(studentAndDanceClassDto.getDanceClassId()).orElseThrow( () -> new EntityNotFoundException("Dance class not found"));
-            List<Student> students = StreamSupport.stream(studentRepository.findAllById(studentAndDanceClassDto.getStudentIds()).spliterator(), false)
+            List<Student> students = StreamSupport.stream(studentRepository.findAllById(studentAndDanceClassDto.getStudentId()).spliterator(), false)
                 .collect(Collectors.toList());
 
             List<Student> newStudents = students.stream()
@@ -116,6 +117,8 @@ public class DanceClassServiceImpl implements IDanceClassService {
                 .collect(Collectors.toList());
 
             danceClass.getStudents().addAll(newStudents);
+
+            //agregar los students a la lista de instructor
 
         return danceClassRepository.save(danceClass);
     }
