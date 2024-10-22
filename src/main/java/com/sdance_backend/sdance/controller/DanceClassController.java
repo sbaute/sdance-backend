@@ -180,11 +180,16 @@ public class DanceClassController {
     public ResponseEntity<?> delete (@PathVariable Integer id){
         try {
             DanceClass danceClassDelete = danceClassService.getDanceClassById(id);
+            if (danceClassDelete == null) {
+                return new ResponseEntity<>(ResponseMessage.builder()
+                        .message("Dance class not found")
+                        .object(null)
+                        .build(), HttpStatus.NOT_FOUND);
+            }
             danceClassService.deleteDanceClass(danceClassDelete);
             return new ResponseEntity<>(ResponseMessage
                     .builder()
                     .message("The Dance class was deleted")
-                    .object(danceClassDelete)
                     .build(), HttpStatus.NO_CONTENT);
         } catch (DataAccessException exDT) {
             return new ResponseEntity<>(ResponseMessage.builder()
