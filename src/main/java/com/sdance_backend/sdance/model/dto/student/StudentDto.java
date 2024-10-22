@@ -2,6 +2,7 @@ package com.sdance_backend.sdance.model.dto.student;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.sdance_backend.sdance.model.dto.danceClass.DanceClassNameDto;
 import com.sdance_backend.sdance.model.entity.DanceClass;
 import lombok.*;
 
@@ -19,6 +20,6 @@ public class StudentDto {
     private String lastName;
     private String document;
     private String phoneNumber;
-    private List<Integer> danceClassesId;
+    private List<DanceClassNameDto> danceClassNameDtos;
 
 }

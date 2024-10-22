@@ -1,9 +1,13 @@
 package com.sdance_backend.sdance.controller;
 
+import com.sdance_backend.sdance.model.dto.danceClass.DanceClassDto;
+import com.sdance_backend.sdance.model.dto.danceClass.DanceClassNameDto;
 import com.sdance_backend.sdance.model.dto.student.StudentDto;
+import com.sdance_backend.sdance.model.dto.student.StudentNameDto;
 import com.sdance_backend.sdance.model.entity.DanceClass;
 import com.sdance_backend.sdance.model.entity.Student;
 import com.sdance_backend.sdance.model.payload.ResponseMessage;
+import com.sdance_backend.sdance.model.service.IDanceClassService;
 import com.sdance_backend.sdance.model.service.IStudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -11,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -19,6 +24,9 @@ public class StudentController {
 
     @Autowired
     private IStudentService studentService;
+
+    @Autowired
+    private IDanceClassService danceClassService;
 
     @GetMapping("student")
     public void getAll() {
@@ -29,6 +37,18 @@ public class StudentController {
     public ResponseEntity<?> getById(@PathVariable Integer id){
         try{
             Student student = studentService.getStudentById(id);
+
+            List<DanceClassNameDto> danceClassNameDto = danceClassService.mapToDanceClassDtoWhitInstructor(student.getDanceClasses());
+
+            StudentDto studentDto = StudentDto.builder()
+                    .id(student.getId())
+                    .name(student.getName())
+                    .lastName(student.getLastName())
+                    .document(student.getDocument())
+                    .phoneNumber(student.getPhoneNumber())
+                    .danceClassNameDtos(danceClassNameDto)
+                    .build();
+
             if(student == null) {
                 return new ResponseEntity<>(ResponseMessage.builder()
                         .message("The student of id " + id + " was not found")
@@ -55,20 +75,20 @@ public class StudentController {
     public ResponseEntity<?> create (@RequestBody StudentDto studentDto){
         try{
             Student studentSave = studentService.createUpdateStudent(studentDto);
-           StudentDto.builder()
+            StudentDto studentSaveDto = StudentDto.builder()
                     .id(studentSave.getId())
                     .name(studentSave.getName())
                     .lastName(studentSave.getLastName())
                     .document(studentSave.getDocument())
                     .phoneNumber(studentSave.getPhoneNumber())
-                    .danceClassesId(studentSave.getDanceClasses()
+                    /*.danceClassesId(studentSave.getDanceClasses()
                     .stream()
                     .map(DanceClass::getId)
-                    .collect(Collectors.toList()))
+                    .collect(Collectors.toList()))*/
                     .build();
             return new ResponseEntity<>(ResponseMessage.builder()
                     .message("Student save")
-                    .object(studentDto)
+                    .object(studentSaveDto)
                     .build(),
                     HttpStatus.CREATED);
         }catch (DataAccessException exDT) {

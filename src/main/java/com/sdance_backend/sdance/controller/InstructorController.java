@@ -33,16 +33,16 @@ public class InstructorController {
         List<InstructorDto> instructorDto = instructors.stream()
                 .map(instructor -> {
                     List<DanceClassDto> danceClassDto = instructor.getDanceClasses().stream()
-                            .map(danceClass -> danceClassService.mapToDanceClassDto(danceClass))
+                            .map(danceClass -> danceClassService.mapToDanceClassDtoWhitStudents(danceClass))
                             .collect(Collectors.toList());
 
                     return InstructorDto.builder()
                             .id(instructor.getId())
                             .name(instructor.getName())
                             .lastName(instructor.getLastName())
-                            .document(instructor.getDocument())
+                           /* .document(instructor.getDocument())
                             .phoneNumber(instructor.getPhoneNumber())
-                            .danceClasses(danceClassDto)
+                            .danceClasses(danceClassDto)*/
                             .build();
                 })
                 .collect(Collectors.toList());
@@ -60,7 +60,7 @@ public class InstructorController {
             Instructor instructor = instructorService.getInstructorById(id);
 
             List<DanceClassDto> danceClassDto = instructor.getDanceClasses().stream()
-                    .map(danceClass -> danceClassService.mapToDanceClassDto(danceClass))
+                    .map(danceClass -> danceClassService.mapToDanceClassDtoWhitStudents(danceClass))
                     .collect(Collectors.toList());
 
             InstructorDto instructorDtoGet = InstructorDto.builder()

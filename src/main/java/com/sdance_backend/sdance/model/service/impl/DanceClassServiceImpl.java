@@ -2,6 +2,7 @@ package com.sdance_backend.sdance.model.service.impl;
 
 import com.sdance_backend.sdance.model.dto.danceClass.AddStudentsToDanceClassDto;
 import com.sdance_backend.sdance.model.dto.danceClass.DanceClassDto;
+import com.sdance_backend.sdance.model.dto.danceClass.DanceClassNameDto;
 import com.sdance_backend.sdance.model.dto.instructor.InstructorNameDto;
 import com.sdance_backend.sdance.model.dto.student.StudentNameDto;
 import com.sdance_backend.sdance.model.entity.DanceClass;
@@ -13,6 +14,7 @@ import com.sdance_backend.sdance.model.repository.DanceClassRepository;
 import com.sdance_backend.sdance.model.repository.InstructorRepository;
 import com.sdance_backend.sdance.model.repository.StudentRepository;
 import com.sdance_backend.sdance.model.service.IDanceClassService;
+import com.sdance_backend.sdance.model.service.IInstructorService;
 import com.sdance_backend.sdance.model.service.IStudentService;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
@@ -39,6 +41,9 @@ public class DanceClassServiceImpl implements IDanceClassService {
 
     @Autowired
     private IStudentService studentService;
+
+    @Autowired
+    private IInstructorService instructorService;
 
     @Override
     public List<DanceClass> getAllDanceClass() {
@@ -153,7 +158,7 @@ public class DanceClassServiceImpl implements IDanceClassService {
     }
 
     @Override
-    public DanceClassDto mapToDanceClassDto(DanceClass danceClass) {
+    public DanceClassDto mapToDanceClassDtoWhitStudents(DanceClass danceClass) {
         List<StudentNameDto> studentNameDtos = studentService.mapToStudentNameDto(danceClass.getStudents());
         return DanceClassDto.builder()
                 .className(danceClass.getClassName())
@@ -161,5 +166,15 @@ public class DanceClassServiceImpl implements IDanceClassService {
                 .classTime(danceClass.getClassTime())
                 .student(studentNameDtos)
                 .build();
+    }
+
+    @Override
+    public List<DanceClassNameDto> mapToDanceClassDtoWhitInstructor(List<DanceClass> danceClasses) {
+        return danceClasses.stream()
+                .map(danceClass -> DanceClassNameDto.builder()
+                        .id(danceClass.getId())
+                        .className(danceClass.getClassName())
+                        .instructor(instructorService.mapToInstructorNameDto(danceClass.getInstructor()))
+                        .build()).collect(Collectors.toList());
     }
 }

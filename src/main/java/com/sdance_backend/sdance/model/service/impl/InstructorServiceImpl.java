@@ -1,22 +1,30 @@
 package com.sdance_backend.sdance.model.service.impl;
 
+import com.sdance_backend.sdance.model.dto.instructor.AddInstructorToDanceClass;
 import com.sdance_backend.sdance.model.dto.instructor.InstructorDto;
 import com.sdance_backend.sdance.model.dto.instructor.InstructorNameDto;
 import com.sdance_backend.sdance.model.dto.student.StudentNameDto;
 import com.sdance_backend.sdance.model.entity.Instructor;
 import com.sdance_backend.sdance.model.entity.Student;
+import com.sdance_backend.sdance.model.repository.DanceClassRepository;
 import com.sdance_backend.sdance.model.repository.InstructorRepository;
 import com.sdance_backend.sdance.model.service.IInstructorService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 public class InstructorServiceImpl implements IInstructorService {
 
     @Autowired
     InstructorRepository instructorRepository;
+
+    @Autowired
+    DanceClassRepository danceClassRepository;
 
     @Override
     public List<Instructor> getAllInstructors() {

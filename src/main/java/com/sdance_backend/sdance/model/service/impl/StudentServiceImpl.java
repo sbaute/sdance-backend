@@ -49,14 +49,7 @@ public class StudentServiceImpl implements IStudentService {
                             .danceClasses(new ArrayList<>())
                             .build();
 
-        // Agregar las clases de danza a la lista de estudiantes (opcional)
-        if((!studentDto.getDanceClassesId().isEmpty()) && (studentDto.getDanceClassesId() != null)){
-            for (Integer danceClassId : studentDto.getDanceClassesId()) {
-                DanceClass danceClass = danceClassRepository.findById(danceClassId)
-                        .orElseThrow(() -> new EntityNotFoundException("ClassDance not found"));
-                student.getDanceClasses().add(danceClass);
-            }
-        }
+
         return studentRepository.save(student);
     }
 
