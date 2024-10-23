@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -68,7 +67,7 @@ public class DanceClassServiceImpl implements IDanceClassService {
             throw new EntityExistsException("A class with this instructor, day, and time already exists.");
         }
 
-        if(danceClassDto.getStudent().isEmpty()){
+        if(danceClassDto.getStudents().isEmpty()){
             danceClass = DanceClass.builder()
                     .className(danceClassDto.getClassName())
                     .daysOfWeek(danceClassDto.getDaysOfWeek())
@@ -83,7 +82,7 @@ public class DanceClassServiceImpl implements IDanceClassService {
                     .classTime(danceClassDto.getClassTime())
                     .instructor(instructorRepository.findById(danceClassDto.getInstructor().getId())
                             .orElseThrow(() -> new EntityNotFoundException("Instructor not found")))
-                    .students(danceClassDto.getStudent().stream()
+                    .students(danceClassDto.getStudents().stream()
                             .map(studentNameDto -> studentRepository.findById(studentNameDto.getId())
                                     .orElseThrow(() -> new EntityNotFoundException("Student not found"))
                             )
@@ -164,7 +163,7 @@ public class DanceClassServiceImpl implements IDanceClassService {
                 .className(danceClass.getClassName())
                 .daysOfWeek(danceClass.getDaysOfWeek())
                 .classTime(danceClass.getClassTime())
-                .student(studentNameDtos)
+                .students(studentNameDtos)
                 .build();
     }
 

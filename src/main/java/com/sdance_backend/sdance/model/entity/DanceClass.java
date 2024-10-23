@@ -39,6 +39,7 @@ public class DanceClass {
             joinColumns = @JoinColumn(name = "dance_class_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
+    @JsonBackReference
     private List<Student> students;
 
 }

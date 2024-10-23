@@ -20,6 +20,6 @@ public class DanceClassDto {
     private Days daysOfWeek;
     private Hour classTime;
     private InstructorNameDto instructor;
-    private List<StudentNameDto> student;
+    private List<StudentNameDto> students;
 
 }

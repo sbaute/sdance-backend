@@ -28,18 +28,40 @@ public class StudentController {
     @Autowired
     private IDanceClassService danceClassService;
 
-    @GetMapping("student")
-    public void getAll() {
-        studentService.getAllStudents();
+    @GetMapping("students")
+    public ResponseEntity<?> getAll() {
+        try {
+             List<Student> students = studentService.getAllStudents();
+             List<StudentDto> studentDto = students.stream().map(student -> {
+                List<DanceClassNameDto> danceClassNameDto = danceClassService.mapToDanceClassDtoWhitInstructor(student.getDanceClasses());
+                 return StudentDto.builder()
+                        .id(student.getId())
+                        .name(student.getName())
+                        .lastName(student.getLastName())
+                        .document(student.getDocument())
+                        .phoneNumber(student.getPhoneNumber())
+                        .danceClassNameDtos(danceClassNameDto)
+                        .build();
+            }).collect(Collectors.toList());
+            return new ResponseEntity<>(ResponseMessage.builder()
+                    .message("")
+                    .object(studentDto)
+                    .build(),
+                    HttpStatus.OK);
+        }catch (DataAccessException exDT) {
+            return new ResponseEntity<>(ResponseMessage.builder()
+                    .message(exDT.getMessage())
+                    .object(null)
+                    .build(),
+                    HttpStatus.METHOD_NOT_ALLOWED);
+        }
     }
 
     @GetMapping("student/{id}")
     public ResponseEntity<?> getById(@PathVariable Integer id){
         try{
             Student student = studentService.getStudentById(id);
-
             List<DanceClassNameDto> danceClassNameDto = danceClassService.mapToDanceClassDtoWhitInstructor(student.getDanceClasses());
-
             StudentDto studentDto = StudentDto.builder()
                     .id(student.getId())
                     .name(student.getName())
@@ -48,7 +70,6 @@ public class StudentController {
                     .phoneNumber(student.getPhoneNumber())
                     .danceClassNameDtos(danceClassNameDto)
                     .build();
-
             if(student == null) {
                 return new ResponseEntity<>(ResponseMessage.builder()
                         .message("The student of id " + id + " was not found")
@@ -58,7 +79,7 @@ public class StudentController {
             }
             return new ResponseEntity<>(ResponseMessage.builder()
                     .message("")
-                    .object(student)
+                    .object(studentDto)
                     .build(),
                     HttpStatus.OK);
 
@@ -81,10 +102,6 @@ public class StudentController {
                     .lastName(studentSave.getLastName())
                     .document(studentSave.getDocument())
                     .phoneNumber(studentSave.getPhoneNumber())
-                    /*.danceClassesId(studentSave.getDanceClasses()
-                    .stream()
-                    .map(DanceClass::getId)
-                    .collect(Collectors.toList()))*/
                     .build();
             return new ResponseEntity<>(ResponseMessage.builder()
                     .message("Student save")
@@ -154,5 +171,25 @@ public class StudentController {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @DeleteMapping("/student/deleteClass/{studentId}")
+    public ResponseEntity<?> deleteDanceClass (@PathVariable Integer studentId, @RequestBody List<Integer> danceClassId) {
+        try {
+            studentService.deleteDanceClass(studentId, danceClassId);
+            return new ResponseEntity<>(ResponseMessage
+                    .builder()
+                    .message("The dance class deleted")
+                    .build(), HttpStatus.OK);
+
+        }catch (DataAccessException exDT) {
+            return new ResponseEntity<>(ResponseMessage.builder()
+                    .message(exDT.getMessage())
+                    .object(null)
+                    .build(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 
 }

@@ -48,7 +48,7 @@ public class DanceClassController {
                             .daysOfWeek(danceClass.getDaysOfWeek())
                             .classTime(danceClass.getClassTime())
                             .instructor(instructorNameDto)
-                            .student(studentNameDto)
+                            .students(studentNameDto)
                             .build();
                 })
                 .collect(Collectors.toList());
@@ -83,7 +83,7 @@ public class DanceClassController {
                     .daysOfWeek(danceClass.getDaysOfWeek())
                     .classTime(danceClass.getClassTime())
                     .instructor(instructorNameDto)
-                    .student(studentNameDto)
+                    .students(studentNameDto)
                     .build();
 
             return new ResponseEntity<>(ResponseMessage
@@ -111,7 +111,7 @@ public class DanceClassController {
                     .daysOfWeek(danceClassSave.getDaysOfWeek())
                     .classTime(danceClassSave.getClassTime())
                     .instructor(instructorService.mapToInstructorNameDto(danceClassSave.getInstructor()))
-                    .student((danceClassSave.getStudents() != null && !danceClassSave.getStudents().isEmpty())
+                    .students((danceClassSave.getStudents() != null && !danceClassSave.getStudents().isEmpty())
                             ? studentService.mapToStudentNameDto(danceClassSave.getStudents())
                             : Collections.emptyList())
                     .build();
@@ -152,7 +152,7 @@ public class DanceClassController {
                         .daysOfWeek(danceClassUpdate.getDaysOfWeek())
                         .classTime(danceClassUpdate.getClassTime())
                         .instructor(instructorService.mapToInstructorNameDto(danceClassUpdate.getInstructor()))
-                        .student(studentService.mapToStudentNameDto(danceClassUpdate.getStudents()))
+                        .students(studentService.mapToStudentNameDto(danceClassUpdate.getStudents()))
                         .build();
                 return new ResponseEntity<>(ResponseMessage.builder()
                         .message("Dance class Update")

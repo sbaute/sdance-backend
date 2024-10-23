@@ -1,5 +1,6 @@
 package com.sdance_backend.sdance.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,7 +31,7 @@ public class Student {
     @Column(name = "phone_number",nullable = false)
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "students", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "students", cascade = CascadeType.ALL)
     private List<DanceClass> danceClasses;
 
 
