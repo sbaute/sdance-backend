@@ -1,12 +1,12 @@
 package com.sdance_backend.sdance.controller;
 
 
-import com.sdance_backend.sdance.model.dto.danceClass.DanceClassDto;
-import com.sdance_backend.sdance.model.dto.instructor.InstructorDto;
-import com.sdance_backend.sdance.model.entity.Instructor;
-import com.sdance_backend.sdance.model.payload.ResponseMessage;
-import com.sdance_backend.sdance.model.service.IDanceClassService;
-import com.sdance_backend.sdance.model.service.IInstructorService;
+import com.sdance_backend.sdance.dto.danceClass.DanceClassDto;
+import com.sdance_backend.sdance.dto.instructor.InstructorDto;
+import com.sdance_backend.sdance.model.Instructor;
+import com.sdance_backend.sdance.payload.ResponseMessage;
+import com.sdance_backend.sdance.service.IDanceClassService;
+import com.sdance_backend.sdance.service.IInstructorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
