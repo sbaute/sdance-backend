@@ -7,13 +7,14 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class InstructorDTO {
 
-    private Integer id;
+    private UUID id;
     private String name;
     private String lastName;
     private String document;

@@ -13,7 +13,7 @@ import java.util.UUID;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DanceClassRequestDTO {
-    private Integer id;
+    private UUID id;
     private String className;
     private Days daysOfWeek;
     private Hour classTime;
