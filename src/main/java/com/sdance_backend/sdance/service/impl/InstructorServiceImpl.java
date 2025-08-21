@@ -1,67 +1,97 @@
 package com.sdance_backend.sdance.service.impl;
 
-import com.sdance_backend.sdance.dto.instructor.InstructorDto;
-import com.sdance_backend.sdance.dto.instructor.InstructorNameDto;
-import com.sdance_backend.sdance.model.Instructor;
-import com.sdance_backend.sdance.repository.DanceClassRepository;
+import com.sdance_backend.sdance.dto.instructor.InstructorDTO;
+import com.sdance_backend.sdance.dto.instructor.InstructorRequestDTO;
+import com.sdance_backend.sdance.entity.Instructor;
+import com.sdance_backend.sdance.exceptions.CustomException;
+import com.sdance_backend.sdance.exceptions.ErrorType;
+import com.sdance_backend.sdance.mapper.InstructorMapper;
 import com.sdance_backend.sdance.repository.InstructorRepository;
 import com.sdance_backend.sdance.service.IInstructorService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class InstructorServiceImpl implements IInstructorService {
 
-    @Autowired
-    InstructorRepository instructorRepository;
-
-    @Autowired
-    DanceClassRepository danceClassRepository;
+    private final InstructorRepository instructorRepository;
+    private final InstructorMapper instructorMapper;
 
     @Override
-    public List<Instructor> getAllInstructors() {
-        return (List<Instructor>) instructorRepository.findAll();
-    }
+    public List<InstructorDTO> getAllInstructors() {
+        List<Instructor> instructors = (List<Instructor>) instructorRepository.findAll();
 
-    @Override
-    public Instructor getInstructorById(Integer id) {
-        return instructorRepository.findById(id).orElse(null);
-    }
-
-    @Override
-    public Instructor createAndUpdateInstructor(InstructorDto instructorDto) {
-        Instructor instructor;
-        if (instructorDto.getId() != null && instructorRepository.existsById(instructorDto.getId())) {
-            instructor = instructorRepository.findById(instructorDto.getId()).get();
-        } else {
-            instructor = new Instructor();
+        if(instructors.isEmpty()) {
+            throw new CustomException(ErrorType.INSTRUCTOR_LIST_EMPTY);
         }
-        instructor.setName(instructorDto.getName());
-        instructor.setLastName(instructorDto.getLastName());
-        instructor.setPhoneNumber(instructorDto.getPhoneNumber());
-        instructor.setDocument(instructorDto.getDocument());
-
-        return instructorRepository.save(instructor);
+        return instructorMapper.toResponseDTOList(instructors);
     }
 
     @Override
-    public void deleteInstructor(Instructor instructor) {
-        instructorRepository.delete(instructor);
+    public InstructorDTO getInstructorById(UUID id) {
+        return instructorMapper.toResponseDTO(getInstructor(id));
     }
 
     @Override
-    public Boolean existById(Integer id) {
-        return instructorRepository.existsById(id);
+    public InstructorDTO createInstructor(InstructorRequestDTO instructorRequestDto) {
+        try {
+            validateFields(instructorRequestDto);
+
+            Instructor instructor = instructorMapper.toEntity(instructorRequestDto);
+            Instructor savedInstructor = instructorRepository.save(instructor);
+            return instructorMapper.toResponseDTO(savedInstructor);
+
+        } catch (Exception ex) {
+            throw new CustomException(
+                    ErrorType.INSTRUCTOR_CREATE_ERROR,
+                    ex.getMessage()
+            );
+        }
     }
 
     @Override
-    public InstructorNameDto mapToInstructorNameDto(Instructor instructor){
-        return InstructorNameDto.builder()
-                        .id(instructor.getId())
-                        .name(instructor.getName())
-                        .lastName(instructor.getLastName())
-                        .build();
+    public InstructorDTO updateInstructor(InstructorRequestDTO instructorRequestDto, UUID id) {
+        try {
+            validateFields(instructorRequestDto);
+
+            Instructor instructor = getInstructor(id);
+           instructorMapper.updateFromDTO(instructorRequestDto, instructor);
+            return instructorMapper.toResponseDTO(instructor);
+
+        } catch (Exception ex) {
+            throw new CustomException(
+                    ErrorType.INSTRUCTOR_UPDATE_ERROR,
+                    ex.getMessage()
+            );
+        }
     }
+
+    @Override
+    public void deleteInstructor(UUID id) {
+        try {
+            Instructor instructor = getInstructor(id);
+            instructorRepository.delete(instructor);
+        }catch (Exception ex) {
+            throw new CustomException(
+                    ErrorType.INSTRUCTOR_DELETE_ERROR,
+                    ex.getMessage()
+            );
+        }
+    }
+
+    public Instructor getInstructor(UUID id) {
+        Instructor instructor = instructorRepository.findById(id).orElseThrow(() -> new CustomException(ErrorType.INSTRUCTOR_NOT_FOUND));
+        return instructor;
+    }
+
+    private void validateFields(InstructorRequestDTO instructorRequestDto){
+        if(instructorRequestDto.getName() == null || instructorRequestDto.getLastName() == null || instructorRequestDto.getPhoneNumber().isEmpty() || instructorRequestDto.getDocument().isEmpty()){
+            throw new CustomException(ErrorType.REQUIRED_FIELDS_MISSING);
+        }
+    }
+
 }

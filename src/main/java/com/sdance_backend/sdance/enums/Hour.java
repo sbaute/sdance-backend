@@ -1,5 +1,8 @@
 package com.sdance_backend.sdance.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum Hour {
     HOUR_9_10("09:00-10:00"),
     HOUR_10_11("10:00 - 11:00"),
@@ -20,7 +23,4 @@ public enum Hour {
         this.displayName = displayName;
     }
 
-    public String getDisplayName() {
-        return displayName;
-    }
 }

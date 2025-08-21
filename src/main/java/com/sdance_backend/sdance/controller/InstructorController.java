@@ -1,175 +1,49 @@
 package com.sdance_backend.sdance.controller;
 
 
-import com.sdance_backend.sdance.dto.danceClass.DanceClassDto;
-import com.sdance_backend.sdance.dto.instructor.InstructorDto;
-import com.sdance_backend.sdance.model.Instructor;
-import com.sdance_backend.sdance.payload.ResponseMessage;
-import com.sdance_backend.sdance.service.IDanceClassService;
+import com.sdance_backend.sdance.dto.instructor.InstructorDTO;
+import com.sdance_backend.sdance.dto.instructor.InstructorRequestDTO;
 import com.sdance_backend.sdance.service.IInstructorService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.http.HttpStatus;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 @RestController
-@RequestMapping(path = "/api/v1")
+@RequestMapping("/api/v1/instructors")
+@Slf4j
+@AllArgsConstructor
 public class InstructorController {
 
-    @Autowired
-    IInstructorService instructorService;
+    private final IInstructorService instructorService;
 
-    @Autowired
-    IDanceClassService danceClassService;
-
-    @GetMapping("instructors")
-    public ResponseEntity<?> getAll() {
-       List<Instructor> instructors =  instructorService.getAllInstructors();
-
-        List<InstructorDto> instructorDto = instructors.stream()
-                .map(instructor -> {
-                    List<DanceClassDto> danceClassDto = instructor.getDanceClasses().stream()
-                            .map(danceClass -> danceClassService.mapToDanceClassDtoWhitStudents(danceClass))
-                            .collect(Collectors.toList());
-
-                    return InstructorDto.builder()
-                            .id(instructor.getId())
-                            .name(instructor.getName())
-                            .lastName(instructor.getLastName())
-                           /* .document(instructor.getDocument())
-                            .phoneNumber(instructor.getPhoneNumber())
-                            .danceClasses(danceClassDto)*/
-                            .build();
-                })
-                .collect(Collectors.toList());
-
-        return new ResponseEntity<>(ResponseMessage.builder()
-                .message("")
-                .object(instructorDto)
-                .build(),
-                HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity<List<InstructorDTO>> getAll() {
+        return ResponseEntity.ok(instructorService.getAllInstructors());
     }
 
-    @GetMapping("instructor/{id}")
-    public ResponseEntity<?> getById(@PathVariable Integer id) {
-        try {
-            Instructor instructor = instructorService.getInstructorById(id);
-
-            List<DanceClassDto> danceClassDto = instructor.getDanceClasses().stream()
-                    .map(danceClass -> danceClassService.mapToDanceClassDtoWhitStudents(danceClass))
-                    .collect(Collectors.toList());
-
-            InstructorDto instructorDtoGet = InstructorDto.builder()
-                    .id(instructor.getId())
-                    .name(instructor.getName())
-                    .lastName(instructor.getLastName())
-                    .document(instructor.getDocument())
-                    .phoneNumber(instructor.getPhoneNumber())
-                    .danceClasses(danceClassDto)
-                    .build();
-            if(instructor == null) {
-                return new ResponseEntity<>(ResponseMessage.builder()
-                        .message("The instructor of id " + id + " was not found")
-                        .object(null)
-                        .build(),
-                        HttpStatus.NOT_FOUND);
-            }
-            return new ResponseEntity<>(ResponseMessage.builder()
-                    .message("")
-                    .object(instructorDtoGet)
-                    .build(),
-                    HttpStatus.OK);
-
-        }catch (DataAccessException exDT) {
-            return new ResponseEntity<>(ResponseMessage.builder()
-                    .message(exDT.getMessage())
-                    .object(null)
-                    .build(),
-                    HttpStatus.METHOD_NOT_ALLOWED);
-        }
+    @GetMapping("/{id}")
+    public ResponseEntity<InstructorDTO> getById(@PathVariable UUID id) {
+     return ResponseEntity.ok(instructorService.getInstructorById(id));
     }
 
-    @PostMapping("instructor")
-    public ResponseEntity<?> create (@RequestBody InstructorDto instructorDto){
-        try{
-            Instructor instructorSave = instructorService.createAndUpdateInstructor(instructorDto);
-            InstructorDto savedDto = InstructorDto.builder()
-                    .name(instructorSave.getName())
-                    .lastName(instructorSave.getLastName())
-                    .build();
-            return new ResponseEntity<>(ResponseMessage.builder()
-                    .message("Instructor save")
-                    .object(savedDto)
-                    .build(),
-                    HttpStatus.CREATED);
-        }catch (DataAccessException exDT) {
-            return new ResponseEntity<>(ResponseMessage.builder()
-                    .message(exDT.getMessage())
-                    .object(null)
-                    .build(),
-                    HttpStatus.METHOD_NOT_ALLOWED);
-        }
+    @PostMapping
+    public ResponseEntity<InstructorDTO> create (@RequestBody InstructorRequestDTO instructorRequestDto){
+       return ResponseEntity.ok(instructorService.createInstructor(instructorRequestDto));
     }
 
-    @PutMapping("instructor/{id}")
-    public ResponseEntity<?> update (@RequestBody InstructorDto instructorDto, @PathVariable Integer id){
-        try{
-            if(instructorService.existById(id)){
-                instructorDto.setId(id);
-                Instructor instructorUpdate = instructorService.createAndUpdateInstructor(instructorDto);
-                InstructorDto updateDto = InstructorDto.builder()
-                        .id(instructorUpdate.getId())
-                        .name(instructorUpdate.getName())
-                        .lastName(instructorUpdate.getLastName())
-                        .phoneNumber(instructorUpdate.getPhoneNumber())
-                        .document(instructorUpdate.getDocument())
-                        .build();
-                return new ResponseEntity<>(ResponseMessage.builder()
-                        .message("Instructor Update")
-                        .object(updateDto)
-                        .build(),
-                        HttpStatus.CREATED);
-
-            } else {
-                return new ResponseEntity<>(ResponseMessage.builder()
-                        .message("The instructor who wants to update is not found")
-                        .object(null)
-                        .build(),
-                        HttpStatus.NOT_FOUND);
-            }
-
-        }catch (DataAccessException exDT) {
-            return new ResponseEntity<>(ResponseMessage.builder()
-                    .message(exDT.getMessage())
-                    .object(null)
-                    .build(),
-                    HttpStatus.METHOD_NOT_ALLOWED);
-        }
+    @PutMapping("/{id}")
+    public ResponseEntity<InstructorDTO> update (@RequestBody InstructorRequestDTO instructorRequestDto, @PathVariable UUID id){
+       return ResponseEntity.ok(instructorService.updateInstructor(instructorRequestDto, id));
     }
 
-    @DeleteMapping("instructor/{id}")
-    public ResponseEntity<?> delete (@PathVariable Integer id){
-        try {
-            Instructor instructorDeleted = instructorService.getInstructorById(id);
-            instructorService.deleteInstructor(instructorDeleted);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (DataAccessException exDT) {
-            return new ResponseEntity<>(ResponseMessage.builder()
-                    .message(exDT.getMessage())
-                    .object(null)
-                    .build(),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete (@PathVariable UUID id){
+      instructorService.deleteInstructor(id);
+      return ResponseEntity.noContent().build();
     }
-
-
-
-
-
-
 
 }

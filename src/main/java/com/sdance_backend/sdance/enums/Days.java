@@ -1,5 +1,8 @@
 package com.sdance_backend.sdance.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum Days {
     MONDAY("Monday"),
     TUESDAY("Tuesday"),
@@ -18,7 +21,4 @@ public enum Days {
         this.displayName = displayName;
     }
 
-    public String getDisplayName() {
-        return displayName;
-    }
 }

@@ -1,19 +1,16 @@
 package com.sdance_backend.sdance.service;
 
-import com.sdance_backend.sdance.dto.instructor.InstructorDto;
-import com.sdance_backend.sdance.dto.instructor.InstructorNameDto;
-import com.sdance_backend.sdance.model.Instructor;
+import com.sdance_backend.sdance.dto.instructor.InstructorDTO;
+import com.sdance_backend.sdance.dto.instructor.InstructorRequestDTO;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface IInstructorService {
 
-   List<Instructor> getAllInstructors();
-   Instructor getInstructorById(Integer id);
-   Instructor createAndUpdateInstructor(InstructorDto instructorDto);
-   void deleteInstructor(Instructor instructor);
-   Boolean existById(Integer id);
-   InstructorNameDto mapToInstructorNameDto(Instructor instructor);
-
-
+   List<InstructorDTO> getAllInstructors();
+   InstructorDTO getInstructorById(UUID id);
+   InstructorDTO createInstructor(InstructorRequestDTO instructorRequestDto);
+   InstructorDTO updateInstructor(InstructorRequestDTO instructorRequestDto, UUID id);
+   void deleteInstructor(UUID iD);
 }

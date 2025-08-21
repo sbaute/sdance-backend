@@ -2,22 +2,21 @@ package com.sdance_backend.sdance.dto.student;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.sdance_backend.sdance.dto.danceClass.DanceClassNameDto;
+import com.sdance_backend.sdance.dto.danceClass.DanceClassNameDTO;
 import lombok.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
-@ToString
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class StudentDto {
 
-    private Integer id;
+    private UUID id;
     private String name;
     private String lastName;
     private String document;
     private String phoneNumber;
-    private List<DanceClassNameDto> danceClassNameDtos;
-
+    private List<DanceClassNameDTO> danceClasses;
 }

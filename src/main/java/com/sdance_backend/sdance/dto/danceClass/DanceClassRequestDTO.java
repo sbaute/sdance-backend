@@ -1,19 +1,21 @@
 package com.sdance_backend.sdance.dto.danceClass;
 
+
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.sdance_backend.sdance.dto.instructor.InstructorNameDto;
+import com.sdance_backend.sdance.enums.Days;
+import com.sdance_backend.sdance.enums.Hour;
 import lombok.Builder;
 import lombok.Data;
-import lombok.ToString;
 
+import java.util.UUID;
 
 @Data
-@ToString
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DanceClassNameDto {
-
+public class DanceClassRequestDTO {
     private Integer id;
     private String className;
-    private InstructorNameDto instructor;
+    private Days daysOfWeek;
+    private Hour classTime;
+    private UUID instructorId;
 }

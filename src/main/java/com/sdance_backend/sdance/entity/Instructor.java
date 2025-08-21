@@ -1,26 +1,24 @@
-package com.sdance_backend.sdance.model;
+package com.sdance_backend.sdance.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
+import java.util.UUID;
 
 
-@Data
+@Entity
+@Table(name = "instructor")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity
 public class Instructor {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
+    private UUID id = UUID.randomUUID();
 
     @Column(name = "name", nullable = false)
     private String name;

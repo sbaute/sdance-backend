@@ -1,18 +1,19 @@
-package com.sdance_backend.sdance.dto.instructor;
-
+package com.sdance_backend.sdance.dto.student;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 
+import java.util.UUID;
+
 @Data
-@ToString
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class InstructorNameDto {
-
-    private  Integer id;
+public class StudentRequestDto {
+    private UUID id;
     private String name;
     private String lastName;
+    private String document;
+    private String phoneNumber;
 }

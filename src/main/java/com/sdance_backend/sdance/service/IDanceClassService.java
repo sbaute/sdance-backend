@@ -1,25 +1,16 @@
 package com.sdance_backend.sdance.service;
 
-import com.sdance_backend.sdance.dto.danceClass.AddStudentsToDanceClassDto;
-import com.sdance_backend.sdance.dto.danceClass.DanceClassDto;
-import com.sdance_backend.sdance.dto.danceClass.DanceClassNameDto;
-import com.sdance_backend.sdance.dto.instructor.InstructorNameDto;
-import com.sdance_backend.sdance.model.DanceClass;
-import com.sdance_backend.sdance.enums.Days;
-import com.sdance_backend.sdance.enums.Hour;
+import com.sdance_backend.sdance.dto.danceClass.DanceClassDTO;
+import com.sdance_backend.sdance.dto.danceClass.DanceClassRequestDTO;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface IDanceClassService {
-    List<DanceClass> getAllDanceClass();
-    DanceClass getDanceClassById(Integer id);
-    DanceClass createDanceClass(DanceClassDto danceClassDto);
-    DanceClass updateDanceClass(DanceClassDto danceClassDto);
-    void deleteDanceClass(DanceClass danceClass);
-    boolean existsById(Integer id);
-    DanceClassDto mapToDanceClassDtoWhitStudents(DanceClass danceClass);
-    List<DanceClassNameDto> mapToDanceClassDtoWhitInstructor(List<DanceClass> danceClasses);
-    boolean isClassExists(InstructorNameDto instructorDto, Days daysOfWeek, Hour classTime);
+    List<DanceClassDTO> getAllDanceClass();
+    DanceClassDTO getDanceClassById(UUID id);
+    DanceClassDTO createDanceClass(DanceClassRequestDTO danceClassRequestDTO);
+    DanceClassDTO updateDanceClass(DanceClassRequestDTO danceClassRequestDTO, UUID id);
+    void deleteDanceClass(UUID id);
 
-    DanceClass addStudentsToDanceClass(AddStudentsToDanceClassDto studentAndDanceClassDto);
 }

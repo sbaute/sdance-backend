@@ -1,4 +1,4 @@
-package com.sdance_backend.sdance.model;
+package com.sdance_backend.sdance.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sdance_backend.sdance.enums.Days;
@@ -7,18 +7,19 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.UUID;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-@ToString
 @Entity
+@Table(name = "dance_class")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class DanceClass {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private UUID id = UUID.randomUUID();
 
     private String className;
 
