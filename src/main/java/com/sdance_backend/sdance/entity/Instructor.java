@@ -3,6 +3,7 @@ package com.sdance_backend.sdance.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +19,9 @@ import java.util.UUID;
 public class Instructor {
 
     @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(updatable = false, nullable = false)
     private UUID id = UUID.randomUUID();
 
     @Column(name = "name", nullable = false)

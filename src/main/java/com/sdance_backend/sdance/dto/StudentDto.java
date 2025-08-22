@@ -1,11 +1,11 @@
-package com.sdance_backend.sdance.dto.student;
+package com.sdance_backend.sdance.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.sdance_backend.sdance.dto.danceClass.DanceClassNameDTO;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-import java.util.List;
+
 import java.util.UUID;
 
 @Data
@@ -14,9 +14,16 @@ import java.util.UUID;
 public class StudentDto {
 
     private UUID id;
+
+    @NotBlank(message = "Name cannot be empty")
     private String name;
+
+    @NotBlank(message = "lastName cannot be empty")
     private String lastName;
+
+    @NotBlank(message = "document cannot be empty")
     private String document;
+
+    @NotBlank(message = "phoneNumber cannot be empty")
     private String phoneNumber;
-    private List<DanceClassNameDTO> danceClasses;
 }

@@ -5,6 +5,7 @@ import com.sdance_backend.sdance.enums.Days;
 import com.sdance_backend.sdance.enums.Hour;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,6 +20,9 @@ import java.util.UUID;
 public class DanceClass {
 
     @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(updatable = false, nullable = false)
     private UUID id = UUID.randomUUID();
 
     private String className;

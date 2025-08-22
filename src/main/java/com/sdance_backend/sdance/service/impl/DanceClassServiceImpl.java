@@ -1,9 +1,8 @@
 package com.sdance_backend.sdance.service.impl;
 
-import com.sdance_backend.sdance.dto.danceClass.DanceClassDTO;
-import com.sdance_backend.sdance.dto.danceClass.DanceClassRequestDTO;
+import com.sdance_backend.sdance.dto.DanceClassDTO;
+import com.sdance_backend.sdance.dto.DanceClassRequestDTO;
 import com.sdance_backend.sdance.entity.DanceClass;
-import com.sdance_backend.sdance.entity.Instructor;
 import com.sdance_backend.sdance.exceptions.CustomException;
 import com.sdance_backend.sdance.exceptions.ErrorType;
 import com.sdance_backend.sdance.mapper.DanceClassMapper;
@@ -12,6 +11,7 @@ import com.sdance_backend.sdance.service.IDanceClassService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,12 +33,12 @@ public class DanceClassServiceImpl implements IDanceClassService {
             throw new CustomException(ErrorType.DANCE_CLASS_LIST_EMPTY);
         }
 
-        return danceClassMapper.toResponseDTOList(danceClassDTOList);
+        return danceClassMapper.toDTOList(danceClassDTOList);
     }
 
     @Override
     public DanceClassDTO getDanceClassById(UUID id) {
-        return  danceClassMapper.toResponseDTO(danceClassRepository.findById(id).get());
+        return  danceClassMapper.toDTO(danceClassRepository.findById(id).get());
     }
 
     @Override
@@ -46,10 +46,11 @@ public class DanceClassServiceImpl implements IDanceClassService {
        try{
             DanceClass danceClass = danceClassMapper.toEntity(danceClassRequestDTO);
             danceClass.setInstructor(instructorService.getInstructor(danceClassRequestDTO.getInstructorId()));
+            danceClass.setStudents(new ArrayList<>());
 
            danceClassRepository.save(danceClass);
 
-           return danceClassMapper.toResponseDTO(danceClass);
+           return danceClassMapper.toDTO(danceClass);
 
        } catch (Exception ex) {
            throw new CustomException(ErrorType.DANCE_CLASS_CREATE_ERROR,
@@ -62,13 +63,12 @@ public class DanceClassServiceImpl implements IDanceClassService {
         try{
             DanceClass danceClass = getDanceClass(id);
 
-            Instructor instructor = instructorService.getInstructor(danceClassRequestDTO.getInstructorId());
-            danceClass.setInstructor(instructor);
+            danceClass.setInstructor(instructorService.getInstructor(danceClassRequestDTO.getInstructorId()));
 
             danceClassMapper.updateFromDTO(danceClassRequestDTO, danceClass);
             danceClassRepository.save(danceClass);
 
-            return danceClassMapper.toResponseDTO(danceClass);
+            return danceClassMapper.toDTO(danceClass);
 
         } catch (Exception ex) {
             throw new CustomException(ErrorType.DANCE_CLASS_UPDATE_ERROR,
@@ -86,7 +86,6 @@ public class DanceClassServiceImpl implements IDanceClassService {
                     ex.getMessage());
         }
     }
-
 
     private DanceClass getDanceClass(UUID id) {
         return danceClassRepository.findById(id).orElseThrow(() -> new CustomException(ErrorType.DANCE_CLASS_NOT_FOUND));

@@ -1,7 +1,6 @@
 package com.sdance_backend.sdance.service.impl;
 
-import com.sdance_backend.sdance.dto.instructor.InstructorDTO;
-import com.sdance_backend.sdance.dto.instructor.InstructorRequestDTO;
+import com.sdance_backend.sdance.dto.InstructorDTO;
 import com.sdance_backend.sdance.entity.Instructor;
 import com.sdance_backend.sdance.exceptions.CustomException;
 import com.sdance_backend.sdance.exceptions.ErrorType;
@@ -11,6 +10,7 @@ import com.sdance_backend.sdance.service.IInstructorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,22 +28,23 @@ public class InstructorServiceImpl implements IInstructorService {
         if(instructors.isEmpty()) {
             throw new CustomException(ErrorType.INSTRUCTOR_LIST_EMPTY);
         }
-        return instructorMapper.toResponseDTOList(instructors);
+        return instructorMapper.toDTOList(instructors);
     }
 
     @Override
     public InstructorDTO getInstructorById(UUID id) {
-        return instructorMapper.toResponseDTO(getInstructor(id));
+        return instructorMapper.toDTO(getInstructor(id));
     }
 
     @Override
-    public InstructorDTO createInstructor(InstructorRequestDTO instructorRequestDto) {
+    public InstructorDTO createInstructor(InstructorDTO instructorRequestDto) {
         try {
             validateFields(instructorRequestDto);
 
             Instructor instructor = instructorMapper.toEntity(instructorRequestDto);
-            Instructor savedInstructor = instructorRepository.save(instructor);
-            return instructorMapper.toResponseDTO(savedInstructor);
+            instructor.setDanceClasses(new ArrayList<>());
+            instructorRepository.save(instructor);
+            return instructorMapper.toDTO(instructor);
 
         } catch (Exception ex) {
             throw new CustomException(
@@ -54,13 +55,13 @@ public class InstructorServiceImpl implements IInstructorService {
     }
 
     @Override
-    public InstructorDTO updateInstructor(InstructorRequestDTO instructorRequestDto, UUID id) {
+    public InstructorDTO updateInstructor(InstructorDTO instructorRequestDto, UUID id) {
         try {
             validateFields(instructorRequestDto);
 
             Instructor instructor = getInstructor(id);
            instructorMapper.updateFromDTO(instructorRequestDto, instructor);
-            return instructorMapper.toResponseDTO(instructor);
+            return instructorMapper.toDTO(instructor);
 
         } catch (Exception ex) {
             throw new CustomException(
@@ -88,7 +89,7 @@ public class InstructorServiceImpl implements IInstructorService {
         return instructor;
     }
 
-    private void validateFields(InstructorRequestDTO instructorRequestDto){
+    private void validateFields(InstructorDTO instructorRequestDto){
         if(instructorRequestDto.getName() == null || instructorRequestDto.getLastName() == null || instructorRequestDto.getPhoneNumber().isEmpty() || instructorRequestDto.getDocument().isEmpty()){
             throw new CustomException(ErrorType.REQUIRED_FIELDS_MISSING);
         }

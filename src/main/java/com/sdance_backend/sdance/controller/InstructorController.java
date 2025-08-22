@@ -1,9 +1,9 @@
 package com.sdance_backend.sdance.controller;
 
 
-import com.sdance_backend.sdance.dto.instructor.InstructorDTO;
-import com.sdance_backend.sdance.dto.instructor.InstructorRequestDTO;
+import com.sdance_backend.sdance.dto.InstructorDTO;
 import com.sdance_backend.sdance.service.IInstructorService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -31,12 +31,12 @@ public class InstructorController {
     }
 
     @PostMapping
-    public ResponseEntity<InstructorDTO> create (@RequestBody InstructorRequestDTO instructorRequestDto){
+    public ResponseEntity<InstructorDTO> create (@Valid  @RequestBody InstructorDTO instructorRequestDto){
        return ResponseEntity.ok(instructorService.createInstructor(instructorRequestDto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<InstructorDTO> update (@RequestBody InstructorRequestDTO instructorRequestDto, @PathVariable UUID id){
+    public ResponseEntity<InstructorDTO> update (@Valid @RequestBody InstructorDTO instructorRequestDto, @PathVariable UUID id){
        return ResponseEntity.ok(instructorService.updateInstructor(instructorRequestDto, id));
     }
 

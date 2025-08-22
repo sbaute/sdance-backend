@@ -1,6 +1,5 @@
 package com.sdance_backend.sdance.service.impl;
-import com.sdance_backend.sdance.dto.student.StudentDto;
-import com.sdance_backend.sdance.dto.student.StudentRequestDto;
+import com.sdance_backend.sdance.dto.StudentDto;
 import com.sdance_backend.sdance.exceptions.CustomException;
 import com.sdance_backend.sdance.exceptions.ErrorType;
 import com.sdance_backend.sdance.mapper.StudentMapper;
@@ -11,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,24 +29,25 @@ public class StudentServiceImpl implements IStudentService {
             if(students.isEmpty()) {
                 throw new CustomException(ErrorType.STUDENT_LIST_EMPTY);
             }
-            return studentMapper.toResponseDTOList(students);
+            return studentMapper.toDTOList(students);
     }
 
     @Override
     @Transactional(readOnly = true)
     public StudentDto getStudentById(UUID id) {
-        return studentMapper.toResponseDTO(getStudent(id));
+        return studentMapper.toDTO(getStudent(id));
     }
 
     @Override
     @Transactional
-    public StudentDto createStudent(StudentRequestDto studentRequestDto) {
+    public StudentDto createStudent(StudentDto studentRequestDto) {
         try {
             validateFields(studentRequestDto);
 
             Student student = studentMapper.toEntity(studentRequestDto);
+            student.setDanceClasses(new ArrayList<>());
             studentRepository.save(student);
-            return studentMapper.toResponseDTO(student);
+            return studentMapper.toDTO(student);
 
         } catch (Exception ex) {
             throw new CustomException(
@@ -58,15 +59,13 @@ public class StudentServiceImpl implements IStudentService {
 
     @Override
     @Transactional
-    public StudentDto updateStudent(StudentRequestDto studentRequestDto, UUID id) {
+    public StudentDto updateStudent(StudentDto studentRequestDto, UUID id) {
         try {
-            validateFields(studentRequestDto);
-
             Student student = getStudent(id);
             studentMapper.updateFromDTO(studentRequestDto, student);
             studentRepository.save(student);
 
-            return studentMapper.toResponseDTO(student);
+            return studentMapper.toDTO(student);
 
         } catch (Exception ex) {
             throw new CustomException(
@@ -90,13 +89,12 @@ public class StudentServiceImpl implements IStudentService {
         }
     }
 
-
-    private void validateFields(StudentRequestDto studentRequestDto){
+    private void validateFields(StudentDto studentRequestDto){
         if(studentRequestDto.getName() == null || studentRequestDto.getLastName() == null || studentRequestDto.getPhoneNumber().isEmpty() || studentRequestDto.getDocument().isEmpty()){
             throw new CustomException(ErrorType.REQUIRED_FIELDS_MISSING);
         }
     }
-    private Student getStudent(UUID id) {
+    public Student getStudent(UUID id) {
         Student student = studentRepository.findById(id).orElseThrow(() -> new CustomException(ErrorType.STUDENT_NOT_FOUND));
         return student;
     }
