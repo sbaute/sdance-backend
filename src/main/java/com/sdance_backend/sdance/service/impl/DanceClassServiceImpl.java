@@ -4,16 +4,14 @@ import com.sdance_backend.sdance.dto.DanceClassDTO;
 import com.sdance_backend.sdance.dto.DanceClassRequestDTO;
 import com.sdance_backend.sdance.entity.DanceClass;
 import com.sdance_backend.sdance.exceptions.CustomException;
-import com.sdance_backend.sdance.exceptions.ErrorType;
 import com.sdance_backend.sdance.mapper.DanceClassMapper;
+import com.sdance_backend.sdance.messages.errors.DanceClassError;
 import com.sdance_backend.sdance.repository.DanceClassRepository;
 import com.sdance_backend.sdance.service.IDanceClassService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 @Service
@@ -30,7 +28,7 @@ public class DanceClassServiceImpl implements IDanceClassService {
         List<DanceClass> danceClassDTOList = (List<DanceClass>) danceClassRepository.findAll();
 
         if (danceClassDTOList.isEmpty()) {
-            throw new CustomException(ErrorType.DANCE_CLASS_LIST_EMPTY);
+            throw new CustomException(DanceClassError.DANCE_CLASS_LIST_EMPTY);
         }
 
         return danceClassMapper.toDTOList(danceClassDTOList);
@@ -53,7 +51,7 @@ public class DanceClassServiceImpl implements IDanceClassService {
            return danceClassMapper.toDTO(danceClass);
 
        } catch (Exception ex) {
-           throw new CustomException(ErrorType.DANCE_CLASS_CREATE_ERROR,
+           throw new CustomException(DanceClassError.DANCE_CLASS_CREATE_ERROR,
                    ex.getMessage());
        }
     }
@@ -71,7 +69,7 @@ public class DanceClassServiceImpl implements IDanceClassService {
             return danceClassMapper.toDTO(danceClass);
 
         } catch (Exception ex) {
-            throw new CustomException(ErrorType.DANCE_CLASS_UPDATE_ERROR,
+            throw new CustomException(DanceClassError.DANCE_CLASS_UPDATE_ERROR,
                     ex.getMessage());
         }
     }
@@ -82,12 +80,12 @@ public class DanceClassServiceImpl implements IDanceClassService {
             DanceClass danceClass = getDanceClass(id);
             danceClassRepository.delete(danceClass);
         } catch (Exception ex) {
-            throw new CustomException(ErrorType.DANCE_CLASS_DELETE_ERROR,
+            throw new CustomException(DanceClassError.DANCE_CLASS_DELETE_ERROR,
                     ex.getMessage());
         }
     }
 
-    private DanceClass getDanceClass(UUID id) {
-        return danceClassRepository.findById(id).orElseThrow(() -> new CustomException(ErrorType.DANCE_CLASS_NOT_FOUND));
+    public DanceClass getDanceClass(UUID id) {
+        return danceClassRepository.findById(id).orElseThrow(() -> new CustomException(DanceClassError.DANCE_CLASS_NOT_FOUND));
     }
 }

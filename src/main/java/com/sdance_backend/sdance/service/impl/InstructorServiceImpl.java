@@ -3,16 +3,15 @@ package com.sdance_backend.sdance.service.impl;
 import com.sdance_backend.sdance.dto.InstructorDTO;
 import com.sdance_backend.sdance.entity.Instructor;
 import com.sdance_backend.sdance.exceptions.CustomException;
-import com.sdance_backend.sdance.exceptions.ErrorType;
 import com.sdance_backend.sdance.mapper.InstructorMapper;
+import com.sdance_backend.sdance.messages.errors.GenericError;
+import com.sdance_backend.sdance.messages.errors.InstructorError;
 import com.sdance_backend.sdance.repository.InstructorRepository;
 import com.sdance_backend.sdance.service.IInstructorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +25,7 @@ public class InstructorServiceImpl implements IInstructorService {
         List<Instructor> instructors = (List<Instructor>) instructorRepository.findAll();
 
         if(instructors.isEmpty()) {
-            throw new CustomException(ErrorType.INSTRUCTOR_LIST_EMPTY);
+            throw new CustomException(InstructorError.INSTRUCTOR_LIST_EMPTY);
         }
         return instructorMapper.toDTOList(instructors);
     }
@@ -48,7 +47,7 @@ public class InstructorServiceImpl implements IInstructorService {
 
         } catch (Exception ex) {
             throw new CustomException(
-                    ErrorType.INSTRUCTOR_CREATE_ERROR,
+                    InstructorError.INSTRUCTOR_CREATE_ERROR,
                     ex.getMessage()
             );
         }
@@ -65,7 +64,7 @@ public class InstructorServiceImpl implements IInstructorService {
 
         } catch (Exception ex) {
             throw new CustomException(
-                    ErrorType.INSTRUCTOR_UPDATE_ERROR,
+                    InstructorError.INSTRUCTOR_UPDATE_ERROR,
                     ex.getMessage()
             );
         }
@@ -78,20 +77,20 @@ public class InstructorServiceImpl implements IInstructorService {
             instructorRepository.delete(instructor);
         }catch (Exception ex) {
             throw new CustomException(
-                    ErrorType.INSTRUCTOR_DELETE_ERROR,
+                    InstructorError.INSTRUCTOR_DELETE_ERROR,
                     ex.getMessage()
             );
         }
     }
 
     public Instructor getInstructor(UUID id) {
-        Instructor instructor = instructorRepository.findById(id).orElseThrow(() -> new CustomException(ErrorType.INSTRUCTOR_NOT_FOUND));
+        Instructor instructor = instructorRepository.findById(id).orElseThrow(() -> new CustomException(InstructorError.INSTRUCTOR_NOT_FOUND));
         return instructor;
     }
 
     private void validateFields(InstructorDTO instructorRequestDto){
         if(instructorRequestDto.getName() == null || instructorRequestDto.getLastName() == null || instructorRequestDto.getPhoneNumber().isEmpty() || instructorRequestDto.getDocument().isEmpty()){
-            throw new CustomException(ErrorType.REQUIRED_FIELDS_MISSING);
+            throw new CustomException(GenericError.REQUIRED_FIELDS_MISSING);
         }
     }
 
