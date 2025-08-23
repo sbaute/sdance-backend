@@ -5,7 +5,7 @@ import com.sdance_backend.sdance.dto.InstructorDTO;
 import com.sdance_backend.sdance.entity.Instructor;
 import com.sdance_backend.sdance.payload.ResponseMessage;
 import com.sdance_backend.sdance.service.IInstructorService;
-import com.sdance_backend.sdance.utils.Actions;
+import com.sdance_backend.sdance.messages.Actions;
 import com.sdance_backend.sdance.utils.ResponseBuilder;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
