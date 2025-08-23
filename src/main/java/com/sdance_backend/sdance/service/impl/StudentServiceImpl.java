@@ -1,8 +1,9 @@
 package com.sdance_backend.sdance.service.impl;
 import com.sdance_backend.sdance.dto.StudentDto;
 import com.sdance_backend.sdance.exceptions.CustomException;
-import com.sdance_backend.sdance.exceptions.ErrorType;
 import com.sdance_backend.sdance.mapper.StudentMapper;
+import com.sdance_backend.sdance.messages.errors.GenericError;
+import com.sdance_backend.sdance.messages.errors.StudentError;
 import com.sdance_backend.sdance.repository.StudentRepository;
 import com.sdance_backend.sdance.entity.Student;
 import com.sdance_backend.sdance.service.IStudentService;
@@ -10,9 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -24,10 +23,10 @@ public class StudentServiceImpl implements IStudentService {
     @Override
     @Transactional
     public List<StudentDto> getAllStudents() {
-            List<Student> students = (List<Student>) studentRepository.findAll();
+        List<Student> students = (List<Student>) studentRepository.findAll();
 
             if(students.isEmpty()) {
-                throw new CustomException(ErrorType.STUDENT_LIST_EMPTY);
+                throw new CustomException(StudentError.STUDENT_LIST_EMPTY);
             }
             return studentMapper.toDTOList(students);
     }
@@ -51,7 +50,7 @@ public class StudentServiceImpl implements IStudentService {
 
         } catch (Exception ex) {
             throw new CustomException(
-                   ErrorType.STUDENT_CREATE_ERROR,
+                    StudentError.STUDENT_CREATE_ERROR,
                     ex.getMessage()
             );
         }
@@ -69,7 +68,7 @@ public class StudentServiceImpl implements IStudentService {
 
         } catch (Exception ex) {
             throw new CustomException(
-                    ErrorType.STUDENT_UPDATE_ERROR,
+                    StudentError.STUDENT_UPDATE_ERROR,
                     ex.getMessage()
             );
         }
@@ -83,7 +82,7 @@ public class StudentServiceImpl implements IStudentService {
             studentRepository.delete(student);
         } catch (Exception ex) {
             throw new CustomException(
-                    ErrorType.STUDENT_DELETE_ERROR,
+                    StudentError.STUDENT_DELETE_ERROR,
                     ex.getMessage()
             );
         }
@@ -91,11 +90,11 @@ public class StudentServiceImpl implements IStudentService {
 
     private void validateFields(StudentDto studentRequestDto){
         if(studentRequestDto.getName() == null || studentRequestDto.getLastName() == null || studentRequestDto.getPhoneNumber().isEmpty() || studentRequestDto.getDocument().isEmpty()){
-            throw new CustomException(ErrorType.REQUIRED_FIELDS_MISSING);
+            throw new CustomException(GenericError.REQUIRED_FIELDS_MISSING);
         }
     }
     public Student getStudent(UUID id) {
-        Student student = studentRepository.findById(id).orElseThrow(() -> new CustomException(ErrorType.STUDENT_NOT_FOUND));
+        Student student = studentRepository.findById(id).orElseThrow(() -> new CustomException(StudentError.STUDENT_NOT_FOUND));
         return student;
     }
 

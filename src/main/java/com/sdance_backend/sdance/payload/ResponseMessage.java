@@ -1,15 +1,14 @@
 package com.sdance_backend.sdance.payload;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
+
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 
 @Data
-@Builder
-public class ResponseMessage implements Serializable {
-
+@SuperBuilder
+public class ResponseMessage<T> implements Serializable {
     private String message;
-    private Object object;
+    private T data;
 }
