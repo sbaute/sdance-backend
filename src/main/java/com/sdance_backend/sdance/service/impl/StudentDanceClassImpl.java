@@ -2,6 +2,7 @@ package com.sdance_backend.sdance.service.impl;
 
 import com.sdance_backend.sdance.dto.DanceClassNameDTO;
 import com.sdance_backend.sdance.dto.StudentDanceClassResponseDTO;
+import com.sdance_backend.sdance.payload.ResponseMessage;
 import com.sdance_backend.sdance.service.IStudentDanceClass;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
