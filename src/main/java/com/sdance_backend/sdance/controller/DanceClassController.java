@@ -5,7 +5,7 @@ import com.sdance_backend.sdance.dto.DanceClassRequestDTO;
 import com.sdance_backend.sdance.entity.DanceClass;
 import com.sdance_backend.sdance.payload.ResponseMessage;
 import com.sdance_backend.sdance.service.IDanceClassService;
-import com.sdance_backend.sdance.utils.Actions;
+import com.sdance_backend.sdance.messages.Actions;
 import com.sdance_backend.sdance.utils.ResponseBuilder;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

@@ -17,5 +17,4 @@ public class StudentDanceClassResponseDTO {
     private UUID danceClassId;
     private String danceClassName;
     private String studentName;
-    private String action;
 }
