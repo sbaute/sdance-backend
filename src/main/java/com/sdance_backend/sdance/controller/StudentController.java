@@ -4,7 +4,7 @@ import com.sdance_backend.sdance.dto.StudentDto;
 import com.sdance_backend.sdance.entity.Student;
 import com.sdance_backend.sdance.payload.ResponseMessage;
 import com.sdance_backend.sdance.service.IStudentService;
-import com.sdance_backend.sdance.utils.Actions;
+import com.sdance_backend.sdance.messages.Actions;
 import com.sdance_backend.sdance.utils.ResponseBuilder;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @RestController

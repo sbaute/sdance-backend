@@ -1,4 +1,4 @@
-package com.sdance_backend.sdance.utils;
+package com.sdance_backend.sdance.messages;
 
 
 import org.springframework.stereotype.Component;
