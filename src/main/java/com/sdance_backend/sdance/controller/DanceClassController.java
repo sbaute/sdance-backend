@@ -38,13 +38,13 @@ public class DanceClassController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseMessage<DanceClassDTO>> create (@Valid @RequestBody DanceClassRequestDTO danceClassRequestDTO) {
+    public ResponseEntity<ResponseMessage<DanceClassDTO>> create (@RequestBody DanceClassRequestDTO danceClassRequestDTO) {
         return responseBuilder.success(DanceClass.class, Actions.CREATED, danceClassService.createDanceClass(danceClassRequestDTO));
 
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseMessage<DanceClassDTO>> update(@Valid @RequestBody DanceClassRequestDTO danceClassRequestDTO, @PathVariable UUID id) {
+    public ResponseEntity<ResponseMessage<DanceClassDTO>> update(@RequestBody DanceClassRequestDTO danceClassRequestDTO, @PathVariable UUID id) {
         return responseBuilder.success(DanceClass.class, Actions.UPDATED, danceClassService.updateDanceClass(danceClassRequestDTO,id));
     }
 

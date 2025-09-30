@@ -8,4 +8,10 @@ public class Actions {
     public static final String DELETED = "deleted";
     public static final String RETRIEVED = "retrieved";
     public static final String LIST_RETRIEVED = "list retrieved";
+
+
+    //Student - Dance Class
+    public static final String GET_DANCE_CLASS = "Dance classes successfully retrieved for student";
+    public static final String ADD_DANCE_CLASS = "Dance class successfully added to student";
+
 }
