@@ -37,16 +37,5 @@ public class Student {
     @ManyToMany(mappedBy = "students", cascade = CascadeType.ALL)
     private List<DanceClass> danceClasses;
 
-    public void addDanceClass(DanceClass danceClass) {
-        danceClasses.add(danceClass);
-        if (!danceClass.getStudents().contains(this)) {
-            danceClass.getStudents().add(this);
-        }
-    }
-
-    public void removeDanceClass(DanceClass danceClass) {
-        danceClasses.remove(danceClass);
-        danceClass.getStudents().remove(this);          
-    }
 
 }

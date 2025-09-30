@@ -14,7 +14,8 @@ import java.util.UUID;
 public class StudentDanceClassResponseDTO {
 
     private UUID studentId;
+    private String studentName;
     private UUID danceClassId;
     private String danceClassName;
-    private String studentName;
+
 }

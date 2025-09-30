@@ -4,9 +4,14 @@ import com.sdance_backend.sdance.dto.DanceClassNameDTO;
 import com.sdance_backend.sdance.dto.StudentDanceClassResponseDTO;
 import com.sdance_backend.sdance.entity.DanceClass;
 import com.sdance_backend.sdance.entity.Student;
+import com.sdance_backend.sdance.exceptions.CustomException;
 import com.sdance_backend.sdance.mapper.DanceClassMapper;
+import com.sdance_backend.sdance.messages.errors.StudentError;
+import com.sdance_backend.sdance.repository.DanceClassRepository;
+import com.sdance_backend.sdance.repository.StudentRepository;
 import com.sdance_backend.sdance.service.IStudentDanceClass;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,10 +19,13 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class StudentDanceClassImpl implements IStudentDanceClass {
 
     private final StudentServiceImpl studentService;
+    private final StudentRepository studentRepository;
     private final DanceClassServiceImpl danceClassService;
+    private final DanceClassRepository danceClassRepository;
     private final DanceClassMapper danceClassMapper;
 
     @Override
@@ -31,7 +39,11 @@ public class StudentDanceClassImpl implements IStudentDanceClass {
     public StudentDanceClassResponseDTO addDanceClassToStudent(UUID studentId, UUID classId) {
         Student student = studentService.getStudent(studentId);
         DanceClass danceClass = danceClassService.getDanceClass(classId);
-        student.addDanceClass(danceClass);
+        if (danceClass.getStudents().contains(student)) {
+            throw new CustomException(StudentError.STUDENT_ALREADY_EXISTS);
+        }
+        danceClass.getStudents().add(student);
+        danceClassRepository.save(danceClass);
         return response(student, danceClass);
     }
 
@@ -39,7 +51,10 @@ public class StudentDanceClassImpl implements IStudentDanceClass {
     public StudentDanceClassResponseDTO deleteDanceClassToStudent(UUID studentId, UUID classId) {
         Student student = studentService.getStudent(studentId);
         DanceClass danceClass = danceClassService.getDanceClass(classId);
-        student.removeDanceClass(danceClass);
+        if (danceClass.getStudents().contains(student)) {
+            danceClass.getStudents().remove(student);
+            danceClassRepository.save(danceClass);
+        }
         return response(student, danceClass);
     }
 

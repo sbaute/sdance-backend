@@ -11,7 +11,7 @@ public class Actions {
 
 
     //Student - Dance Class
-    public static final String GET_DANCE_CLASS = "Dance classes successfully retrieved for student";
-    public static final String ADD_DANCE_CLASS = "Dance class successfully added to student";
+    public static final String GET_DANCE_CLASS = "dance classes retrieved";
+    public static final String ADD_DANCE_CLASS = "added to student";
 
 }

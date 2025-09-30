@@ -1,6 +1,8 @@
 package com.sdance_backend.sdance.controller;
 
 import com.sdance_backend.sdance.dto.DanceClassNameDTO;
+import com.sdance_backend.sdance.dto.StudentDanceClassResponseDTO;
+import com.sdance_backend.sdance.entity.DanceClass;
 import com.sdance_backend.sdance.entity.Student;
 import com.sdance_backend.sdance.messages.Actions;
 import com.sdance_backend.sdance.payload.ResponseMessage;
@@ -9,10 +11,7 @@ import com.sdance_backend.sdance.utils.ResponseBuilderMessage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -29,6 +28,11 @@ public class StudentDanceClassController {
     @GetMapping
     public ResponseEntity<ResponseMessage<List<DanceClassNameDTO>>> getDanceClassByStudentId(@PathVariable UUID studentId) {
         return responseBuilderMessage.success(Student.class, Actions.GET_DANCE_CLASS, studentDanceClassService.getClassesByStudentId(studentId));
+    }
+
+    @PostMapping("/{danceClassId}")
+    public ResponseEntity<ResponseMessage<StudentDanceClassResponseDTO>> addDanceClassToStudent(@PathVariable UUID studentId, @PathVariable UUID danceClassId) {
+        return responseBuilderMessage.success(DanceClass.class, Actions.ADD_DANCE_CLASS, studentDanceClassService.addDanceClassToStudent(studentId, danceClassId));
     }
 
 
