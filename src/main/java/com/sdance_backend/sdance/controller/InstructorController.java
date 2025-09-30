@@ -6,7 +6,7 @@ import com.sdance_backend.sdance.entity.Instructor;
 import com.sdance_backend.sdance.payload.ResponseMessage;
 import com.sdance_backend.sdance.service.IInstructorService;
 import com.sdance_backend.sdance.messages.Actions;
-import com.sdance_backend.sdance.utils.ResponseBuilder;
+import com.sdance_backend.sdance.utils.ResponseBuilderMessage;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,26 +23,26 @@ import java.util.UUID;
 public class InstructorController {
 
     private final IInstructorService instructorService;
-    private final ResponseBuilder responseBuilder;
+    private final ResponseBuilderMessage responseBuilderMessage;
 
     @GetMapping
     public ResponseEntity<ResponseMessage<List<InstructorDTO>>> getAll() {
-        return responseBuilder.success(Instructor.class, Actions.LIST_RETRIEVED, instructorService.getAllInstructors());
+        return responseBuilderMessage.success(Instructor.class, Actions.LIST_RETRIEVED, instructorService.getAllInstructors());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ResponseMessage<InstructorDTO>> getById(@PathVariable UUID id) {
-        return responseBuilder.success(Instructor.class, Actions.RETRIEVED, instructorService.getInstructorById(id));
+        return responseBuilderMessage.success(Instructor.class, Actions.RETRIEVED, instructorService.getInstructorById(id));
     }
 
     @PostMapping
     public ResponseEntity<ResponseMessage<InstructorDTO>> create (@Valid  @RequestBody InstructorDTO instructorRequestDto){
-        return responseBuilder.success(Instructor.class, Actions.CREATED, instructorService.createInstructor(instructorRequestDto));
+        return responseBuilderMessage.success(Instructor.class, Actions.CREATED, instructorService.createInstructor(instructorRequestDto));
     }
 
     @PutMapping("/{id}")
     public  ResponseEntity<ResponseMessage<InstructorDTO>> update (@Valid @RequestBody InstructorDTO instructorRequestDto, @PathVariable UUID id){
-        return responseBuilder.success(Instructor.class, Actions.UPDATED, instructorService.updateInstructor(instructorRequestDto, id));
+        return responseBuilderMessage.success(Instructor.class, Actions.UPDATED, instructorService.updateInstructor(instructorRequestDto, id));
     }
 
     @DeleteMapping("/{id}")

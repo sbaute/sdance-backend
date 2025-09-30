@@ -5,7 +5,7 @@ import com.sdance_backend.sdance.entity.Student;
 import com.sdance_backend.sdance.payload.ResponseMessage;
 import com.sdance_backend.sdance.service.IStudentService;
 import com.sdance_backend.sdance.messages.Actions;
-import com.sdance_backend.sdance.utils.ResponseBuilder;
+import com.sdance_backend.sdance.utils.ResponseBuilderMessage;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,26 +22,26 @@ import java.util.UUID;
 public class StudentController {
 
     private final IStudentService studentService;
-    private final ResponseBuilder responseBuilder;
+    private final ResponseBuilderMessage responseBuilderMessage;
 
     @GetMapping
     public ResponseEntity<ResponseMessage<List<StudentDto>>> getAll() {
-        return responseBuilder.success(Student.class, Actions.LIST_RETRIEVED, studentService.getAllStudents());
+        return responseBuilderMessage.success(Student.class, Actions.LIST_RETRIEVED, studentService.getAllStudents());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ResponseMessage<StudentDto>> getById(@PathVariable UUID id) {
-        return responseBuilder.success(Student.class, Actions.RETRIEVED, studentService.getStudentById(id));
+        return responseBuilderMessage.success(Student.class, Actions.RETRIEVED, studentService.getStudentById(id));
     }
 
     @PostMapping
     public ResponseEntity<ResponseMessage<StudentDto>> create (@Valid @RequestBody StudentDto studentRequestDto){
-        return responseBuilder.success(Student.class, Actions.CREATED, studentService.createStudent(studentRequestDto));
+        return responseBuilderMessage.success(Student.class, Actions.CREATED, studentService.createStudent(studentRequestDto));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ResponseMessage<StudentDto>> update (@Valid @RequestBody StudentDto studentRequestDto, @PathVariable UUID id){
-        return responseBuilder.success(Student.class, Actions.UPDATED, studentService.updateStudent(studentRequestDto,id));
+        return responseBuilderMessage.success(Student.class, Actions.UPDATED, studentService.updateStudent(studentRequestDto,id));
     }
 
     @DeleteMapping("/{id}")

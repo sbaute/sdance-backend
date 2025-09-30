@@ -6,8 +6,7 @@ import com.sdance_backend.sdance.entity.DanceClass;
 import com.sdance_backend.sdance.payload.ResponseMessage;
 import com.sdance_backend.sdance.service.IDanceClassService;
 import com.sdance_backend.sdance.messages.Actions;
-import com.sdance_backend.sdance.utils.ResponseBuilder;
-import jakarta.validation.Valid;
+import com.sdance_backend.sdance.utils.ResponseBuilderMessage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -25,27 +24,27 @@ import java.util.UUID;
 public class DanceClassController {
 
     private final IDanceClassService danceClassService;
-    private final ResponseBuilder responseBuilder;
+    private final ResponseBuilderMessage responseBuilderMessage;
 
     @GetMapping
     public ResponseEntity<ResponseMessage<List<DanceClassDTO>>> getAll() {
-       return responseBuilder.success(DanceClass.class, Actions.LIST_RETRIEVED, danceClassService.getAllDanceClass());
+       return responseBuilderMessage.success(DanceClass.class, Actions.LIST_RETRIEVED, danceClassService.getAllDanceClass());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ResponseMessage<DanceClassDTO>> getById(@PathVariable UUID id) {
-        return responseBuilder.success(DanceClass.class, Actions.RETRIEVED, danceClassService.getDanceClassById(id));
+        return responseBuilderMessage.success(DanceClass.class, Actions.RETRIEVED, danceClassService.getDanceClassById(id));
     }
 
     @PostMapping
     public ResponseEntity<ResponseMessage<DanceClassDTO>> create (@RequestBody DanceClassRequestDTO danceClassRequestDTO) {
-        return responseBuilder.success(DanceClass.class, Actions.CREATED, danceClassService.createDanceClass(danceClassRequestDTO));
+        return responseBuilderMessage.success(DanceClass.class, Actions.CREATED, danceClassService.createDanceClass(danceClassRequestDTO));
 
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ResponseMessage<DanceClassDTO>> update(@RequestBody DanceClassRequestDTO danceClassRequestDTO, @PathVariable UUID id) {
-        return responseBuilder.success(DanceClass.class, Actions.UPDATED, danceClassService.updateDanceClass(danceClassRequestDTO,id));
+        return responseBuilderMessage.success(DanceClass.class, Actions.UPDATED, danceClassService.updateDanceClass(danceClassRequestDTO,id));
     }
 
     @DeleteMapping("/{id}")

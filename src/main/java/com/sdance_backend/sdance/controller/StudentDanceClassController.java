@@ -5,7 +5,7 @@ import com.sdance_backend.sdance.entity.Student;
 import com.sdance_backend.sdance.messages.Actions;
 import com.sdance_backend.sdance.payload.ResponseMessage;
 import com.sdance_backend.sdance.service.impl.StudentDanceClassImpl;
-import com.sdance_backend.sdance.utils.ResponseBuilder;
+import com.sdance_backend.sdance.utils.ResponseBuilderMessage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,11 +24,11 @@ import java.util.UUID;
 public class StudentDanceClassController {
 
     private final StudentDanceClassImpl studentDanceClassService;
-    private final ResponseBuilder responseBuilder;
+    private final ResponseBuilderMessage responseBuilderMessage;
 
     @GetMapping
     public ResponseEntity<ResponseMessage<List<DanceClassNameDTO>>> getDanceClassByStudentId(@PathVariable UUID studentId) {
-        return responseBuilder.success(Student.class, Actions.GET_DANCE_CLASS, studentDanceClassService.getClassesByStudentId(studentId));
+        return responseBuilderMessage.success(Student.class, Actions.GET_DANCE_CLASS, studentDanceClassService.getClassesByStudentId(studentId));
     }
 
 
