@@ -23,7 +23,6 @@ import java.util.UUID;
 public class StudentDanceClassImpl implements IStudentDanceClass {
 
     private final StudentServiceImpl studentService;
-    private final StudentRepository studentRepository;
     private final DanceClassServiceImpl danceClassService;
     private final DanceClassRepository danceClassRepository;
     private final DanceClassMapper danceClassMapper;
