@@ -47,14 +47,13 @@ public class StudentDanceClassImpl implements IStudentDanceClass {
     }
 
     @Override
-    public StudentDanceClassResponseDTO deleteDanceClassToStudent(UUID studentId, UUID classId) {
+    public void deleteDanceClassToStudent(UUID studentId, UUID classId) {
         Student student = studentService.getStudent(studentId);
         DanceClass danceClass = danceClassService.getDanceClass(classId);
         if (danceClass.getStudents().contains(student)) {
             danceClass.getStudents().remove(student);
             danceClassRepository.save(danceClass);
         }
-        return response(student, danceClass);
     }
 
     private static StudentDanceClassResponseDTO response(Student student, DanceClass danceClass) {

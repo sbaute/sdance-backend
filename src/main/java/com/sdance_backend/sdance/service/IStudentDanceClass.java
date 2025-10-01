@@ -9,7 +9,7 @@ import java.util.UUID;
 public interface IStudentDanceClass {
     List<DanceClassNameDTO> getClassesByStudentId (UUID studentId);
     StudentDanceClassResponseDTO addDanceClassToStudent (UUID studentId, UUID classId);
-    StudentDanceClassResponseDTO deleteDanceClassToStudent (UUID studentId, UUID classId);
+    void deleteDanceClassToStudent (UUID studentId, UUID classId);
 
 
 

@@ -35,5 +35,11 @@ public class StudentDanceClassController {
         return responseBuilderMessage.success(DanceClass.class, Actions.ADD_DANCE_CLASS, studentDanceClassService.addDanceClassToStudent(studentId, danceClassId));
     }
 
+    @DeleteMapping("/{danceClassId}")
+    public ResponseEntity<Void> deleteDanceClassToStudent(@PathVariable UUID studentId, @PathVariable UUID danceClassId) {
+        studentDanceClassService.deleteDanceClassToStudent(studentId, danceClassId);
+        return ResponseEntity.noContent().build();
+    }
+
 
 }
