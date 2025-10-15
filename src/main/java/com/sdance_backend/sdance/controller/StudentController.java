@@ -1,5 +1,7 @@
 package com.sdance_backend.sdance.controller;
 
+import com.sdance_backend.sdance.dto.PageResponseDTO;
+import com.sdance_backend.sdance.dto.SearchTermDTO;
 import com.sdance_backend.sdance.dto.StudentDto;
 import com.sdance_backend.sdance.entity.Student;
 import com.sdance_backend.sdance.payload.ResponseMessage;
@@ -37,6 +39,13 @@ public class StudentController {
     @PostMapping
     public ResponseEntity<ResponseMessage<StudentDto>> create (@Valid @RequestBody StudentDto studentRequestDto){
         return responseBuilderMessage.success(Student.class, Actions.CREATED, studentService.createStudent(studentRequestDto));
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<PageResponseDTO<StudentDto>> search (@RequestBody(required = false) SearchTermDTO description,
+                                                               @RequestParam(defaultValue = "0") int pag,
+                                                               @RequestParam int size){
+        return ResponseEntity.ok(studentService.searchStudents(description,pag, size));
     }
 
     @PutMapping("/{id}")

@@ -1,5 +1,7 @@
 package com.sdance_backend.sdance.service;
 
+import com.sdance_backend.sdance.dto.PageResponseDTO;
+import com.sdance_backend.sdance.dto.SearchTermDTO;
 import com.sdance_backend.sdance.dto.StudentDto;
 
 import java.util.List;
@@ -13,4 +15,5 @@ public interface IStudentService {
     StudentDto createStudent(StudentDto studentDto);
     StudentDto updateStudent(StudentDto studentDto, UUID id);
     void deleteStudent(UUID id);
+    PageResponseDTO<StudentDto> searchStudents(SearchTermDTO searchTermRequestDTO, int page, int size);
 }

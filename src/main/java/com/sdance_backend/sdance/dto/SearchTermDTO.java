@@ -8,5 +8,6 @@ import lombok.Data;
 @Data
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ActionsDTO {
+public class SearchTermDTO {
+    private String description;
 }
