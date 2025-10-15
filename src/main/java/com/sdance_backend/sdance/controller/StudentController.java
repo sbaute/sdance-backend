@@ -45,7 +45,8 @@ public class StudentController {
     public ResponseEntity<PageResponseDTO<StudentDto>> search (@RequestBody(required = false) SearchTermDTO description,
                                                                @RequestParam(defaultValue = "0") int pag,
                                                                @RequestParam int size){
-        return ResponseEntity.ok(studentService.searchStudents(description,pag, size));
+        int validLimit = Math.min(Math.max(1, size), 100);
+        return ResponseEntity.ok(studentService.searchStudents(description,pag, validLimit));
     }
 
     @PutMapping("/{id}")
