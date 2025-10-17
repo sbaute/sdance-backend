@@ -10,7 +10,6 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-@Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DanceClassRequestDTO {
 
