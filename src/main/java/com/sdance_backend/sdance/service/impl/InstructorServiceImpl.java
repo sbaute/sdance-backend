@@ -111,8 +111,8 @@ public class InstructorServiceImpl implements IInstructorService {
         try {
             Pageable pageable = PageRequest.of(pageNumber, size, Sort.by(Sort.Direction.ASC, "lastName"));
 
-            //  busco la descripcion en los atributos de student
-            Specification<Student> spec = (root, query, cb) -> {
+            //  busco la descripcion en los atributos de instructor
+            Specification<Instructor> spec = (root, query, cb) -> {
                 if (searchRequest != null && searchRequest.getDescription() != null && !searchRequest.getDescription().trim().isEmpty()) {
                     String term = "%" + searchRequest.getDescription().toLowerCase() + "%";
                     return cb.or(

@@ -111,19 +111,17 @@ public class DanceClassServiceImpl implements IDanceClassService {
         try {
             Pageable pageable = PageRequest.of(pageNumber, size, Sort.by(Sort.Direction.ASC, "lastName"));
 
-            //  busco la descripcion en los atributos de student
-            Specification<Student> spec = (root, query, cb) -> {
+            //  busco la descripcion en los atributos de dance class
+            Specification<DanceClass> spec = (root, query, cb) -> {
                 if (searchRequest != null && searchRequest.getDescription() != null && !searchRequest.getDescription().trim().isEmpty()) {
                     String term = "%" + searchRequest.getDescription().toLowerCase() + "%";
                     return cb.or(
-                            cb.like(cb.lower(root.get("className")), term),
-                            cb.like(cb.lower(root.get("daysOfWeek")), term),
-                            cb.like(cb.lower(root.get("classTime")), term),
-                            cb.like(cb.lower(root.get("instructor")), term)
+                            cb.like(cb.lower(root.get("className")), term)
                     );
                 }
-                return null; // si no hay termino de busqueda, devuelve todo
+                return null;
             };
+
 
             Page<DanceClass> danceClassPage = danceClassRepository.findAll(spec, pageable);
 
