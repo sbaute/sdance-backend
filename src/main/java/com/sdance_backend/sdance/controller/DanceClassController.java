@@ -1,7 +1,6 @@
 package com.sdance_backend.sdance.controller;
 
-import com.sdance_backend.sdance.dto.DanceClassDTO;
-import com.sdance_backend.sdance.dto.DanceClassRequestDTO;
+import com.sdance_backend.sdance.dto.*;
 import com.sdance_backend.sdance.entity.DanceClass;
 import com.sdance_backend.sdance.payload.ResponseMessage;
 import com.sdance_backend.sdance.service.IDanceClassService;
@@ -40,6 +39,14 @@ public class DanceClassController {
     public ResponseEntity<ResponseMessage<DanceClassDTO>> create (@RequestBody DanceClassRequestDTO danceClassRequestDTO) {
         return responseBuilderMessage.success(DanceClass.class, Actions.CREATED, danceClassService.createDanceClass(danceClassRequestDTO));
 
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<PageResponseDTO<DanceClassDTO>> search (@RequestBody(required = false) SearchTermDTO description,
+                                                                  @RequestParam(defaultValue = "0") int pag,
+                                                                  @RequestParam int size){
+        int validSize = Math.min(Math.max(1, size), 100);
+        return ResponseEntity.ok(danceClassService.searchDanceClass(description,pag, validSize));
     }
 
     @PutMapping("/{id}")

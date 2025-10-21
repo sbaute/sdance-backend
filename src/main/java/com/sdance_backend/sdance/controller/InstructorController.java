@@ -2,6 +2,9 @@ package com.sdance_backend.sdance.controller;
 
 
 import com.sdance_backend.sdance.dto.InstructorDTO;
+import com.sdance_backend.sdance.dto.PageResponseDTO;
+import com.sdance_backend.sdance.dto.SearchTermDTO;
+import com.sdance_backend.sdance.dto.StudentDto;
 import com.sdance_backend.sdance.entity.Instructor;
 import com.sdance_backend.sdance.payload.ResponseMessage;
 import com.sdance_backend.sdance.service.IInstructorService;
@@ -38,6 +41,14 @@ public class InstructorController {
     @PostMapping
     public ResponseEntity<ResponseMessage<InstructorDTO>> create (@Valid  @RequestBody InstructorDTO instructorRequestDto){
         return responseBuilderMessage.success(Instructor.class, Actions.CREATED, instructorService.createInstructor(instructorRequestDto));
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<PageResponseDTO<InstructorDTO>> search (@RequestBody(required = false) SearchTermDTO description,
+                                                               @RequestParam(defaultValue = "0") int pag,
+                                                               @RequestParam int size){
+        int validSize = Math.min(Math.max(1, size), 100);
+        return ResponseEntity.ok(instructorService.searchInstructors(description,pag, validSize));
     }
 
     @PutMapping("/{id}")
