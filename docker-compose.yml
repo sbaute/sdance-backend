@@ -9,6 +9,7 @@ services:
       POSTGRES_PASSWORD: root
       POSTGRES_DB: sdance
       TZ: America/Argentina/Buenos_Aires
+      PGTZ: America/Argentina/Buenos_Aires
       POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=es_AR.UTF-8 --timezone=America/Argentina/Buenos_Aires"
     ports:
       - "5432:5432"
@@ -33,6 +34,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/sdance
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: root
+      TZ: America/Argentina/Buenos_Aires
+      PGTZ: America/Argentina/Buenos_Aires
 
 volumes:
   pgdata:

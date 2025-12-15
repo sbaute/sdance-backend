@@ -109,7 +109,7 @@ public class DanceClassServiceImpl implements IDanceClassService {
         int pageNumber = Math.max(0, page);
 
         try {
-            Pageable pageable = PageRequest.of(pageNumber, size, Sort.by(Sort.Direction.ASC, "lastName"));
+            Pageable pageable = PageRequest.of(pageNumber, size, Sort.by(Sort.Direction.ASC, "className"));
 
             //  busco la descripcion en los atributos de dance class
             Specification<DanceClass> spec = (root, query, cb) -> {
