@@ -35,6 +35,7 @@ public class HttpSecurityConfig {
                 .authorizeHttpRequests(auth -> {
 
                     // Rutas de autenticación
+                    auth.requestMatchers(HttpMethod.POST, "/api/v1/user/register").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/api/v1/auth/authenticate").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/api/v1/auth/validate").permitAll();
 
