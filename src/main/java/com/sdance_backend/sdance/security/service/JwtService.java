@@ -1,4 +1,4 @@
-package com.sdance_backend.sdance.service.auth;
+package com.sdance_backend.sdance.security.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

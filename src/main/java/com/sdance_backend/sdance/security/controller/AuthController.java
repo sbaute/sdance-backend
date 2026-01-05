@@ -1,9 +1,10 @@
-package com.sdance_backend.sdance.controller;
+package com.sdance_backend.sdance.security.controller;
 
 
-import com.sdance_backend.sdance.dto.AuthRequestDTO;
-import com.sdance_backend.sdance.dto.AuthResponseDTO;
-import com.sdance_backend.sdance.service.auth.AuthService;
+import com.sdance_backend.sdance.security.dto.AuthRequestDTO;
+import com.sdance_backend.sdance.security.dto.AuthResponseDTO;
+import com.sdance_backend.sdance.entity.User;
+import com.sdance_backend.sdance.security.service.AuthService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -28,5 +29,11 @@ public class AuthController {
     public ResponseEntity<AuthResponseDTO> authenticate(@RequestBody AuthRequestDTO authenticationRequest) {
         AuthResponseDTO response = authService.login(authenticationRequest);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<User> findMyProfile(){
+        User user = authService.findLoggedInUser();
+        return ResponseEntity.ok(user);
     }
 }

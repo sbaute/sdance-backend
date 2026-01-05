@@ -1,9 +1,9 @@
-package com.sdance_backend.sdance.config.security.filter;
+package com.sdance_backend.sdance.security.filter;
 
 import com.sdance_backend.sdance.entity.User;
 import com.sdance_backend.sdance.exceptions.CustomException;
 import com.sdance_backend.sdance.messages.errors.UserError;
-import com.sdance_backend.sdance.service.auth.JwtService;
+import com.sdance_backend.sdance.security.service.JwtService;
 import com.sdance_backend.sdance.service.impl.UserServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

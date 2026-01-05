@@ -1,7 +1,6 @@
-package com.sdance_backend.sdance.config.security;
+package com.sdance_backend.sdance.security.filter;
 
 
-import com.sdance_backend.sdance.config.security.filter.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

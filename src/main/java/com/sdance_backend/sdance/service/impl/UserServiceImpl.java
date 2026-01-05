@@ -1,6 +1,6 @@
 package com.sdance_backend.sdance.service.impl;
 
-import com.sdance_backend.sdance.dto.UserRegisterRequestDTO;
+import com.sdance_backend.sdance.security.dto.UserRegisterRequestDTO;
 import com.sdance_backend.sdance.entity.User;
 import com.sdance_backend.sdance.enums.Role;
 import com.sdance_backend.sdance.exceptions.CustomException;

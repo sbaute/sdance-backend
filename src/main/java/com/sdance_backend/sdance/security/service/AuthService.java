@@ -1,16 +1,19 @@
-package com.sdance_backend.sdance.service.auth;
+package com.sdance_backend.sdance.security.service;
 
-import com.sdance_backend.sdance.dto.AuthRequestDTO;
-import com.sdance_backend.sdance.dto.AuthResponseDTO;
-import com.sdance_backend.sdance.dto.UserRegisterRequestDTO;
-import com.sdance_backend.sdance.dto.UserRegisterResponseDTO;
+import com.sdance_backend.sdance.security.dto.AuthRequestDTO;
+import com.sdance_backend.sdance.security.dto.AuthResponseDTO;
+import com.sdance_backend.sdance.security.dto.UserRegisterRequestDTO;
+import com.sdance_backend.sdance.security.dto.UserRegisterResponseDTO;
 import com.sdance_backend.sdance.entity.User;
+import com.sdance_backend.sdance.exceptions.CustomException;
+import com.sdance_backend.sdance.messages.errors.UserError;
 import com.sdance_backend.sdance.service.IUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -81,5 +84,13 @@ public class AuthService {
             System.out.println(e.getMessage());
             return false;
         }
+    }
+
+    public User findLoggedInUser() {
+        Authentication auth =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        String username = (String) auth.getPrincipal();
+        return userService.findOneByUsername(username)
+                .orElseThrow(() -> new CustomException(UserError.USER_NOT_FOUND));
     }
 }

@@ -1,10 +1,9 @@
 package com.sdance_backend.sdance.controller;
 
 
-import com.sdance_backend.sdance.dto.UserRegisterRequestDTO;
-import com.sdance_backend.sdance.dto.UserRegisterResponseDTO;
-import com.sdance_backend.sdance.payload.ResponseMessage;
-import com.sdance_backend.sdance.service.auth.AuthService;
+import com.sdance_backend.sdance.security.dto.UserRegisterRequestDTO;
+import com.sdance_backend.sdance.security.dto.UserRegisterResponseDTO;
+import com.sdance_backend.sdance.security.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

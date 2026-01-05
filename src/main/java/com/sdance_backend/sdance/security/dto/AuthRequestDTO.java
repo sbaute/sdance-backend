@@ -1,4 +1,4 @@
-package com.sdance_backend.sdance.dto;
+package com.sdance_backend.sdance.security.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;

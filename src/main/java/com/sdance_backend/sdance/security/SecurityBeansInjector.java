@@ -1,9 +1,8 @@
-package com.sdance_backend.sdance.config.security;
+package com.sdance_backend.sdance.security;
 
 import com.sdance_backend.sdance.exceptions.CustomException;
 import com.sdance_backend.sdance.messages.errors.UserError;
 import com.sdance_backend.sdance.repository.UserRepository;
-import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
