@@ -1,7 +1,5 @@
 package com.sdance_backend.sdance.service.auth;
 
-
-import com.sdance_backend.sdance.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -17,29 +15,31 @@ import java.util.Map;
 @Service
 public class JwtService {
 
-    @Value("${security.jwt.expiration-in-minutes}")
-    private Long EXPIRATION_IN_MINUTES;
+    private final SecretKey secretKey;
+    private final Long expirationInMinutes;
 
-    @Value("${security.jwt.secret-key}")
-    private String SECRET_KEY;
+    public JwtService(
+            @Value("${security.jwt.secret-key}") String secretKey,
+            @Value("${security.jwt.expiration-in-minutes}") Long expirationInMinutes
+    ) {
+        this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
+        this.expirationInMinutes = expirationInMinutes;
+    }
 
     public String generateToken(UserDetails user, Map<String, Object> extraClaims) {
         Date issuedAt = new Date(System.currentTimeMillis());
-        Date expiration = new Date(issuedAt.getTime() + EXPIRATION_IN_MINUTES * 60 * 1000);
+        Date expiration = new Date(
+                issuedAt.getTime() + expirationInMinutes * 60 * 1000
+        );
 
-        String jwt = Jwts.builder()
+        return Jwts.builder()
                 .subject(user.getUsername())
                 .issuedAt(issuedAt)
                 .expiration(expiration)
                 .claims(extraClaims)
-                .signWith(secretKey, Jwts.SIG.HS256)   // firma
+                .signWith(secretKey, Jwts.SIG.HS256)
                 .compact();
-
-        return jwt;
     }
-
-    //Se genera una sola vez
-    private final SecretKey secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
 
     public String extractUsername(String jwt) {
         return parseToken(jwt).getSubject();
@@ -52,6 +52,4 @@ public class JwtService {
                 .parseSignedClaims(jwt)
                 .getPayload();
     }
-
-
 }

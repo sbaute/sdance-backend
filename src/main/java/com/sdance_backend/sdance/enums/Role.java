@@ -28,13 +28,13 @@ public enum Role {
 
     INSTRUCTOR(Arrays.asList(
             RolePermission.READ_ALL_CLASS,
-            RolePermission.READ_ALL_STUDENT
+            RolePermission.READ_ALL_STUDENT,
             RolePermission.READ_MY_PROFILE
     )),
 
     STUDENT(Arrays.asList(
             RolePermission.READ_ALL_CLASS,
-            RolePermission.READ_ALL_INSTRUCTOR
+            RolePermission.READ_ALL_INSTRUCTOR,
             RolePermission.READ_MY_PROFILE
     ));
 
