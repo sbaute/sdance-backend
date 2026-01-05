@@ -1,7 +1,6 @@
-package com.sdance_backend.sdance.utils;
+package com.sdance_backend.sdance.messages;
 
 import com.sdance_backend.sdance.exceptions.CustomException;
-import com.sdance_backend.sdance.messages.MessageBuilder;
 import com.sdance_backend.sdance.payload.ErrorResponseMessage;
 import com.sdance_backend.sdance.payload.ResponseMessage;
 import lombok.AllArgsConstructor;

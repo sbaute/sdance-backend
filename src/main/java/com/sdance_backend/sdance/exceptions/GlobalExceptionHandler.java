@@ -1,7 +1,7 @@
 package com.sdance_backend.sdance.exceptions;
 
 import com.sdance_backend.sdance.payload.ErrorResponseMessage;
-import com.sdance_backend.sdance.utils.ResponseBuilderMessage;
+import com.sdance_backend.sdance.messages.ResponseBuilderMessage;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

@@ -7,7 +7,7 @@ import com.sdance_backend.sdance.entity.Student;
 import com.sdance_backend.sdance.payload.ResponseMessage;
 import com.sdance_backend.sdance.service.IStudentService;
 import com.sdance_backend.sdance.messages.Actions;
-import com.sdance_backend.sdance.utils.ResponseBuilderMessage;
+import com.sdance_backend.sdance.messages.ResponseBuilderMessage;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

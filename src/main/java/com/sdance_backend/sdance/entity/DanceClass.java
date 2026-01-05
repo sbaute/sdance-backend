@@ -11,13 +11,15 @@ import org.hibernate.annotations.GenericGenerator;
 import java.util.List;
 import java.util.UUID;
 
-@Entity
-@Table(name = "dance_class")
+
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity
+@Table(name = "dance_class")
 public class DanceClass {
 
     @Id

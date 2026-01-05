@@ -1,19 +1,54 @@
 package com.sdance_backend.sdance.config.security;
 
+import com.sdance_backend.sdance.exceptions.CustomException;
+import com.sdance_backend.sdance.messages.errors.UserError;
+import com.sdance_backend.sdance.repository.UserRepository;
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+ import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class SecurityBeansInjector {
 
     @Autowired
-    private AuthenticationConfiguration authenticationConfiguration;
+    private UserRepository userRepository;
 
     @Bean
-    public AuthenticationManager authenticationManager () throws Exception {
+    public AuthenticationManager authenticationManager (AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider authenticationStrategy = new DaoAuthenticationProvider();
+        authenticationStrategy.setPasswordEncoder(passwordEncoder());
+        authenticationStrategy.setUserDetailsService(userDetailsService());
+        return authenticationStrategy;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService(){
+        return (username) -> {
+            return userRepository.findByUsername(username)
+                    .orElseThrow(()-> new CustomException(UserError.USER_NOT_FOUND, username));
+        };
+
+    }
+
+
+
+
 }

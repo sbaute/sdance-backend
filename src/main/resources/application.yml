@@ -25,6 +25,13 @@ logging:
 server:
   port: 8080
 
+security:
+  jwt:
+    expiration-in-minutes: 1
+    secret-key: bWkgY2xhdmUgZXMgbXV5IHNlZ3VyYSAxMjM0NTY3OCBhYmNkZWZn
+
+
+
 
 
 

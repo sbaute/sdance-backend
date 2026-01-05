@@ -9,13 +9,14 @@ import java.util.List;
 import java.util.UUID;
 
 
-@Entity
-@Table(name = "instructor")
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity
+@Table(name = "instructor")
 public class Instructor {
 
     @Id
