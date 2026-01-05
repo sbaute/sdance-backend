@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: root
       POSTGRES_DB: sdance
       SECURITY_JWT_SECRET_KEY: bWkgY2xhdmUgZXMgbXV5IHNlZ3VyYSAxMjM0NTY3OCBhYmNkZWZn
-      SECURITY_JWT_EXPIRATION_IN_MINUTES: 1
+      SECURITY_JWT_EXPIRATION_IN_MINUTES: 30
       TZ: America/Argentina/Buenos_Aires
       PGTZ: America/Argentina/Buenos_Aires
       POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=es_AR.UTF-8 --timezone=America/Argentina/Buenos_Aires"
