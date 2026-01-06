@@ -6,36 +6,61 @@ import java.util.List;
 public enum Role {
 
     ADMIN(Arrays.asList(
-            RolePermission.READ_MY_PROFILE,
+
+            // ===== PROFILE =====
+            RolePermission.PROFILE_VIEW,
+            RolePermission.PROFILE_READ_MY,
+
             // ===== CLASS =====
-            RolePermission.READ_ALL_CLASS,
-            RolePermission.CREATE_CLASS,
-            RolePermission.UPDATE_CLASS,
-            RolePermission.DELETE_CLASS,
+            RolePermission.CLASS_VIEW,
+            RolePermission.CLASS_READ_ALL,
+            RolePermission.CLASS_CREATE,
+            RolePermission.CLASS_MODIFY,
+            RolePermission.CLASS_DELETE,
 
             // ===== STUDENT =====
-            RolePermission.READ_ALL_STUDENT,
-            RolePermission.CREATE_STUDENT,
-            RolePermission.UPDATE_STUDENT,
-            RolePermission.DELETE_STUDENT,
+            RolePermission.STUDENT_VIEW,
+            RolePermission.STUDENT_READ_ALL,
+            RolePermission.STUDENT_CREATE,
+            RolePermission.STUDENT_MODIFY,
+            RolePermission.STUDENT_DELETE,
 
             // ===== INSTRUCTOR =====
-            RolePermission.READ_ALL_INSTRUCTOR,
-            RolePermission.CREATE_INSTRUCTOR,
-            RolePermission.UPDATE_INSTRUCTOR,
-            RolePermission.DELETE_INSTRUCTOR
+            RolePermission.INSTRUCTOR_VIEW,
+            RolePermission.INSTRUCTOR_READ_ALL,
+            RolePermission.INSTRUCTOR_CREATE,
+            RolePermission.INSTRUCTOR_MODIFY,
+            RolePermission.INSTRUCTOR_DELETE
     )),
 
     INSTRUCTOR(Arrays.asList(
-            RolePermission.READ_ALL_CLASS,
-            RolePermission.READ_ALL_STUDENT,
-            RolePermission.READ_MY_PROFILE
+
+            // ===== PROFILE =====
+            RolePermission.PROFILE_VIEW,
+            RolePermission.PROFILE_READ_MY,
+
+            // ===== CLASS =====
+            RolePermission.CLASS_VIEW,
+            RolePermission.CLASS_READ_ALL,
+
+            // ===== STUDENT =====
+            RolePermission.STUDENT_VIEW,
+            RolePermission.STUDENT_READ_ALL
     )),
 
     STUDENT(Arrays.asList(
-            RolePermission.READ_ALL_CLASS,
-            RolePermission.READ_ALL_INSTRUCTOR,
-            RolePermission.READ_MY_PROFILE
+
+            // ===== PROFILE =====
+            RolePermission.PROFILE_VIEW,
+            RolePermission.PROFILE_READ_MY,
+
+            // ===== CLASS =====
+            RolePermission.CLASS_VIEW,
+            RolePermission.CLASS_READ_ALL,
+
+            // ===== INSTRUCTOR =====
+            RolePermission.INSTRUCTOR_VIEW,
+            RolePermission.INSTRUCTOR_READ_ALL
     ));
 
     private final List<RolePermission> permissions;

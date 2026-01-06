@@ -1,5 +1,8 @@
 package com.sdance_backend.sdance.service.impl;
 
+import com.sdance_backend.sdance.dto.UserDTO;
+import com.sdance_backend.sdance.mapper.UserMapper;
+import com.sdance_backend.sdance.messages.errors.UserError;
 import com.sdance_backend.sdance.security.dto.UserRegisterRequestDTO;
 import com.sdance_backend.sdance.entity.User;
 import com.sdance_backend.sdance.enums.Role;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Service
@@ -20,8 +24,9 @@ import java.util.Optional;
 public class UserServiceImpl implements IUserService {
 
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
+
 
 
     @Override
@@ -38,11 +43,22 @@ public class UserServiceImpl implements IUserService {
         return userRepository.save(user);
     }
 
+
+
     @Override
     public Optional<User> findOneByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
+    @Override
+    public UserDTO getUserById(UUID id) {
+        return userMapper.toDTO(getUser(id));
+    }
+
+    public User getUser(UUID id){
+        User user = userRepository.findById(id).orElseThrow(()-> new CustomException(UserError.USER_NOT_FOUND));
+        return user;
+    }
 
     private void validatePassword(String password1, String password2) {
 
