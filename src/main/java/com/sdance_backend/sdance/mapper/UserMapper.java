@@ -28,16 +28,22 @@ public abstract class UserMapper {
 
     public abstract List<UserDTO> toDTOList(List<User> users);
 
-    // -------------------- Update parcial --------------------
+    // ================= UPDATE (PATCH / PUT) =================
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "password", ignore = true)
-    @Mapping(target = "role", expression = "java(toRole(dto.getRole()))")
+    @Mapping(target = "role", source = "role", qualifiedByName = "stringToRole")
     public abstract void updateFromDTO(UserDTO dto, @MappingTarget User user);
 
-    // -------------------- Helper --------------------
-    protected Role toRole(String role) {
+    // ================= HELPERS =================
+    @Named("stringToRole")
+    protected Role stringToRole(String role) {
         return role == null ? null : Role.valueOf(role);
+    }
+
+    @Named("roleToString")
+    protected String roleToString(Role role) {
+        return role == null ? null : role.name();
     }
 
 }
