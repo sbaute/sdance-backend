@@ -29,7 +29,6 @@ public class StudentServiceImpl implements IStudentService {
     private final StudentMapper studentMapper;
 
     @Override
-    @Transactional
     public List<StudentDto> getAllStudents() {
         List<Student> students = (List<Student>) studentRepository.findAll();
 

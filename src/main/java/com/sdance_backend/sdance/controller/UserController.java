@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -35,9 +36,25 @@ public class UserController {
             return ResponseEntity.ok(userRegister);
     }
 
+    @GetMapping
+    public ResponseEntity<ResponseMessage<List<UserDTO>>> getAll (){
+        return responseBuilderMessage.success(User.class, Actions.LIST_RETRIEVED, userService.getAll());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ResponseMessage<UserDTO>> getUserById(@PathVariable UUID id){
         return responseBuilderMessage.success(User.class, Actions.RETRIEVED, userService.getUserById(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseMessage<UserDTO>> updateUser(@RequestBody UserDTO userDTO, @PathVariable UUID id){
+        return responseBuilderMessage.success(User.class, Actions.UPDATED, userService.updateUser(userDTO,id));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> delete (@PathVariable UUID id){
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 
 

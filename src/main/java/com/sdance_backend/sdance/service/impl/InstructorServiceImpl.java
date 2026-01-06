@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -40,11 +41,13 @@ public class InstructorServiceImpl implements IInstructorService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public InstructorDTO getInstructorById(UUID id) {
         return instructorMapper.toDTO(getInstructor(id));
     }
 
     @Override
+    @Transactional
     public InstructorDTO createInstructor(InstructorDTO instructorRequestDto) {
         try {
             validateFields(instructorRequestDto);
@@ -63,6 +66,7 @@ public class InstructorServiceImpl implements IInstructorService {
     }
 
     @Override
+    @Transactional
     public InstructorDTO updateInstructor(InstructorDTO instructorRequestDto, UUID id) {
         try {
             validateFields(instructorRequestDto);
@@ -80,6 +84,7 @@ public class InstructorServiceImpl implements IInstructorService {
     }
 
     @Override
+    @Transactional
     public void deleteInstructor(UUID id) {
         try {
             Instructor instructor = getInstructor(id);

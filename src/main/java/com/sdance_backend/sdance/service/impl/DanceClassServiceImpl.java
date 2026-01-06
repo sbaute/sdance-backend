@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -42,11 +43,13 @@ public class DanceClassServiceImpl implements IDanceClassService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public DanceClassDTO getDanceClassById(UUID id) {
         return  danceClassMapper.toDTO(danceClassRepository.findById(id).get());
     }
 
     @Override
+    @Transactional
     public DanceClassDTO createDanceClass(DanceClassRequestDTO danceClassRequestDTO) {
        try{
             DanceClass danceClass = danceClassMapper.toEntity(danceClassRequestDTO);
@@ -64,6 +67,7 @@ public class DanceClassServiceImpl implements IDanceClassService {
     }
 
     @Override
+    @Transactional
     public DanceClassDTO updateDanceClass(DanceClassRequestDTO danceClassRequestDTO, UUID id) {
         try{
             DanceClass danceClass = getDanceClass(id);
@@ -82,6 +86,7 @@ public class DanceClassServiceImpl implements IDanceClassService {
     }
 
     @Override
+    @Transactional
     public void deleteDanceClass(UUID id) {
         try {
             DanceClass danceClass = getDanceClass(id);

@@ -13,8 +13,10 @@ import com.sdance_backend.sdance.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,8 +28,6 @@ public class UserServiceImpl implements IUserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
-
-
 
     @Override
     public User registerUser(UserRegisterRequestDTO newUser) {
@@ -43,11 +43,13 @@ public class UserServiceImpl implements IUserService {
         return userRepository.save(user);
     }
 
-
-
     @Override
-    public Optional<User> findOneByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public List<UserDTO> getAll() {
+        List<User> users = (List<User>) userRepository.findAll();
+        if(users.isEmpty()){
+            throw new CustomException(UserError.USER_LIST_EMPTY);
+        }
+        return userMapper.toDTOList(users);
     }
 
     @Override
@@ -55,10 +57,46 @@ public class UserServiceImpl implements IUserService {
         return userMapper.toDTO(getUser(id));
     }
 
+    @Override
+    @Transactional
+    public UserDTO updateUser(UserDTO userDTO, UUID id){
+        try{
+            User user = getUser(id);
+            userMapper.updateFromDTO(userDTO, user);
+            userRepository.save(user);
+
+            return userMapper.toDTO(user);
+        } catch (Exception ex) {
+            throw new CustomException(
+                    UserError.USER_UPDATE_ERROR,
+                    ex.getMessage()
+            );
+        }
+    }
+
+    public void deleteUser(UUID id) {
+        try {
+            User user = getUser(id);
+            userRepository.delete(user);
+        } catch (Exception ex){
+            throw new CustomException(
+                    UserError.USER_DELETE_ERROR,
+                    ex.getMessage()
+            );
+        }
+    }
+
+
     public User getUser(UUID id){
         User user = userRepository.findById(id).orElseThrow(()-> new CustomException(UserError.USER_NOT_FOUND));
         return user;
     }
+
+    @Override
+    public Optional<User> findOneByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
 
     private void validatePassword(String password1, String password2) {
 
