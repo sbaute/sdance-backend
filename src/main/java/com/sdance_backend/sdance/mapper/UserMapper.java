@@ -16,26 +16,26 @@ import java.util.List;
 )
 public abstract class UserMapper {
 
-    // -------------------- DTO -> Entity --------------------
+    // -------------------- DTO -> Entity (CREATE) --------------------
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "password", ignore = true)
-    @Mapping(target = "role", expression = "java(toRole(dto.getRole()))")
+    @Mapping(target = "role", source = "role", qualifiedByName = "stringToRole")
     public abstract User toEntity(UserDTO dto);
 
-    // -------------------- Entity -> DTO --------------------
-    @Mapping(target = "role", expression = "java(user.getRole() != null ? user.getRole().name() : null)")
+    // -------------------- Entity -> DTO (RESPONSE) --------------------
+    @Mapping(target = "role", source = "role", qualifiedByName = "roleToString")
     public abstract UserDTO toDTO(User user);
 
     public abstract List<UserDTO> toDTOList(List<User> users);
 
-    // ================= UPDATE (PATCH / PUT) =================
+    // -------------------- UPDATE (PATCH / PUT) --------------------
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "role", source = "role", qualifiedByName = "stringToRole")
     public abstract void updateFromDTO(UserDTO dto, @MappingTarget User user);
 
-    // ================= HELPERS =================
+    // -------------------- HELPERS --------------------
     @Named("stringToRole")
     protected Role stringToRole(String role) {
         return role == null ? null : Role.valueOf(role);
