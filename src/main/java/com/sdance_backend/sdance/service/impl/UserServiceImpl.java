@@ -1,7 +1,11 @@
 package com.sdance_backend.sdance.service.impl;
 
+import com.sdance_backend.sdance.dto.StudentDto;
 import com.sdance_backend.sdance.dto.UserDTO;
+import com.sdance_backend.sdance.entity.Student;
+import com.sdance_backend.sdance.mapper.StudentMapper;
 import com.sdance_backend.sdance.mapper.UserMapper;
+import com.sdance_backend.sdance.messages.errors.AuthError;
 import com.sdance_backend.sdance.messages.errors.UserError;
 import com.sdance_backend.sdance.security.dto.UserRegisterRequestDTO;
 import com.sdance_backend.sdance.entity.User;
@@ -9,6 +13,7 @@ import com.sdance_backend.sdance.enums.Role;
 import com.sdance_backend.sdance.exceptions.CustomException;
 import com.sdance_backend.sdance.messages.errors.PasswordError;
 import com.sdance_backend.sdance.repository.UserRepository;
+import com.sdance_backend.sdance.service.IStudentService;
 import com.sdance_backend.sdance.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,20 +33,47 @@ public class UserServiceImpl implements IUserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final IStudentService studentService;
+    private final StudentMapper studentMapper;
 
     @Override
-    public User registerUser(UserRegisterRequestDTO newUser) {
+    public User createUser(UserRegisterRequestDTO newUser, Role role) {
+        try{
+            validatePassword(newUser.getPassword(), newUser.getRepeatedPassword());
+            User user = new User();
+            user.setName(newUser.getName());
+            user.setUsername(newUser.getUsername());
+            user.setPassword(passwordEncoder.encode(newUser.getPassword()));
+            user.setRole(role);
 
-        validatePassword(newUser.getPassword(), newUser.getRepeatedPassword());
-
-        User user = new User();
-        user.setName(newUser.getName());
-        user.setUsername(newUser.getUsername());
-        user.setPassword(passwordEncoder.encode(newUser.getPassword()));
-        user.setRole(Role.ADMIN);
-
-        return userRepository.save(user);
+            return userRepository.save(user);
+        } catch (Exception ex) {
+            throw new CustomException(
+                    UserError.USER_REGISTER_ERROR,
+                    ex.getMessage()
+            );
+        }
     }
+
+
+    public User registerAdminUser(UserRegisterRequestDTO newUser){
+        return createUser(newUser, Role.ADMIN);
+    }
+
+    public User registerStudetUser(UserRegisterRequestDTO newUser){
+        return createUser(newUser, Role.STUDENT);
+    }
+
+    public User registerInstructorUser(UserRegisterRequestDTO newUser){
+        return createUser(newUser, Role.INSTRUCTOR);
+    }
+
+
+    public void assignStudentToUser(UUID studentId, UUID userId){
+        Student student = studentMapper.toEntity(studentService.getStudentById(studentId));
+        student.setUser(userRepository.findById(userId).get());
+    }
+
 
     @Override
     public List<UserDTO> getAll() {

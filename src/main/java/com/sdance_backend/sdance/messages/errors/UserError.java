@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum UserError implements MessageType {
-    USER_CREATE_ERROR("Failed to create user", 500),
+    USER_REGISTER_ERROR("Failed to register user", 500),
     USER_UPDATE_ERROR("Failed to update user", 500),
     USER_DELETE_ERROR("Failed to delete user", 500),
     USER_NOT_FOUND("The user was not found", 404),

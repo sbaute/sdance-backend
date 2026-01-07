@@ -38,5 +38,8 @@ public class Student {
     @ManyToMany(mappedBy = "students", cascade = CascadeType.ALL)
     private List<DanceClass> danceClasses;
 
+    @OneToOne(optional = true)
+    @JoinColumn(name = "user_id", unique = true)
+    private User user;
 
 }

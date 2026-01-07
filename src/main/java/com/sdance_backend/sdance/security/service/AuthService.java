@@ -1,5 +1,8 @@
 package com.sdance_backend.sdance.security.service;
 
+import com.sdance_backend.sdance.enums.Role;
+import com.sdance_backend.sdance.mapper.UserMapper;
+import com.sdance_backend.sdance.messages.errors.AuthError;
 import com.sdance_backend.sdance.security.dto.AuthRequestDTO;
 import com.sdance_backend.sdance.security.dto.AuthResponseDTO;
 import com.sdance_backend.sdance.security.dto.UserRegisterRequestDTO;
@@ -25,14 +28,12 @@ import java.util.Map;
 public class AuthService {
 
     private final IUserService userService;
-
     private final JwtService jwtService;
-
     private final AuthenticationManager authenticationManager;
 
-    public UserRegisterResponseDTO registerUser(@Valid UserRegisterRequestDTO newUser) {
+    public UserRegisterResponseDTO registerUser(@Valid UserRegisterRequestDTO newUser, Role role) {
 
-        User user = userService.registerUser(newUser);
+        User user = userService.createUser(newUser, role);
 
         UserRegisterResponseDTO userDto = new UserRegisterResponseDTO();
         userDto.setId(user.getId());
@@ -58,22 +59,31 @@ public class AuthService {
     }
 
     public AuthResponseDTO login(AuthRequestDTO authRequest) {
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                authRequest.getUsername(),
-                authRequest.getPassword()
-        );
+        try{
+            Authentication authentication = new UsernamePasswordAuthenticationToken(
+                    authRequest.getUsername(),
+                    authRequest.getPassword()
+            );
 
-        authenticationManager.authenticate(authentication);
+            authenticationManager.authenticate(authentication);
 
-        UserDetails user = userService.findOneByUsername(authRequest.getUsername()).get();
-        String jwt = jwtService.generateToken(user, generateExtraClaims((User)user));
-        //String role = ((User) user).getRole().name();
+            UserDetails user = userService.findOneByUsername(authRequest.getUsername()).get();
+            String jwt = jwtService.generateToken(user, generateExtraClaims((User)user));
+            //String role = ((User) user).getRole().name();
 
-        AuthResponseDTO authResponse = new AuthResponseDTO();
-        authResponse.setJwt(jwt);
-        //authResponse.set(role);
+            AuthResponseDTO authResponse = new AuthResponseDTO();
+            authResponse.setJwt(jwt);
+            //authResponse.set(role);
 
-        return authResponse;
+            return authResponse;
+
+        } catch (Exception ex) {
+            throw new CustomException(
+                    AuthError.AUTH_LOGIN_ERROR,
+                    ex.getMessage()
+            );
+        }
+
     }
 
     public boolean validateToken(String jwt) {

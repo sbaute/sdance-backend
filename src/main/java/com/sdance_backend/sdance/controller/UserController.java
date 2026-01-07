@@ -3,6 +3,7 @@ package com.sdance_backend.sdance.controller;
 
 import com.sdance_backend.sdance.dto.UserDTO;
 import com.sdance_backend.sdance.entity.User;
+import com.sdance_backend.sdance.enums.Role;
 import com.sdance_backend.sdance.messages.Actions;
 import com.sdance_backend.sdance.messages.ResponseBuilderMessage;
 import com.sdance_backend.sdance.payload.ResponseMessage;
@@ -30,10 +31,24 @@ public class UserController {
     private final ResponseBuilderMessage responseBuilderMessage;
 
 
+//    @PostMapping("/register")
+//    public ResponseEntity<UserRegisterResponseDTO> registerUser (@RequestBody @Valid UserRegisterRequestDTO newUser){
+//            UserRegisterResponseDTO userRegister = authService.registerUser(newUser);
+//            return ResponseEntity.ok(userRegister);
+//    }
+
     @PostMapping("/register")
-    public ResponseEntity<UserRegisterResponseDTO> registerUser (@RequestBody @Valid UserRegisterRequestDTO newUser){
-            UserRegisterResponseDTO userRegister = authService.registerUser(newUser);
-            return ResponseEntity.ok(userRegister);
+    public ResponseEntity<ResponseMessage<User>> registerAdminUser(@RequestBody @Valid UserRegisterRequestDTO newUser){
+        return responseBuilderMessage.success(User.class, Actions.CREATED, userService.createUser(newUser, Role.ADMIN));
+    }
+
+    @PostMapping("/register/student")
+    public ResponseEntity<ResponseMessage<User>> registerStudentUser(@RequestBody @Valid UserRegisterRequestDTO newUser){
+        return responseBuilderMessage.success(User.class, Actions.CREATED, userService.createUser(newUser, Role.STUDENT));
+    }
+    @PostMapping("/register/instructor")
+    public ResponseEntity<ResponseMessage<User>> registerInstructorUser(@RequestBody @Valid UserRegisterRequestDTO newUser){
+        return responseBuilderMessage.success(User.class, Actions.CREATED, userService.createUser(newUser, Role.INSTRUCTOR));
     }
 
     @GetMapping
@@ -51,12 +66,10 @@ public class UserController {
         return responseBuilderMessage.success(User.class, Actions.UPDATED, userService.updateUser(userDTO,id));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete (@PathVariable UUID id){
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
-
-
 
 }
