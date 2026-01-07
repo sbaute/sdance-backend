@@ -19,6 +19,7 @@ public enum RolePermission {
     STUDENT_CREATE,
     STUDENT_MODIFY,
     STUDENT_DELETE,
+    STUDENT_SEARCH,
 
     // ===== INSTRUCTOR =====
     INSTRUCTOR_VIEW,

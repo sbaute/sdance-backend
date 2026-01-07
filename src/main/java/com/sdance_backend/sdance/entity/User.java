@@ -48,9 +48,7 @@ public class User implements UserDetails {
         if (role == null) {
             return List.of();
         }
-
         List<GrantedAuthority> authorities = new ArrayList<>();
-
         // ROLE_
         authorities.add(new SimpleGrantedAuthority("ROLE_" + role.name()));
 
@@ -62,7 +60,6 @@ public class User implements UserDetails {
         );
 
         return authorities;
-
     }
 
     @Override

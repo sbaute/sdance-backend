@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,21 +27,25 @@ public class StudentController {
     private final IStudentService studentService;
     private final ResponseBuilderMessage responseBuilderMessage;
 
+    @PreAuthorize("hasAuthority('STUDENT_READ_ALL')")
     @GetMapping
     public ResponseEntity<ResponseMessage<List<StudentDto>>> getAll() {
         return responseBuilderMessage.success(Student.class, Actions.LIST_RETRIEVED, studentService.getAllStudents());
     }
 
+    @PreAuthorize("hasAuthority('STUDENT_VIEW')")
     @GetMapping("/{id}")
     public ResponseEntity<ResponseMessage<StudentDto>> getById(@PathVariable UUID id) {
         return responseBuilderMessage.success(Student.class, Actions.RETRIEVED, studentService.getStudentById(id));
     }
 
+    @PreAuthorize("hasAuthority('STUDENT_CREATE')")
     @PostMapping
     public ResponseEntity<ResponseMessage<StudentDto>> create (@Valid @RequestBody StudentDto studentRequestDto){
         return responseBuilderMessage.success(Student.class, Actions.CREATED, studentService.createStudent(studentRequestDto));
     }
 
+    @PreAuthorize("hasAuthority('STUDENT_SEARCH')")
     @PostMapping("/search")
     public ResponseEntity<PageResponseDTO<StudentDto>> search (@RequestBody(required = false) SearchTermDTO description,
                                                                @RequestParam(defaultValue = "0") int pag,
@@ -49,11 +54,13 @@ public class StudentController {
         return ResponseEntity.ok(studentService.searchStudents(description,pag, validSize));
     }
 
+    @PreAuthorize("hasAuthority('STUDENT_MODIFY')")
     @PutMapping("/{id}")
     public ResponseEntity<ResponseMessage<StudentDto>> update (@Valid @RequestBody StudentDto studentRequestDto, @PathVariable UUID id){
         return responseBuilderMessage.success(Student.class, Actions.UPDATED, studentService.updateStudent(studentRequestDto,id));
     }
 
+    @PreAuthorize("hasAuthority('STUDENT_DELETE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         studentService.deleteStudent(id);

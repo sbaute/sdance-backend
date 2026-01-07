@@ -24,6 +24,7 @@ public enum Role {
             RolePermission.STUDENT_CREATE,
             RolePermission.STUDENT_MODIFY,
             RolePermission.STUDENT_DELETE,
+            RolePermission.STUDENT_SEARCH,
 
             // ===== INSTRUCTOR =====
             RolePermission.INSTRUCTOR_VIEW,
