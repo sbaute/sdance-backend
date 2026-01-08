@@ -1,6 +1,6 @@
 package com.sdance_backend.sdance.security;
 
-import com.sdance_backend.sdance.exceptions.CustomException;
+import com.sdance_backend.sdance.exception.CustomException;
 import com.sdance_backend.sdance.messages.errors.UserError;
 import com.sdance_backend.sdance.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

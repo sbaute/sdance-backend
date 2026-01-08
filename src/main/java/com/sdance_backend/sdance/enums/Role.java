@@ -11,12 +11,21 @@ public enum Role {
             RolePermission.PROFILE_VIEW,
             RolePermission.PROFILE_READ_MY,
 
+            // ===== USER =====
+            RolePermission.USER_VIEW,
+            RolePermission.USER_READ_ALL,
+            RolePermission.USER_CREATE,
+            RolePermission.USER_MODIFY,
+            RolePermission.USER_DELETE,
+            RolePermission.USER_SEARCH,
+
             // ===== CLASS =====
             RolePermission.CLASS_VIEW,
             RolePermission.CLASS_READ_ALL,
             RolePermission.CLASS_CREATE,
             RolePermission.CLASS_MODIFY,
             RolePermission.CLASS_DELETE,
+            RolePermission.CLASS_SEARCH,
 
             // ===== STUDENT =====
             RolePermission.STUDENT_VIEW,

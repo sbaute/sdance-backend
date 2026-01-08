@@ -1,16 +1,14 @@
 package com.sdance_backend.sdance.service.impl;
 
-import com.sdance_backend.sdance.dto.StudentDto;
 import com.sdance_backend.sdance.dto.UserDTO;
 import com.sdance_backend.sdance.entity.Student;
 import com.sdance_backend.sdance.mapper.StudentMapper;
 import com.sdance_backend.sdance.mapper.UserMapper;
-import com.sdance_backend.sdance.messages.errors.AuthError;
 import com.sdance_backend.sdance.messages.errors.UserError;
 import com.sdance_backend.sdance.security.dto.UserRegisterRequestDTO;
 import com.sdance_backend.sdance.entity.User;
 import com.sdance_backend.sdance.enums.Role;
-import com.sdance_backend.sdance.exceptions.CustomException;
+import com.sdance_backend.sdance.exception.CustomException;
 import com.sdance_backend.sdance.messages.errors.PasswordError;
 import com.sdance_backend.sdance.repository.UserRepository;
 import com.sdance_backend.sdance.service.IStudentService;

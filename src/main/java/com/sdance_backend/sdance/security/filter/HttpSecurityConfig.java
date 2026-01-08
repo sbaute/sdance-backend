@@ -1,6 +1,9 @@
 package com.sdance_backend.sdance.security.filter;
 
 
+import com.sdance_backend.sdance.messages.ResponseBuilderMessage;
+import com.sdance_backend.sdance.messages.errors.AuthError;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,38 +19,42 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class HttpSecurityConfig {
 
-    @Autowired
-    private AuthenticationProvider daoAuthProvider;
-
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
-
+    private final AuthenticationProvider daoAuthProvider;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final ResponseBuilderMessage responseBuilderMessage;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf -> csrf.disable()) // Deshabilita CSRF
-//                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Habilita CORS
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
                 .authenticationProvider(daoAuthProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .authorizeHttpRequests(auth -> {
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((request, response, authException) ->
+                                responseBuilderMessage.writeHttpError(
+                                        response,
+                                        AuthError.AUTH_UNAUTHORIZED
+                                )
+                        )
+                        .accessDeniedHandler((request, response, accessDeniedException) ->
+                                responseBuilderMessage.writeHttpError(
+                                        response,
+                                        AuthError.AUTH_FORBIDDEN
+                                )
+                        )
+                )
 
-                    // Rutas de autenticación
+                .authorizeHttpRequests(auth -> {
                     auth.requestMatchers(HttpMethod.POST, "/api/v1/user/register/**").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/api/v1/auth/authenticate").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/api/v1/auth/validate").permitAll();
-
-
-                    // Rutas privadas (requieren autenticación)
-//                    auth.requestMatchers("/api/v1/user/**").hasAnyRole("ADMIN", "SUPERADMIN");
-//                    auth.requestMatchers("/api/v1/**").authenticated();
-
-                    // Cualquier otra petición requiere autenticación
                     auth.anyRequest().authenticated();
-
                 })
                 .build();
     }

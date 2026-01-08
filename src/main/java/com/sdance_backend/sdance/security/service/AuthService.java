@@ -1,14 +1,13 @@
 package com.sdance_backend.sdance.security.service;
 
 import com.sdance_backend.sdance.enums.Role;
-import com.sdance_backend.sdance.mapper.UserMapper;
 import com.sdance_backend.sdance.messages.errors.AuthError;
 import com.sdance_backend.sdance.security.dto.AuthRequestDTO;
 import com.sdance_backend.sdance.security.dto.AuthResponseDTO;
 import com.sdance_backend.sdance.security.dto.UserRegisterRequestDTO;
 import com.sdance_backend.sdance.security.dto.UserRegisterResponseDTO;
 import com.sdance_backend.sdance.entity.User;
-import com.sdance_backend.sdance.exceptions.CustomException;
+import com.sdance_backend.sdance.exception.CustomException;
 import com.sdance_backend.sdance.messages.errors.UserError;
 import com.sdance_backend.sdance.service.IUserService;
 import jakarta.validation.Valid;

@@ -1,4 +1,4 @@
-package com.sdance_backend.sdance.exceptions;
+package com.sdance_backend.sdance.exception;
 
 import com.sdance_backend.sdance.payload.ErrorResponseMessage;
 import com.sdance_backend.sdance.messages.ResponseBuilderMessage;

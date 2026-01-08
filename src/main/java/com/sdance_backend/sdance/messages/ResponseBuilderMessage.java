@@ -1,17 +1,22 @@
 package com.sdance_backend.sdance.messages;
 
-import com.sdance_backend.sdance.exceptions.CustomException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sdance_backend.sdance.exception.CustomException;
 import com.sdance_backend.sdance.payload.ErrorResponseMessage;
 import com.sdance_backend.sdance.payload.ResponseMessage;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 
 @Component
 @AllArgsConstructor
 public class ResponseBuilderMessage {
 
     private final MessageBuilder messageBuilder;
+    private final ObjectMapper objectMapper;
 
     //SUCCESFULL
     // Respuesta genérica de éxito
@@ -43,5 +48,25 @@ public class ResponseBuilderMessage {
         return error(ex.getStatus(), ex.getCode(), ex.getMessage(), data);
     }
 
+    //  ERRORS (HTTP / Security)
+    public void writeHttpError(
+            HttpServletResponse response,
+            MessageType error
+    ) throws IOException {
+
+        response.setStatus(error.getStatus());
+        response.setContentType("application/json");
+
+        ErrorResponseMessage<Object> body =
+                ErrorResponseMessage.builder()
+                        .status(error.getStatus())
+                        .code(error.getCode())
+                        .message(error.getMessage())
+                        .timestamp(System.currentTimeMillis())
+                        .data(null)
+                        .build();
+
+        response.getWriter().write(objectMapper.writeValueAsString(body));
+    }
 
 }

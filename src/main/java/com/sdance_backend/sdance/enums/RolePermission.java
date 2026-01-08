@@ -6,12 +6,21 @@ public enum RolePermission {
     PROFILE_VIEW,
     PROFILE_READ_MY,
 
+    // ===== USER =====
+    USER_VIEW,
+    USER_READ_ALL,
+    USER_CREATE,
+    USER_MODIFY,
+    USER_DELETE,
+    USER_SEARCH,
+
     // ===== CLASS =====
     CLASS_VIEW,
     CLASS_READ_ALL,
     CLASS_CREATE,
     CLASS_MODIFY,
     CLASS_DELETE,
+    CLASS_SEARCH,
 
     // ===== STUDENT =====
     STUDENT_VIEW,

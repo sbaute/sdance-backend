@@ -2,8 +2,7 @@ package com.sdance_backend.sdance.service.impl;
 
 import com.sdance_backend.sdance.dto.*;
 import com.sdance_backend.sdance.entity.DanceClass;
-import com.sdance_backend.sdance.entity.Student;
-import com.sdance_backend.sdance.exceptions.CustomException;
+import com.sdance_backend.sdance.exception.CustomException;
 import com.sdance_backend.sdance.mapper.DanceClassMapper;
 import com.sdance_backend.sdance.messages.errors.DanceClassError;
 import com.sdance_backend.sdance.messages.errors.GenericError;

@@ -2,7 +2,7 @@ package com.sdance_backend.sdance.service.impl;
 import com.sdance_backend.sdance.dto.PageResponseDTO;
 import com.sdance_backend.sdance.dto.SearchTermDTO;
 import com.sdance_backend.sdance.dto.StudentDto;
-import com.sdance_backend.sdance.exceptions.CustomException;
+import com.sdance_backend.sdance.exception.CustomException;
 import com.sdance_backend.sdance.mapper.StudentMapper;
 import com.sdance_backend.sdance.messages.errors.GenericError;
 import com.sdance_backend.sdance.messages.errors.StudentError;

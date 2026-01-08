@@ -8,13 +8,13 @@ import com.sdance_backend.sdance.messages.Actions;
 import com.sdance_backend.sdance.messages.ResponseBuilderMessage;
 import com.sdance_backend.sdance.payload.ResponseMessage;
 import com.sdance_backend.sdance.security.dto.UserRegisterRequestDTO;
-import com.sdance_backend.sdance.security.dto.UserRegisterResponseDTO;
 import com.sdance_backend.sdance.security.service.AuthService;
 import com.sdance_backend.sdance.service.IUserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,21 +51,26 @@ public class UserController {
         return responseBuilderMessage.success(User.class, Actions.CREATED, userService.createUser(newUser, Role.INSTRUCTOR));
     }
 
+
+    @PreAuthorize("hasAuthority('USER_READ_ALL')")
     @GetMapping
     public ResponseEntity<ResponseMessage<List<UserDTO>>> getAll (){
         return responseBuilderMessage.success(User.class, Actions.LIST_RETRIEVED, userService.getAll());
     }
 
+    @PreAuthorize("hasAuthority('USER_VIEW')")
     @GetMapping("/{id}")
     public ResponseEntity<ResponseMessage<UserDTO>> getUserById(@PathVariable UUID id){
         return responseBuilderMessage.success(User.class, Actions.RETRIEVED, userService.getUserById(id));
     }
 
+    @PreAuthorize("hasAuthority('USER_MODIFY')")
     @PutMapping("/{id}")
     public ResponseEntity<ResponseMessage<UserDTO>> updateUser(@RequestBody UserDTO userDTO, @PathVariable UUID id){
         return responseBuilderMessage.success(User.class, Actions.UPDATED, userService.updateUser(userDTO,id));
     }
 
+    @PreAuthorize("hasAuthority('USER_DELETE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete (@PathVariable UUID id){
         userService.deleteUser(id);

@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,21 +28,26 @@ public class InstructorController {
     private final IInstructorService instructorService;
     private final ResponseBuilderMessage responseBuilderMessage;
 
+    @PreAuthorize("hasAuthority('INSTRUCTOR_READ_ALL')")
     @GetMapping
     public ResponseEntity<ResponseMessage<List<InstructorDTO>>> getAll() {
         return responseBuilderMessage.success(Instructor.class, Actions.LIST_RETRIEVED, instructorService.getAllInstructors());
     }
 
+    @PreAuthorize("hasAuthority('INSTRUCTOR_VIEW')")
     @GetMapping("/{id}")
     public ResponseEntity<ResponseMessage<InstructorDTO>> getById(@PathVariable UUID id) {
         return responseBuilderMessage.success(Instructor.class, Actions.RETRIEVED, instructorService.getInstructorById(id));
     }
 
+
+    @PreAuthorize("hasAuthority('INSTRUCTOR_CREATE')")
     @PostMapping
     public ResponseEntity<ResponseMessage<InstructorDTO>> create (@Valid  @RequestBody InstructorDTO instructorRequestDto){
         return responseBuilderMessage.success(Instructor.class, Actions.CREATED, instructorService.createInstructor(instructorRequestDto));
     }
 
+    @PreAuthorize("hasAuthority('INSTRUCTOR_SEARCH')")
     @PostMapping("/search")
     public ResponseEntity<PageResponseDTO<InstructorDTO>> search (@RequestBody(required = false) SearchTermDTO description,
                                                                @RequestParam(defaultValue = "0") int pag,
@@ -50,11 +56,13 @@ public class InstructorController {
         return ResponseEntity.ok(instructorService.searchInstructors(description,pag, validSize));
     }
 
+    @PreAuthorize("hasAuthority('INSTRUCTOR_MODIFY')")
     @PutMapping("/{id}")
     public  ResponseEntity<ResponseMessage<InstructorDTO>> update (@Valid @RequestBody InstructorDTO instructorRequestDto, @PathVariable UUID id){
         return responseBuilderMessage.success(Instructor.class, Actions.UPDATED, instructorService.updateInstructor(instructorRequestDto, id));
     }
 
+    @PreAuthorize("hasAuthority('INSTRUCTOR_DELETE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete (@PathVariable UUID id){
       instructorService.deleteInstructor(id);

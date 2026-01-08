@@ -1,7 +1,7 @@
 package com.sdance_backend.sdance.security.filter;
 
 import com.sdance_backend.sdance.entity.User;
-import com.sdance_backend.sdance.exceptions.CustomException;
+import com.sdance_backend.sdance.exception.CustomException;
 import com.sdance_backend.sdance.messages.errors.UserError;
 import com.sdance_backend.sdance.security.service.JwtService;
 import com.sdance_backend.sdance.service.impl.UserServiceImpl;

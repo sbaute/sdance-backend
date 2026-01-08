@@ -1,4 +1,4 @@
-package com.sdance_backend.sdance.exceptions;
+package com.sdance_backend.sdance.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
