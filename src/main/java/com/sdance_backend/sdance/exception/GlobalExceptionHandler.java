@@ -1,11 +1,14 @@
 package com.sdance_backend.sdance.exception;
 
+import com.sdance_backend.sdance.messages.errors.AuthError;
 import com.sdance_backend.sdance.payload.ErrorResponseMessage;
 import com.sdance_backend.sdance.messages.ResponseBuilderMessage;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.nio.file.AccessDeniedException;
 
 @RestControllerAdvice
 @AllArgsConstructor

@@ -52,21 +52,30 @@ public class ResponseBuilderMessage {
     public void writeHttpError(
             HttpServletResponse response,
             MessageType error
-    ) throws IOException {
+    ) {
+        try {
+            response.resetBuffer();
+            response.setStatus(error.getStatus());
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
 
-        response.setStatus(error.getStatus());
-        response.setContentType("application/json");
+            ErrorResponseMessage<Object> body =
+                    ErrorResponseMessage.builder()
+                            .status(error.getStatus())
+                            .code(error.getCode())
+                            .message(error.getMessage())
+                            .timestamp(System.currentTimeMillis())
+                            .data(null)
+                            .build();
 
-        ErrorResponseMessage<Object> body =
-                ErrorResponseMessage.builder()
-                        .status(error.getStatus())
-                        .code(error.getCode())
-                        .message(error.getMessage())
-                        .timestamp(System.currentTimeMillis())
-                        .data(null)
-                        .build();
+            response.getWriter().write(
+                    objectMapper.writeValueAsString(body)
+            );
 
-        response.getWriter().write(objectMapper.writeValueAsString(body));
+            response.flushBuffer();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
