@@ -1,7 +1,8 @@
 package com.sdance_backend.sdance.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.sdance_backend.sdance.enums.Days;
-import com.sdance_backend.sdance.enums.Hour;
+import com.sdance_backend.sdance.enums.danceClass.ClassLevel;
+import com.sdance_backend.sdance.enums.danceClass.Days;
+import com.sdance_backend.sdance.enums.danceClass.Hour;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -20,6 +21,14 @@ public class DanceClassDTO {
     private Days daysOfWeek;
 
     private Hour classTime;
+
+    private ClassLevel level;
+
+    private Integer maxCapacity;
+
+    private String description;
+
+    private String room;
 
     private InstructorNameDTO instructor;
 }

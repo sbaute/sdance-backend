@@ -1,4 +1,4 @@
-package com.sdance_backend.sdance.enums;
+package com.sdance_backend.sdance.enums.auth;
 
 public enum RolePermission {
 

@@ -4,6 +4,7 @@ import com.sdance_backend.sdance.dto.InstructorDTO;
 import com.sdance_backend.sdance.dto.PageResponseDTO;
 import com.sdance_backend.sdance.dto.SearchTermDTO;
 import com.sdance_backend.sdance.entity.Instructor;
+import com.sdance_backend.sdance.enums.status.InstructorStatus;
 import com.sdance_backend.sdance.exception.CustomException;
 import com.sdance_backend.sdance.mapper.InstructorMapper;
 import com.sdance_backend.sdance.messages.errors.GenericError;
@@ -19,6 +20,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -53,6 +55,9 @@ public class InstructorServiceImpl implements IInstructorService {
 
             Instructor instructor = instructorMapper.toEntity(instructorRequestDto);
             instructor.setDanceClasses(new ArrayList<>());
+            instructor.setRegistrationDate(LocalDate.now());
+            instructor.setStatus(InstructorStatus.ACTIVE);
+
             instructorRepository.save(instructor);
             return instructorMapper.toDTO(instructor);
 

@@ -2,8 +2,8 @@ package com.sdance_backend.sdance.repository;
 
 import com.sdance_backend.sdance.entity.DanceClass;
 import com.sdance_backend.sdance.entity.Instructor;
-import com.sdance_backend.sdance.enums.Days;
-import com.sdance_backend.sdance.enums.Hour;
+import com.sdance_backend.sdance.enums.danceClass.Days;
+import com.sdance_backend.sdance.enums.danceClass.Hour;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

@@ -3,7 +3,7 @@ package com.sdance_backend.sdance.mapper;
 
 import com.sdance_backend.sdance.dto.UserDTO;
 import com.sdance_backend.sdance.entity.User;
-import com.sdance_backend.sdance.enums.Role;
+import com.sdance_backend.sdance.enums.auth.Role;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.*;
 

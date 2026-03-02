@@ -55,6 +55,8 @@ public class DanceClassServiceImpl implements IDanceClassService {
             danceClass.setInstructor(instructorService.getInstructor(danceClassRequestDTO.getInstructorId()));
             danceClass.setStudents(new ArrayList<>());
 
+
+
            danceClassRepository.save(danceClass);
 
            return danceClassMapper.toDTO(danceClass);

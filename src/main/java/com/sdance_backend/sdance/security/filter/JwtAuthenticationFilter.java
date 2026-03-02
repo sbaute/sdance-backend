@@ -32,6 +32,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
+        // 🔹 Ignorar preflight OPTIONS
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // 🔹 Ignorar login y registro (rutas públicas)
+        String path = request.getServletPath();
+        if (path.startsWith("/api/v1/auth") || path.startsWith("/api/v1/user/register")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         // 1. Obtener encabezado HTTP Authorization
         String authorizationHeader = request.getHeader("Authorization");
 

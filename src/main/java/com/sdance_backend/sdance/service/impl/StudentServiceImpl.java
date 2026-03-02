@@ -1,7 +1,9 @@
 package com.sdance_backend.sdance.service.impl;
 import com.sdance_backend.sdance.dto.PageResponseDTO;
 import com.sdance_backend.sdance.dto.SearchTermDTO;
-import com.sdance_backend.sdance.dto.StudentDto;
+import com.sdance_backend.sdance.dto.StudentRequest;
+import com.sdance_backend.sdance.dto.StudentResponse;
+import com.sdance_backend.sdance.enums.status.StudentStatus;
 import com.sdance_backend.sdance.exception.CustomException;
 import com.sdance_backend.sdance.mapper.StudentMapper;
 import com.sdance_backend.sdance.messages.errors.GenericError;
@@ -18,6 +20,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,7 +32,7 @@ public class StudentServiceImpl implements IStudentService {
     private final StudentMapper studentMapper;
 
     @Override
-    public List<StudentDto> getAllStudents() {
+    public List<StudentResponse> getAllStudents() {
         List<Student> students = (List<Student>) studentRepository.findAll();
 
             if(students.isEmpty()) {
@@ -40,18 +43,21 @@ public class StudentServiceImpl implements IStudentService {
 
     @Override
     @Transactional(readOnly = true)
-    public StudentDto getStudentById(UUID id) {
+    public StudentResponse getStudentById(UUID id) {
         return studentMapper.toDTO(getStudent(id));
     }
 
     @Override
     @Transactional
-    public StudentDto createStudent(StudentDto studentRequestDto) {
+    public StudentResponse createStudent(StudentRequest studentRequestDto) {
         try {
             validateFields(studentRequestDto);
 
             Student student = studentMapper.toEntity(studentRequestDto);
             student.setDanceClasses(new ArrayList<>());
+            student.setStatus(StudentStatus.ACTIVE);
+            student.setRegistrationDate(LocalDate.now());
+
             studentRepository.save(student);
             return studentMapper.toDTO(student);
 
@@ -65,7 +71,7 @@ public class StudentServiceImpl implements IStudentService {
 
     @Override
     @Transactional
-    public StudentDto updateStudent(StudentDto studentRequestDto, UUID id) {
+    public StudentResponse updateStudent(StudentRequest studentRequestDto, UUID id) {
         try {
             Student student = getStudent(id);
             studentMapper.updateFromDTO(studentRequestDto, student);
@@ -96,7 +102,7 @@ public class StudentServiceImpl implements IStudentService {
     }
 
     @Override
-    public PageResponseDTO<StudentDto> searchStudents(SearchTermDTO searchRequest, int page, int size) {
+    public PageResponseDTO<StudentResponse> searchStudents(SearchTermDTO searchRequest, int page, int size) {
 
         // Validacion de pag y tamaño
         if (page < 0) {
@@ -130,7 +136,7 @@ public class StudentServiceImpl implements IStudentService {
 
             Page<Student> studentPage = studentRepository.findAll(spec, pageable);
 
-            List<StudentDto> students = studentPage.getContent().stream()
+            List<StudentResponse> students = studentPage.getContent().stream()
                     .map(studentMapper::toDTO)
                     .collect(Collectors.toList());
 
@@ -148,7 +154,7 @@ public class StudentServiceImpl implements IStudentService {
     }
 
 
-    private void validateFields(StudentDto studentRequestDto){
+    private void validateFields(StudentRequest studentRequestDto){
         if(studentRequestDto.getName() == null || studentRequestDto.getLastName() == null || studentRequestDto.getPhoneNumber().isEmpty() || studentRequestDto.getDocument().isEmpty()){
             throw new CustomException(GenericError.REQUIRED_FIELDS_MISSING);
         }

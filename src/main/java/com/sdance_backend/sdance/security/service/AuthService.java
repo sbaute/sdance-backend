@@ -1,6 +1,6 @@
 package com.sdance_backend.sdance.security.service;
 
-import com.sdance_backend.sdance.enums.Role;
+import com.sdance_backend.sdance.enums.auth.Role;
 import com.sdance_backend.sdance.messages.errors.AuthError;
 import com.sdance_backend.sdance.security.dto.AuthRequestDTO;
 import com.sdance_backend.sdance.security.dto.AuthResponseDTO;

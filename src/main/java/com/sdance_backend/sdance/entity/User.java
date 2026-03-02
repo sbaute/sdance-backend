@@ -1,6 +1,6 @@
 package com.sdance_backend.sdance.entity;
 
-import com.sdance_backend.sdance.enums.Role;
+import com.sdance_backend.sdance.enums.auth.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -7,7 +7,7 @@ import com.sdance_backend.sdance.mapper.UserMapper;
 import com.sdance_backend.sdance.messages.errors.UserError;
 import com.sdance_backend.sdance.security.dto.UserRegisterRequestDTO;
 import com.sdance_backend.sdance.entity.User;
-import com.sdance_backend.sdance.enums.Role;
+import com.sdance_backend.sdance.enums.auth.Role;
 import com.sdance_backend.sdance.exception.CustomException;
 import com.sdance_backend.sdance.messages.errors.PasswordError;
 import com.sdance_backend.sdance.repository.UserRepository;

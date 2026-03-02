@@ -5,28 +5,28 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
+
 
 import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class InstructorDTO {
+public class StudentRequest {
 
     private UUID id;
 
     @NotBlank(message = "Name cannot be empty")
     private String name;
 
-    @NotBlank(message = "lastName cannot be empty")
+    @NotBlank(message = "Last name cannot be empty")
     private String lastName;
 
-    @NotBlank(message = "document cannot be empty")
+    @NotBlank(message = "Document cannot be empty")
     private String document;
 
-    @NotBlank(message = "phoneNumber cannot be empty")
+    @NotBlank(message = "Phone number cannot be empty")
     private String phoneNumber;
 
     @NotBlank(message = "Email cannot be empty")
@@ -41,4 +41,5 @@ public class InstructorDTO {
 
     @NotBlank(message = "Emergency Contact phone cannot be empty")
     private String emergencyContactPhone;
+
 }

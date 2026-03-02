@@ -1,10 +1,10 @@
 package com.sdance_backend.sdance.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.sdance_backend.sdance.enums.Days;
-import com.sdance_backend.sdance.enums.Hour;
+import com.sdance_backend.sdance.enums.danceClass.ClassLevel;
+import com.sdance_backend.sdance.enums.danceClass.Days;
+import com.sdance_backend.sdance.enums.danceClass.Hour;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -35,6 +35,18 @@ public class DanceClass {
 
     @Enumerated(EnumType.STRING)
     private Hour classTime;
+
+    @Enumerated(EnumType.STRING)
+    private ClassLevel level;
+
+    @Column(name = "max_capacity", nullable = false)
+    private Integer maxCapacity;
+
+    @Column(length = 500)
+    private String description;
+
+    @Column(name = "room")
+    private String room;
 
     @ManyToOne
     @JoinColumn(name = "instructor_id")

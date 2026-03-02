@@ -3,7 +3,6 @@ package com.sdance_backend.sdance.service;
 import com.sdance_backend.sdance.dto.InstructorDTO;
 import com.sdance_backend.sdance.dto.PageResponseDTO;
 import com.sdance_backend.sdance.dto.SearchTermDTO;
-import com.sdance_backend.sdance.dto.StudentDto;
 
 import java.util.List;
 import java.util.UUID;

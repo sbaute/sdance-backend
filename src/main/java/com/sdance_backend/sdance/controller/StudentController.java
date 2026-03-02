@@ -2,7 +2,8 @@ package com.sdance_backend.sdance.controller;
 
 import com.sdance_backend.sdance.dto.PageResponseDTO;
 import com.sdance_backend.sdance.dto.SearchTermDTO;
-import com.sdance_backend.sdance.dto.StudentDto;
+import com.sdance_backend.sdance.dto.StudentRequest;
+import com.sdance_backend.sdance.dto.StudentResponse;
 import com.sdance_backend.sdance.entity.Student;
 import com.sdance_backend.sdance.payload.ResponseMessage;
 import com.sdance_backend.sdance.service.IStudentService;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1/students")
 @Slf4j
@@ -29,34 +31,34 @@ public class StudentController {
 
     @PreAuthorize("hasAuthority('STUDENT_READ_ALL')")
     @GetMapping
-    public ResponseEntity<ResponseMessage<List<StudentDto>>> getAll() {
+    public ResponseEntity<ResponseMessage<List<StudentResponse>>> getAll() {
         return responseBuilderMessage.success(Student.class, Actions.LIST_RETRIEVED, studentService.getAllStudents());
     }
 
     @PreAuthorize("hasAuthority('STUDENT_VIEW')")
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseMessage<StudentDto>> getById(@PathVariable UUID id) {
+    public ResponseEntity<ResponseMessage<StudentResponse>> getById(@PathVariable UUID id) {
         return responseBuilderMessage.success(Student.class, Actions.RETRIEVED, studentService.getStudentById(id));
     }
 
     @PreAuthorize("hasAuthority('STUDENT_CREATE')")
     @PostMapping
-    public ResponseEntity<ResponseMessage<StudentDto>> create (@Valid @RequestBody StudentDto studentRequestDto){
+    public ResponseEntity<ResponseMessage<StudentResponse>> create (@Valid @RequestBody StudentRequest studentRequestDto){
         return responseBuilderMessage.success(Student.class, Actions.CREATED, studentService.createStudent(studentRequestDto));
     }
 
     @PreAuthorize("hasAuthority('STUDENT_SEARCH')")
     @PostMapping("/search")
-    public ResponseEntity<PageResponseDTO<StudentDto>> search (@RequestBody(required = false) SearchTermDTO description,
-                                                               @RequestParam(defaultValue = "0") int pag,
-                                                               @RequestParam int size){
+    public ResponseEntity<PageResponseDTO<StudentResponse>> search (@RequestBody(required = false) SearchTermDTO description,
+                                                                   @RequestParam(defaultValue = "0") int pag,
+                                                                   @RequestParam int size){
         int validSize = Math.min(Math.max(1, size), 100);
         return ResponseEntity.ok(studentService.searchStudents(description,pag, validSize));
     }
 
     @PreAuthorize("hasAuthority('STUDENT_MODIFY')")
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseMessage<StudentDto>> update (@Valid @RequestBody StudentDto studentRequestDto, @PathVariable UUID id){
+    public ResponseEntity<ResponseMessage<StudentResponse>> update (@Valid @RequestBody StudentRequest studentRequestDto, @PathVariable UUID id){
         return responseBuilderMessage.success(Student.class, Actions.UPDATED, studentService.updateStudent(studentRequestDto,id));
     }
 

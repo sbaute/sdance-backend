@@ -1,7 +1,7 @@
 package com.sdance_backend.sdance.service;
 
 import com.sdance_backend.sdance.dto.UserDTO;
-import com.sdance_backend.sdance.enums.Role;
+import com.sdance_backend.sdance.enums.auth.Role;
 import com.sdance_backend.sdance.security.dto.UserRegisterRequestDTO;
 import com.sdance_backend.sdance.entity.User;
 import jakarta.validation.Valid;
