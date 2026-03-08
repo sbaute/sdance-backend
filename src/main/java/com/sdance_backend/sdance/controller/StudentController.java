@@ -31,8 +31,8 @@ public class StudentController {
 
     @PreAuthorize("hasAuthority('STUDENT_READ_ALL')")
     @GetMapping
-    public ResponseEntity<ResponseMessage<List<StudentResponse>>> getAll() {
-        return responseBuilderMessage.success(Student.class, Actions.LIST_RETRIEVED, studentService.getAllStudents());
+    public ResponseEntity<ResponseMessage<PageResponseDTO<StudentResponse>>> getAll(@RequestParam(defaultValue = "0") int page) {
+        return responseBuilderMessage.success(Student.class, Actions.LIST_RETRIEVED, studentService.getAllStudents(page));
     }
 
     @PreAuthorize("hasAuthority('STUDENT_VIEW')")
@@ -52,7 +52,7 @@ public class StudentController {
     public ResponseEntity<PageResponseDTO<StudentResponse>> search (@RequestBody(required = false) SearchTermDTO description,
                                                                    @RequestParam(defaultValue = "0") int pag,
                                                                    @RequestParam int size){
-        int validSize = Math.min(Math.max(1, size), 100);
+        int validSize = Math.min(Math.max(1, size), 10);
         return ResponseEntity.ok(studentService.searchStudents(description,pag, validSize));
     }
 

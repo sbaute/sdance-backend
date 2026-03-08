@@ -40,7 +40,8 @@ public enum Role {
             RolePermission.INSTRUCTOR_READ_ALL,
             RolePermission.INSTRUCTOR_CREATE,
             RolePermission.INSTRUCTOR_MODIFY,
-            RolePermission.INSTRUCTOR_DELETE
+            RolePermission.INSTRUCTOR_DELETE,
+            RolePermission.INSTRUCTOR_SEARCH
     )),
 
     INSTRUCTOR(Arrays.asList(

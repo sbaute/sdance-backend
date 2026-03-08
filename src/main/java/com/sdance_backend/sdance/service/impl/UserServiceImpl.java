@@ -1,7 +1,9 @@
 package com.sdance_backend.sdance.service.impl;
 
 import com.sdance_backend.sdance.dto.UserDTO;
+import com.sdance_backend.sdance.entity.Instructor;
 import com.sdance_backend.sdance.entity.Student;
+import com.sdance_backend.sdance.mapper.InstructorMapper;
 import com.sdance_backend.sdance.mapper.StudentMapper;
 import com.sdance_backend.sdance.mapper.UserMapper;
 import com.sdance_backend.sdance.messages.errors.UserError;
@@ -11,6 +13,7 @@ import com.sdance_backend.sdance.enums.auth.Role;
 import com.sdance_backend.sdance.exception.CustomException;
 import com.sdance_backend.sdance.messages.errors.PasswordError;
 import com.sdance_backend.sdance.repository.UserRepository;
+import com.sdance_backend.sdance.service.IInstructorService;
 import com.sdance_backend.sdance.service.IStudentService;
 import com.sdance_backend.sdance.service.IUserService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +36,8 @@ public class UserServiceImpl implements IUserService {
     private final UserMapper userMapper;
     private final IStudentService studentService;
     private final StudentMapper studentMapper;
+    private final IInstructorService instructorService;
+    private final InstructorMapper instructorMapper;
 
     @Override
     public User createUser(UserRegisterRequestDTO newUser, Role role) {
@@ -54,23 +59,16 @@ public class UserServiceImpl implements IUserService {
     }
 
 
-    public User registerAdminUser(UserRegisterRequestDTO newUser){
-        return createUser(newUser, Role.ADMIN);
-    }
-
-    public User registerStudetUser(UserRegisterRequestDTO newUser){
-        return createUser(newUser, Role.STUDENT);
-    }
-
-    public User registerInstructorUser(UserRegisterRequestDTO newUser){
-        return createUser(newUser, Role.INSTRUCTOR);
-    }
-
-
     public void assignStudentToUser(UUID studentId, UUID userId){
         Student student = studentMapper.toEntity(studentService.getStudentById(studentId));
         student.setUser(userRepository.findById(userId).get());
     }
+
+    //todo: implementar asignacion de usuario a instructor
+//    public void assignInstructorToUser(UUID instructorId, UUID userId){
+//        Instructor instructor = instructorMapper.toEntity(instructorService.getInstructorById(instructorId));
+//        instructor.setUser(userRepository.findById(userId).get());
+//    }
 
 
     @Override

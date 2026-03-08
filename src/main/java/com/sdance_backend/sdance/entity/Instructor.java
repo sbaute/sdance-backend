@@ -58,8 +58,7 @@ public class Instructor {
     @Column(name = "status", nullable = false)
     private InstructorStatus status;
 
-    @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @OneToMany(mappedBy = "instructor")
     private List<DanceClass> danceClasses;
 
 }

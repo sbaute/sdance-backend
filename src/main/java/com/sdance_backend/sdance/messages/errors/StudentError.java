@@ -10,6 +10,7 @@ public enum StudentError implements MessageType {
 
     STUDENT_CREATE_ERROR("Failed to create student", 500),
     STUDENT_UPDATE_ERROR("Failed to update student", 500),
+    STUDENT_LIST_ERROR("Failed to get list", 500),
     STUDENT_DELETE_ERROR("Failed to delete student", 500),
     STUDENT_NOT_FOUND("The student was not found", 404),
     STUDENT_ALREADY_EXISTS("The student already exists", 409),

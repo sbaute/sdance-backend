@@ -1,7 +1,8 @@
 package com.sdance_backend.sdance.controller;
 
 
-import com.sdance_backend.sdance.dto.InstructorDTO;
+import com.sdance_backend.sdance.dto.InstructorRequest;
+import com.sdance_backend.sdance.dto.InstructorResponse;
 import com.sdance_backend.sdance.dto.PageResponseDTO;
 import com.sdance_backend.sdance.dto.SearchTermDTO;
 import com.sdance_backend.sdance.entity.Instructor;
@@ -30,35 +31,35 @@ public class InstructorController {
 
     @PreAuthorize("hasAuthority('INSTRUCTOR_READ_ALL')")
     @GetMapping
-    public ResponseEntity<ResponseMessage<List<InstructorDTO>>> getAll() {
+    public ResponseEntity<ResponseMessage<List<InstructorResponse>>> getAll() {
         return responseBuilderMessage.success(Instructor.class, Actions.LIST_RETRIEVED, instructorService.getAllInstructors());
     }
 
     @PreAuthorize("hasAuthority('INSTRUCTOR_VIEW')")
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseMessage<InstructorDTO>> getById(@PathVariable UUID id) {
+    public ResponseEntity<ResponseMessage<InstructorResponse>> getById(@PathVariable UUID id) {
         return responseBuilderMessage.success(Instructor.class, Actions.RETRIEVED, instructorService.getInstructorById(id));
     }
 
 
     @PreAuthorize("hasAuthority('INSTRUCTOR_CREATE')")
     @PostMapping
-    public ResponseEntity<ResponseMessage<InstructorDTO>> create (@Valid  @RequestBody InstructorDTO instructorRequestDto){
+    public ResponseEntity<ResponseMessage<InstructorResponse>> create (@Valid  @RequestBody InstructorRequest instructorRequestDto){
         return responseBuilderMessage.success(Instructor.class, Actions.CREATED, instructorService.createInstructor(instructorRequestDto));
     }
 
     @PreAuthorize("hasAuthority('INSTRUCTOR_SEARCH')")
     @PostMapping("/search")
-    public ResponseEntity<PageResponseDTO<InstructorDTO>> search (@RequestBody(required = false) SearchTermDTO description,
-                                                               @RequestParam(defaultValue = "0") int pag,
-                                                               @RequestParam int size){
+    public ResponseEntity<PageResponseDTO<InstructorResponse>> search (@RequestBody(required = false) SearchTermDTO description,
+                                                                      @RequestParam(defaultValue = "0") int pag,
+                                                                      @RequestParam int size){
         int validSize = Math.min(Math.max(1, size), 100);
         return ResponseEntity.ok(instructorService.searchInstructors(description,pag, validSize));
     }
 
     @PreAuthorize("hasAuthority('INSTRUCTOR_MODIFY')")
     @PutMapping("/{id}")
-    public  ResponseEntity<ResponseMessage<InstructorDTO>> update (@Valid @RequestBody InstructorDTO instructorRequestDto, @PathVariable UUID id){
+    public  ResponseEntity<ResponseMessage<InstructorResponse>> update (@Valid @RequestBody InstructorRequest instructorRequestDto, @PathVariable UUID id){
         return responseBuilderMessage.success(Instructor.class, Actions.UPDATED, instructorService.updateInstructor(instructorRequestDto, id));
     }
 

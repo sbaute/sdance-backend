@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface IStudentService {
 
-    List<StudentResponse> getAllStudents();
+    PageResponseDTO<StudentResponse> getAllStudents(int page);
     StudentResponse getStudentById(UUID id);
     StudentResponse createStudent(StudentRequest studentRequest);
     StudentResponse updateStudent(StudentRequest studentRequest, UUID id);

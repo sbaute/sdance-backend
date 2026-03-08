@@ -2,6 +2,7 @@ package com.sdance_backend.sdance.service.impl;
 
 import com.sdance_backend.sdance.dto.*;
 import com.sdance_backend.sdance.entity.DanceClass;
+import com.sdance_backend.sdance.enums.status.DanceClassStatus;
 import com.sdance_backend.sdance.exception.CustomException;
 import com.sdance_backend.sdance.mapper.DanceClassMapper;
 import com.sdance_backend.sdance.messages.errors.DanceClassError;
@@ -17,6 +18,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,7 +33,7 @@ public class DanceClassServiceImpl implements IDanceClassService {
     private final DanceClassMapper danceClassMapper;
 
     @Override
-    public List<DanceClassDTO> getAllDanceClass() {
+    public List<DanceClassResponse> getAllDanceClass() {
         List<DanceClass> danceClassDTOList = (List<DanceClass>) danceClassRepository.findAll();
 
         if (danceClassDTOList.isEmpty()) {
@@ -43,19 +45,20 @@ public class DanceClassServiceImpl implements IDanceClassService {
 
     @Override
     @Transactional(readOnly = true)
-    public DanceClassDTO getDanceClassById(UUID id) {
+    public DanceClassResponse getDanceClassById(UUID id) {
         return  danceClassMapper.toDTO(danceClassRepository.findById(id).get());
     }
 
     @Override
     @Transactional
-    public DanceClassDTO createDanceClass(DanceClassRequestDTO danceClassRequestDTO) {
+    public DanceClassResponse createDanceClass(DanceClassRequest danceClassRequest) {
        try{
-            DanceClass danceClass = danceClassMapper.toEntity(danceClassRequestDTO);
-            danceClass.setInstructor(instructorService.getInstructor(danceClassRequestDTO.getInstructorId()));
+            DanceClass danceClass = danceClassMapper.toEntity(danceClassRequest);
+            danceClass.setInstructor(instructorService.getInstructor(danceClassRequest.getInstructorId()));
             danceClass.setStudents(new ArrayList<>());
 
-
+            danceClass.setRegistrationDate(LocalDate.now());
+            danceClass.setStatus(DanceClassStatus.ACTIVE);
 
            danceClassRepository.save(danceClass);
 
@@ -69,13 +72,13 @@ public class DanceClassServiceImpl implements IDanceClassService {
 
     @Override
     @Transactional
-    public DanceClassDTO updateDanceClass(DanceClassRequestDTO danceClassRequestDTO, UUID id) {
+    public DanceClassResponse updateDanceClass(DanceClassRequest danceClassRequest, UUID id) {
         try{
             DanceClass danceClass = getDanceClass(id);
 
-            danceClass.setInstructor(instructorService.getInstructor(danceClassRequestDTO.getInstructorId()));
+            danceClass.setInstructor(instructorService.getInstructor(danceClassRequest.getInstructorId()));
 
-            danceClassMapper.updateFromDTO(danceClassRequestDTO, danceClass);
+            danceClassMapper.updateFromDTO(danceClassRequest, danceClass);
             danceClassRepository.save(danceClass);
 
             return danceClassMapper.toDTO(danceClass);
@@ -99,7 +102,7 @@ public class DanceClassServiceImpl implements IDanceClassService {
     }
 
     @Override
-    public PageResponseDTO<DanceClassDTO> searchDanceClass(SearchTermDTO searchRequest, int page, int size) {
+    public PageResponseDTO<DanceClassResponse> searchDanceClass(SearchTermDTO searchRequest, int page, int size) {
 
         // Validacion de pag y tamaño
         if (page < 0) {
@@ -131,7 +134,7 @@ public class DanceClassServiceImpl implements IDanceClassService {
 
             Page<DanceClass> danceClassPage = danceClassRepository.findAll(spec, pageable);
 
-            List<DanceClassDTO> danceClasses = danceClassPage.getContent().stream()
+            List<DanceClassResponse> danceClasses = danceClassPage.getContent().stream()
                     .map(danceClassMapper::toDTO)
                     .collect(Collectors.toList());
 

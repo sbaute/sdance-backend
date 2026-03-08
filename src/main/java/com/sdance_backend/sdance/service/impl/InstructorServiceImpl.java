@@ -1,6 +1,7 @@
 package com.sdance_backend.sdance.service.impl;
 
-import com.sdance_backend.sdance.dto.InstructorDTO;
+import com.sdance_backend.sdance.dto.InstructorRequest;
+import com.sdance_backend.sdance.dto.InstructorResponse;
 import com.sdance_backend.sdance.dto.PageResponseDTO;
 import com.sdance_backend.sdance.dto.SearchTermDTO;
 import com.sdance_backend.sdance.entity.Instructor;
@@ -32,7 +33,7 @@ public class InstructorServiceImpl implements IInstructorService {
     private final InstructorMapper instructorMapper;
 
     @Override
-    public List<InstructorDTO> getAllInstructors() {
+    public List<InstructorResponse> getAllInstructors() {
         List<Instructor> instructors = (List<Instructor>) instructorRepository.findAll();
 
         if(instructors.isEmpty()) {
@@ -43,13 +44,13 @@ public class InstructorServiceImpl implements IInstructorService {
 
     @Override
     @Transactional(readOnly = true)
-    public InstructorDTO getInstructorById(UUID id) {
+    public InstructorResponse getInstructorById(UUID id) {
         return instructorMapper.toDTO(getInstructor(id));
     }
 
     @Override
     @Transactional
-    public InstructorDTO createInstructor(InstructorDTO instructorRequestDto) {
+    public InstructorResponse createInstructor(InstructorRequest instructorRequestDto) {
         try {
             validateFields(instructorRequestDto);
 
@@ -71,7 +72,7 @@ public class InstructorServiceImpl implements IInstructorService {
 
     @Override
     @Transactional
-    public InstructorDTO updateInstructor(InstructorDTO instructorRequestDto, UUID id) {
+    public InstructorResponse updateInstructor(InstructorRequest instructorRequestDto, UUID id) {
         try {
             validateFields(instructorRequestDto);
 
@@ -102,7 +103,7 @@ public class InstructorServiceImpl implements IInstructorService {
     }
 
     @Override
-    public PageResponseDTO<InstructorDTO> searchInstructors(SearchTermDTO searchRequest, int page, int size) {
+    public PageResponseDTO<InstructorResponse> searchInstructors(SearchTermDTO searchRequest, int page, int size) {
 
         // Validacion de pag y tamaño
         if (page < 0) {
@@ -136,7 +137,7 @@ public class InstructorServiceImpl implements IInstructorService {
 
             Page<Instructor> instructorPage = instructorRepository.findAll(spec, pageable);
 
-            List<InstructorDTO> instructors = instructorPage.getContent().stream()
+            List<InstructorResponse> instructors = instructorPage.getContent().stream()
                     .map(instructorMapper::toDTO)
                     .collect(Collectors.toList());
 
@@ -158,7 +159,7 @@ public class InstructorServiceImpl implements IInstructorService {
         return instructor;
     }
 
-    private void validateFields(InstructorDTO instructorRequestDto){
+    private void validateFields(InstructorRequest instructorRequestDto){
         if(instructorRequestDto.getName() == null || instructorRequestDto.getLastName() == null || instructorRequestDto.getPhoneNumber().isEmpty() || instructorRequestDto.getDocument().isEmpty()){
             throw new CustomException(GenericError.REQUIRED_FIELDS_MISSING);
         }

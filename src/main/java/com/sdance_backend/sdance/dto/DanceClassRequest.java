@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DanceClassRequestDTO {
+public class DanceClassRequest {
 
     private UUID id; // opcional para update
 

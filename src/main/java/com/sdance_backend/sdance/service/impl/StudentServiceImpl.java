@@ -32,13 +32,39 @@ public class StudentServiceImpl implements IStudentService {
     private final StudentMapper studentMapper;
 
     @Override
-    public List<StudentResponse> getAllStudents() {
-        List<Student> students = (List<Student>) studentRepository.findAll();
+    public PageResponseDTO<StudentResponse> getAllStudents(int page) {
 
-            if(students.isEmpty()) {
-                throw new CustomException(StudentError.STUDENT_LIST_EMPTY);
-            }
-            return studentMapper.toDTOList(students);
+        //Validamos paginado
+        if (page < 0) {
+            throw new CustomException(GenericError.INVALID_PAGE_PARAMETER_ERROR);
+        }
+
+        int size = 10;
+
+        try {
+            Pageable pageable = PageRequest.of(
+                    page,
+                    size,
+                    Sort.by(Sort.Order.asc("lastName"),
+                            Sort.Order.asc("name"))
+            );
+
+            Page<Student> studentPage = studentRepository.findAll(pageable);
+
+            List<StudentResponse> students = studentPage.getContent()
+                    .stream()
+                    .map(studentMapper::toDTO)
+                    .toList();
+
+            return new PageResponseDTO<>(
+                    students,
+                    studentPage.getTotalElements(),
+                    page
+            );
+
+        } catch (Exception e) {
+            throw new CustomException(StudentError.STUDENT_LIST_ERROR);
+        }
     }
 
     @Override
@@ -110,7 +136,7 @@ public class StudentServiceImpl implements IStudentService {
             );
         }
 
-        if (size < 1 || size > 100) {
+        if (size < 1 || size > 10) {
             throw new CustomException(GenericError.INVALID_SIZE_PARAMETER_ERROR
             );
         }
@@ -148,7 +174,7 @@ public class StudentServiceImpl implements IStudentService {
 
         } catch (Exception e) {
             throw new CustomException(
-                    GenericError.SEARCH_ERROR
+                    StudentError.STUDENT_LIST_EMPTY
             );
         }
     }

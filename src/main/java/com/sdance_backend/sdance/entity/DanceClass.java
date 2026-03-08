@@ -4,10 +4,12 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sdance_backend.sdance.enums.danceClass.ClassLevel;
 import com.sdance_backend.sdance.enums.danceClass.Days;
 import com.sdance_backend.sdance.enums.danceClass.Hour;
+import com.sdance_backend.sdance.enums.status.DanceClassStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,6 +41,12 @@ public class DanceClass {
     @Enumerated(EnumType.STRING)
     private ClassLevel level;
 
+    @Enumerated(EnumType.STRING)
+    private DanceClassStatus status;
+
+    @Column(name = "registration_date", nullable = false)
+    private LocalDate registrationDate;
+
     @Column(name = "max_capacity", nullable = false)
     private Integer maxCapacity;
 
@@ -49,8 +57,7 @@ public class DanceClass {
     private String room;
 
     @ManyToOne
-    @JoinColumn(name = "instructor_id")
-    @JsonBackReference
+    @JoinColumn(name = "instructor_id", nullable = true)
     private Instructor instructor;
 
     @ManyToMany

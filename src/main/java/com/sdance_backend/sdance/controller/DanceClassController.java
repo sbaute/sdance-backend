@@ -28,36 +28,36 @@ public class DanceClassController {
 
     @PreAuthorize("hasAuthority('CLASS_READ_ALL')")
     @GetMapping
-    public ResponseEntity<ResponseMessage<List<DanceClassDTO>>> getAll() {
+    public ResponseEntity<ResponseMessage<List<DanceClassResponse>>> getAll() {
        return responseBuilderMessage.success(DanceClass.class, Actions.LIST_RETRIEVED, danceClassService.getAllDanceClass());
     }
 
     @PreAuthorize("hasAuthority('CLASS_VIEW')")
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseMessage<DanceClassDTO>> getById(@PathVariable UUID id) {
+    public ResponseEntity<ResponseMessage<DanceClassResponse>> getById(@PathVariable UUID id) {
         return responseBuilderMessage.success(DanceClass.class, Actions.RETRIEVED, danceClassService.getDanceClassById(id));
     }
 
     @PreAuthorize("hasAuthority('CLASS_CREATE')")
     @PostMapping
-    public ResponseEntity<ResponseMessage<DanceClassDTO>> create (@RequestBody DanceClassRequestDTO danceClassRequestDTO) {
-        return responseBuilderMessage.success(DanceClass.class, Actions.CREATED, danceClassService.createDanceClass(danceClassRequestDTO));
+    public ResponseEntity<ResponseMessage<DanceClassResponse>> create (@RequestBody DanceClassRequest danceClassRequest) {
+        return responseBuilderMessage.success(DanceClass.class, Actions.CREATED, danceClassService.createDanceClass(danceClassRequest));
 
     }
 
     @PreAuthorize("hasAuthority('CLASS_SEARCH')")
     @PostMapping("/search")
-    public ResponseEntity<PageResponseDTO<DanceClassDTO>> search (@RequestBody(required = false) SearchTermDTO description,
-                                                                  @RequestParam(defaultValue = "0") int pag,
-                                                                  @RequestParam int size){
+    public ResponseEntity<PageResponseDTO<DanceClassResponse>> search (@RequestBody(required = false) SearchTermDTO description,
+                                                                       @RequestParam(defaultValue = "0") int pag,
+                                                                       @RequestParam int size){
         int validSize = Math.min(Math.max(1, size), 100);
         return ResponseEntity.ok(danceClassService.searchDanceClass(description,pag, validSize));
     }
 
     @PreAuthorize("hasAuthority('CLASS_MODIFY')")
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseMessage<DanceClassDTO>> update(@RequestBody DanceClassRequestDTO danceClassRequestDTO, @PathVariable UUID id) {
-        return responseBuilderMessage.success(DanceClass.class, Actions.UPDATED, danceClassService.updateDanceClass(danceClassRequestDTO,id));
+    public ResponseEntity<ResponseMessage<DanceClassResponse>> update(@RequestBody DanceClassRequest danceClassRequest, @PathVariable UUID id) {
+        return responseBuilderMessage.success(DanceClass.class, Actions.UPDATED, danceClassService.updateDanceClass(danceClassRequest,id));
     }
 
     @PreAuthorize("hasAuthority('CLASS_DELETE')")
