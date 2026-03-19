@@ -13,8 +13,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -44,7 +42,7 @@ public class DanceClass {
     @Enumerated(EnumType.STRING)
     private DanceClassStatus status;
 
-    @Column(name = "registration_date", nullable = false)
+    @Column(name = "registration_date", nullable = true)
     private LocalDate registrationDate;
 
     @Column(name = "max_capacity", nullable = false)

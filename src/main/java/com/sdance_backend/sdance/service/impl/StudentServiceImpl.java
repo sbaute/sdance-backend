@@ -39,7 +39,7 @@ public class StudentServiceImpl implements IStudentService {
             throw new CustomException(GenericError.INVALID_PAGE_PARAMETER_ERROR);
         }
 
-        int size = 10;
+        int size =10;
 
         try {
             Pageable pageable = PageRequest.of(
@@ -93,6 +93,29 @@ public class StudentServiceImpl implements IStudentService {
                     ex.getMessage()
             );
         }
+    }
+
+    private StudentStatus getStatus(UUID studentId){
+        Student student = getStudent(studentId);
+        return student.getStatus();
+    }
+
+    @Override
+    @Transactional
+    public StudentStatus updateStatus(UUID studentId, StudentStatus newStatus) {
+        Student student = getStudent(studentId);
+        student.setStatus(newStatus);
+        studentRepository.save(student);
+        return student.getStatus();
+    }
+
+    @Override
+    @Transactional
+    public void deactivateStudent(UUID studentId) {
+        Student student = getStudent(studentId);
+        student.setStatus(StudentStatus.DEACTIVATED);
+        System.out.println("USANDO SOFT DELETE");
+        studentRepository.save(student);
     }
 
     @Override

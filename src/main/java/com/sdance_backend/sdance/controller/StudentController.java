@@ -5,6 +5,7 @@ import com.sdance_backend.sdance.dto.SearchTermDTO;
 import com.sdance_backend.sdance.dto.StudentRequest;
 import com.sdance_backend.sdance.dto.StudentResponse;
 import com.sdance_backend.sdance.entity.Student;
+import com.sdance_backend.sdance.enums.status.StudentStatus;
 import com.sdance_backend.sdance.payload.ResponseMessage;
 import com.sdance_backend.sdance.service.IStudentService;
 import com.sdance_backend.sdance.messages.Actions;
@@ -16,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -56,6 +56,16 @@ public class StudentController {
         return ResponseEntity.ok(studentService.searchStudents(description,pag, validSize));
     }
 
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<StudentStatus> updateStudentStatus(
+            @PathVariable UUID id,
+            @RequestParam StudentStatus status) {
+
+        StudentStatus updatedStatus = studentService.updateStatus(id, status);
+
+        return ResponseEntity.ok(updatedStatus);
+    }
+
     @PreAuthorize("hasAuthority('STUDENT_MODIFY')")
     @PutMapping("/{id}")
     public ResponseEntity<ResponseMessage<StudentResponse>> update (@Valid @RequestBody StudentRequest studentRequestDto, @PathVariable UUID id){
@@ -65,7 +75,8 @@ public class StudentController {
     @PreAuthorize("hasAuthority('STUDENT_DELETE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        studentService.deleteStudent(id);
+        studentService.deactivateStudent(id);
+        //studentService.deleteStudent(id); no elimino doy baja administrativa
         return ResponseEntity.noContent().build();
     }
 
