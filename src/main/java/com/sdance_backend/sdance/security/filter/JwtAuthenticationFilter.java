@@ -29,50 +29,55 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private UserServiceImpl userService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain)
             throws ServletException, IOException {
 
-        // 🔹 Ignorar preflight OPTIONS
+        // ✅ 1. Ignorar OPTIONS (CORS)
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 🔹 Ignorar login y registro (rutas públicas)
+        // ✅ 2. Rutas públicas
         String path = request.getServletPath();
         if (path.startsWith("/api/v1/auth") || path.startsWith("/api/v1/user/register")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 1. Obtener encabezado HTTP Authorization
-        String authorizationHeader = request.getHeader("Authorization");
+        try {
+            // 3. Header Authorization
+            String authorizationHeader = request.getHeader("Authorization");
 
-        // Valida si el encabezado está presente y empieza con "Bearer"
-        if (!StringUtils.hasText(authorizationHeader) || !authorizationHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
+            if (!StringUtils.hasText(authorizationHeader) || !authorizationHeader.startsWith("Bearer ")) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+            String jwt = authorizationHeader.substring(7);
+
+            // 💣 ESTA LÍNEA PUEDE ROMPER TODO
+            String username = jwtService.extractUsername(jwt);
+
+            User user = userService.findOneByUsername(username)
+                    .orElseThrow(() -> new CustomException(UserError.USER_NOT_FOUND));
+
+            UsernamePasswordAuthenticationToken authToken =
+                    new UsernamePasswordAuthenticationToken(
+                            username, null, user.getAuthorities()
+                    );
+
+            authToken.setDetails(new WebAuthenticationDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authToken);
+
+        } catch (Exception e) {
+            // 🔥 CLAVE: NO cortar el flujo
+            SecurityContextHolder.clearContext();
         }
 
-        // 2. Obtener el JWT desde el header (dsp de Bearer)
-        String jwt = authorizationHeader.substring(7);
-
-        // 3. Obtengo el subject/username desde el token
-        // Esta accion valida el formato del token, firma y fecha de expiración
-        String username = jwtService.extractUsername(jwt);
-
-        // 4. Setea objeto Authentication dentro del SecurityContextHolder
-        User user = userService.findOneByUsername(username)
-                .orElseThrow(() -> new CustomException(UserError.USER_NOT_FOUND));
-
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                username, null, user.getAuthorities()
-        );
-
-        authToken.setDetails(new WebAuthenticationDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authToken);
-
-        // 5. Ejecuta el resto de filtros
+        // ✅ Siempre continuar
         filterChain.doFilter(request, response);
     }
 }
