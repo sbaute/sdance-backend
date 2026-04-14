@@ -15,4 +15,8 @@ public class Actions {
     public static final String ADD_DANCE_CLASS = "added to student";
     public static final String DELETE_DANCE_CLASS = "delete to student";
 
+    //Status - STUDENT
+    public static final String UPDATED_STATUS_STUDENT = "update status ";
+
+
 }

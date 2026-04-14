@@ -56,6 +56,7 @@ public class StudentController {
         return ResponseEntity.ok(studentService.searchStudents(description,pag, validSize));
     }
 
+    @PreAuthorize("hasAuthority('STUDENT_UPDATE_STATUS')")
     @PatchMapping("/{id}/status")
     public ResponseEntity<StudentStatus> updateStudentStatus(
             @PathVariable UUID id,
@@ -79,7 +80,5 @@ public class StudentController {
         //studentService.deleteStudent(id); no elimino doy baja administrativa
         return ResponseEntity.noContent().build();
     }
-
-
 
 }

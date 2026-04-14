@@ -1,8 +1,8 @@
 package com.sdance_backend.sdance.enums.status;
 
 public enum StudentStatus {
-    ACTIVE,        // Puede asistir y operar normalmente
-    INACTIVE,      // No está cursando actualmente
-    BLOCKED,       // Suspendido por deuda / sanción
-    DEACTIVATED    // Dado de baja administrativa
+    ACTIVE,        // Puede operar normalmente
+    INACTIVE,      // No cursa pero puede volver
+    BLOCKED,       // Bloqueado por deuda (temporal)
+    DEACTIVATED    // Baja definitiva (no vuelve)
 }
